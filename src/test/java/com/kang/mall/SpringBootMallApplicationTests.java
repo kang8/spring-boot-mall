@@ -1,4 +1,4 @@
-package com.kang.springbootmall;
+package com.kang.mall;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
