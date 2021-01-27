@@ -13,9 +13,10 @@ import java.nio.charset.StandardCharsets;
  */
 public class MD5Util {
 
-    public static String MD5Encode(String username, String password) {
+    public static String customizeMd5Encode(String username, String password) {
         String hashUsername = md5(username);
-        String salt = md5(hashUsername.substring(0, Constants.MD5_SUBSTRING_LENGTH));
+        char usernameFirstChar = username.charAt(0);
+        String salt = md5(hashUsername.substring(0, usernameFirstChar & 31));
 
         return md5(password + salt);
     }

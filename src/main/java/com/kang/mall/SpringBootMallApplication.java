@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author kang
  */
 @SpringBootApplication
-@MapperScan("com.kang.springbootmall.mapper")
+@MapperScan("com.kang.mall.mapper")
 public class SpringBootMallApplication {
 
     public static void main(String[] args) {

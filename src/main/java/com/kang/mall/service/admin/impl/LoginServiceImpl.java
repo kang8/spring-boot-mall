@@ -28,7 +28,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public AdminUser login(LoginParam loginParam) {
-        String hashPassword = MD5Util.MD5Encode(loginParam.getUsername(), loginParam.getPassword());
+        String hashPassword = MD5Util.customizeMd5Encode(loginParam.getUsername(), loginParam.getPassword());
 
         // TODO: 根据不同的状态返回不同的消息。是没有这个用户还是密码错误
 
@@ -56,10 +56,10 @@ public class LoginServiceImpl implements LoginService {
     public Result updatePassword(PasswordParam param) {
         AdminUser user = adminUserMapper.selectById(param.getAdminUserId());
 
-        String databasePass = MD5Util.MD5Encode(user.getUsername(), param.getOriginPassword());
+        String databasePass = MD5Util.customizeMd5Encode(user.getUsername(), param.getOriginPassword());
 
         if (databasePass.equals(user.getPassword())) {
-            String newDatabasePass = MD5Util.MD5Encode(user.getUsername(), param.getNewPassword());
+            String newDatabasePass = MD5Util.customizeMd5Encode(user.getUsername(), param.getNewPassword());
             user.setPassword(newDatabasePass);
 
             return adminUserMapper.updateById(user) == 0 ? Result.error("更新失败") :

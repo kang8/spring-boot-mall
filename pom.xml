@@ -77,6 +77,16 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>7.5.1</version>
+                <configuration>
+                    <url>jdbc:mysql://localhost:3306/test_mall?serverTimezone=GMT</url>
+                    <user>root</user>
+                    <password>root</password>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
