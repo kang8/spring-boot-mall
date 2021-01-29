@@ -56,7 +56,7 @@ public class CarouselServiceImpl implements CarouselService {
         Carousel copyCarousel = ClassUtil.copyProperties(carouselParam, new Carousel());
         int isInsert = carouselMapper.insert(copyCarousel);
         return isInsert > 0 ?
-                Result.ok("添加成功") :
+                Result.ok("添加成功", copyCarousel) :
                 Result.error("添加失败");
     }
 
@@ -72,13 +72,13 @@ public class CarouselServiceImpl implements CarouselService {
     public Result update(Long id, CarouselParam carouselParam) {
         Carousel queryCarousel = carouselMapper.selectById(id);
 
-        BeanUtils.copyProperties(carouselParam, queryCarousel, "createTime");
+        BeanUtils.copyProperties(carouselParam, queryCarousel, "createTime", "createUser");
 
         queryCarousel.setUpdateTime(LocalDateTime.now());
         int isUpdate = carouselMapper.updateById(queryCarousel);
 
         return isUpdate > 0 ?
-                Result.ok("更新成功") :
+                Result.ok("更新成功", queryCarousel) :
                 Result.error("更新失败");
     }
 }
