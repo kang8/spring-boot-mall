@@ -5,7 +5,7 @@ CREATE TABLE `admin_user`
     `password`      varchar(50) NOT NULL COMMENT '管理员登陆密码',
     `nick_name`     varchar(50) NOT NULL COMMENT '管理员显示昵称',
     `locked`        tinyint NULL DEFAULT 0 COMMENT '是否锁定 0未锁定 1已锁定无法登陆'
-);
+) COMMENT '管理员表';
 
 INSERT INTO `admin_user` (username, password, nick_name)
 VALUES ("admin", "79c94a818605044fe21510f4d7304c64", "yikang"),

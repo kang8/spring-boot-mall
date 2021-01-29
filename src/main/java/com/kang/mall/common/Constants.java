@@ -8,4 +8,9 @@ package com.kang.mall.common;
  */
 public class Constants {
     public final static Integer MD5_SUBSTRING_LENGTH = 20;
+
+    /**
+     * 轮播图
+     */
+    public final static Integer CAROUSEL_MAX = 10;
 }
