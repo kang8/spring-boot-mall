@@ -7,7 +7,6 @@ import lombok.Data;
 /**
  * @author yikang
  * ClassName: AdminUser
- * Description: 管理员表
  * Create Date: 2021/1/15 20:49
  */
 @Data

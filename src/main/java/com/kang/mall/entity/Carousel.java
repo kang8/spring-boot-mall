@@ -36,11 +36,16 @@ public class Carousel {
     private Integer carouselRank;
 
     /**
-     * 是否删除，0 为 false 未删除，1 为true 已删除
+     * 是否删除。0 为 false 未删除，1 为true 已删除
      */
     @TableLogic(value = "0", delval = "1")
     private Byte isDeleted;
 
+    /**
+     * 这里 JsonFormat 的作用是格式 json 为 "yyyy-MM-dd HH:mm:ss"
+     * 后端传给前端的数据会个格式成为 "yyyy-MM-dd HH:mm:ss" 的字符串
+     * 前端传给后端的数据也要是 "yyyy-MM-dd HH:mm:ss" 形式的字符串，再有后端在进行相应转换
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createTime;
 

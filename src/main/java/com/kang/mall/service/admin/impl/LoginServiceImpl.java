@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 /**
  * @author yikang
  * ClassName: LoginServiceImpl
- * Description:
  * Create Date: 2021/1/20 15:19
  */
 @Service

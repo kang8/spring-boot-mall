@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author yikang
  * ClassName: GlobalExceptionHandler
- * Description:
+ * Description: 全局异常处理器
  * Create Date: 2021/1/20 15:33
  */
 @ControllerAdvice

@@ -10,7 +10,7 @@ import java.util.Properties;
 /**
  * @author yikang
  * ClassName: KaptchaConfig
- * Description:
+ * Description: 验证码配置类
  * Create Date: 2021/1/13 16:37
  */
 @Component

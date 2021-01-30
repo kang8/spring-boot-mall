@@ -17,18 +17,17 @@ import javax.validation.Valid;
 /**
  * @author yikang
  * ClassName: LoginController
- * Description:
  * Create Date: 2021/1/15 20:55
  */
-@RestController
+@RestController("LoginAdminController")
 @RequestMapping("/admin")
-public class LoginAdminController {
+public class LoginController {
 
     @Autowired
     private LoginService loginService;
 
     @PostMapping("/login")
-    public Result<AdminUserVO> login(@RequestBody @Valid LoginParam loginParam, HttpSession session) {
+    public Result login(@RequestBody @Valid LoginParam loginParam, HttpSession session) {
         AdminUser user = loginService.login(loginParam);
 
         if (ObjectUtils.isNotEmpty(user)) {

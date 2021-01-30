@@ -13,9 +13,9 @@ import javax.validation.Valid;
  * ClassName: CarouselAdminController
  * Create Date: 2021/1/26 16:33
  */
-@RestController
+@RestController("CarouselAdminController")
 @RequestMapping("/admin")
-public class CarouselAdminController {
+public class CarouselController {
 
     @Autowired
     private CarouselService carouselService;

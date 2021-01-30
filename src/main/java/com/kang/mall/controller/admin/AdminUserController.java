@@ -16,13 +16,12 @@ import javax.validation.Valid;
 
 /**
  * @author yikang
- * ClassName: UserAdminController
- * Description:
+ * ClassName: AdminUserController
  * Create Date: 2021/1/25 15:42
  */
 @RestController
 @RequestMapping("/admin")
-public class UserAdminController {
+public class AdminUserController {
 
     @Autowired
     private AdminUserMapper adminUserMapper;

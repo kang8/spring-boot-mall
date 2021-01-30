@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * @author yikang
  * ClassName: MD5Util
- * Description:
+ * Description: md5 工具类
  * Create Date: 2021/1/15 20:37
  */
 public class MD5Util {

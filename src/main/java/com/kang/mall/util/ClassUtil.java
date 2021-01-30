@@ -5,7 +5,7 @@ import org.springframework.beans.BeanUtils;
 /**
  * @author yikang
  * ClassName: ClassUtil
- * Description:
+ * Description: class 工具类
  * Create Date: 2021/1/20 20:33
  */
 public class ClassUtil {

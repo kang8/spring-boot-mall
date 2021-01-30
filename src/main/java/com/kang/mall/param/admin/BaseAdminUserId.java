@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * @author yikang
  * ClassName: BaseAdminUserId
- * Description:
+ * Description: 基类，用于处理 AdminUser 中的 Id 属性
  * Create Date: 2021/1/20 19:42
  */
 @Data

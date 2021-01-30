@@ -9,7 +9,6 @@ import java.io.Serializable;
 /**
  * @author yikang
  * ClassName: LoginParam
- * Description:
  * Create Date: 2021/1/16 17:54
  */
 @Data

@@ -11,7 +11,6 @@ import com.kang.mall.vo.AdminUserVO;
 /**
  * @author yikang
  * ClassName: LoginService
- * Description:
  * Create Date: 2021/1/20 15:06
  */
 public interface LoginService {

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author yikang
  * ClassName: AdminLoginInterceptor
- * Description: 登陆拦截器
+ * Description: 后台登陆拦截器
  * Create Date: 2021/1/19 20:14
  */
 @Component

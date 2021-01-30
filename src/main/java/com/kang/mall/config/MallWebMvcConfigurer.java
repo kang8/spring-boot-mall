@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * @author yikang
  * ClassName: MallWebMvcConfigurer
- * Description: 拦截配置类
+ * Description: 商城 MVC 配置类
  * Create Date: 2021/1/19 20:29
  */
 @Configuration

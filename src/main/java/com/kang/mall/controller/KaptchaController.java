@@ -20,7 +20,6 @@ import java.io.IOException;
 /**
  * @author yikang
  * ClassName: KaptchaController
- * Description:
  * Create Date: 2021/1/13 16:43
  */
 @Controller
