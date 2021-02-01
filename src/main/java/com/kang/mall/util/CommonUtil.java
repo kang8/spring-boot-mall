@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
  */
 public class CommonUtil {
 
-    public static Long getUserId(HttpSession session, String param) {
-        return (Long) session.getAttribute(param);
+    public static Long getAdminUserId(HttpSession session) {
+        return (Long) session.getAttribute("adminLoginId");
     }
 }

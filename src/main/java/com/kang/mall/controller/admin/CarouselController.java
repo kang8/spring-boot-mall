@@ -3,9 +3,11 @@ package com.kang.mall.controller.admin;
 import com.kang.mall.common.Result;
 import com.kang.mall.param.admin.CarouselParam;
 import com.kang.mall.service.admin.CarouselService;
+import com.kang.mall.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
@@ -31,12 +33,20 @@ public class CarouselController {
     }
 
     @PostMapping("/carousel")
-    public Result create(@RequestBody @Valid CarouselParam carousel) {
+    public Result create(@RequestBody @Valid CarouselParam carousel,
+                         HttpSession session) {
+        Long userId = CommonUtil.getAdminUserId(session);
+        carousel.setCreateUser(userId);
+        carousel.setUpdateUser(userId);
         return carouselService.create(carousel);
     }
 
     @RequestMapping(value = "/carousel/{id}", method = RequestMethod.PUT)
-    public Result update(@PathVariable("id") Long id, @RequestBody @Valid CarouselParam carousel) {
+    public Result update(@PathVariable("id") Long id,
+                         @RequestBody @Valid CarouselParam carousel,
+                         HttpSession session) {
+        Long userId = CommonUtil.getAdminUserId(session);
+        carousel.setUpdateUser(userId);
         return carouselService.update(id, carousel);
     }
 

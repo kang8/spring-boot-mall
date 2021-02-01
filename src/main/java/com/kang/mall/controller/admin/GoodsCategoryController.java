@@ -33,8 +33,9 @@ public class GoodsCategoryController {
     }
 
     @PostMapping("/category")
-    public Result create(@RequestBody @Valid GoodsCategoryParam categoryParam, HttpSession session) {
-        Long userId = CommonUtil.getUserId(session, "adminLoginId");
+    public Result create(@RequestBody @Valid GoodsCategoryParam categoryParam,
+                         HttpSession session) {
+        Long userId = CommonUtil.getAdminUserId(session);
         categoryParam.setCreateUser(userId);
         categoryParam.setUpdateUser(userId);
         return categoryService.create(categoryParam);
@@ -44,7 +45,7 @@ public class GoodsCategoryController {
     public Result update(@PathVariable Long id,
                          @RequestBody @Valid GoodsCategoryParam categoryParam,
                          HttpSession session) {
-        Long userId = CommonUtil.getUserId(session, "adminLoginId");
+        Long userId = CommonUtil.getAdminUserId(session);
         categoryParam.setUpdateUser(userId);
         return categoryService.update(id, categoryParam);
     }
