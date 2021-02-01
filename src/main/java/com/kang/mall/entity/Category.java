@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 
 /**
  * @author yikang
- * ClassName: GoodsCategory
+ * ClassName: Category
  * Create Date: 2021/2/1 15:45
  */
 @Data
-public class GoodsCategory {
+public class Category {
     @TableId(type = IdType.AUTO)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long categoryId;

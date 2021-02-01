@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 
 /**
  * @author yikang
- * ClassName: GoodsCategoryParam
+ * ClassName: CategoryParam
  * Create Date: 2021/2/1 16:59
  */
 @Data
-public class GoodsCategoryParam {
+public class CategoryParam {
 
     @NotNull(message = "请传入分类等级")
     @Range(max = 3, message = "只支持三级分类，请传入 1, 2, 3")

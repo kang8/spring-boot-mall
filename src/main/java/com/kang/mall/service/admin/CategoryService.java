@@ -1,14 +1,14 @@
 package com.kang.mall.service.admin;
 
 import com.kang.mall.common.Result;
-import com.kang.mall.param.admin.GoodsCategoryParam;
+import com.kang.mall.param.admin.CategoryParam;
 
 /**
  * @author yikang
- * ClassName: GoodsCategoryService
+ * ClassName: CategoryService
  * Create Date: 2021/2/1 16:37
  */
-public interface GoodsCategoryService {
+public interface CategoryService {
     /**
      * 获取商品分类信息
      *
@@ -30,7 +30,7 @@ public interface GoodsCategoryService {
      * @param categoryParam 商品分类参数
      * @return Result
      */
-    Result create(GoodsCategoryParam categoryParam);
+    Result create(CategoryParam categoryParam);
 
     /**
      * 更新商品分类信息
@@ -39,7 +39,7 @@ public interface GoodsCategoryService {
      * @param categoryParam 商品分类参数
      * @return Result
      */
-    Result update(Long id, GoodsCategoryParam categoryParam);
+    Result update(Long id, CategoryParam categoryParam);
 
     /**
      * 删除商品分类信息

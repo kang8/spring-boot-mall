@@ -2,10 +2,10 @@ package com.kang.mall.service.admin.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kang.mall.common.Result;
-import com.kang.mall.entity.GoodsCategory;
-import com.kang.mall.mapper.GoodsCategoryMapper;
-import com.kang.mall.param.admin.GoodsCategoryParam;
-import com.kang.mall.service.admin.GoodsCategoryService;
+import com.kang.mall.entity.Category;
+import com.kang.mall.mapper.CategoryMapper;
+import com.kang.mall.param.admin.CategoryParam;
+import com.kang.mall.service.admin.CategoryService;
 import com.kang.mall.util.ClassUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +16,22 @@ import java.util.List;
 
 /**
  * @author yikang
- * ClassName: GoodsCategoryImpl
+ * ClassName: CategoryImpl
  * Create Date: 2021/2/1 16:37
  */
 @Service
-public class GoodsCategoryImpl implements GoodsCategoryService {
+public class CategoryImpl implements CategoryService {
 
     @Autowired
-    private GoodsCategoryMapper categoryMapper;
+    private CategoryMapper categoryMapper;
 
     @Override
     public Result list() {
-        QueryWrapper<GoodsCategory> query = new QueryWrapper<>();
+        QueryWrapper<Category> query = new QueryWrapper<>();
         query.orderByDesc("category_rank")
                 .select("category_id", "category_level", "parent_id", "category_name", "category_rank");
 
-        List<GoodsCategory> categories = categoryMapper.selectList(query);
+        List<Category> categories = categoryMapper.selectList(query);
 
         return categories != null ?
                 Result.ok(categories) :
@@ -40,15 +40,15 @@ public class GoodsCategoryImpl implements GoodsCategoryService {
 
     @Override
     public Result get(Long id) {
-        GoodsCategory goodsCategory = categoryMapper.selectById(id);
-        return goodsCategory != null ?
-                Result.ok("查询成功", goodsCategory) :
+        Category category = categoryMapper.selectById(id);
+        return category != null ?
+                Result.ok("查询成功", category) :
                 Result.error("查询失败");
     }
 
     @Override
-    public Result create(GoodsCategoryParam categoryParam) {
-        GoodsCategory category = ClassUtil.copyProperties(categoryParam, new GoodsCategory());
+    public Result create(CategoryParam categoryParam) {
+        Category category = ClassUtil.copyProperties(categoryParam, new Category());
         int isInsert = categoryMapper.insert(category);
         return isInsert > 0 ?
                 Result.ok("添加成功", category) :
@@ -56,8 +56,8 @@ public class GoodsCategoryImpl implements GoodsCategoryService {
     }
 
     @Override
-    public Result update(Long id, GoodsCategoryParam categoryParam) {
-        GoodsCategory category = categoryMapper.selectById(id);
+    public Result update(Long id, CategoryParam categoryParam) {
+        Category category = categoryMapper.selectById(id);
 
         BeanUtils.copyProperties(categoryParam, category, "createUser", "createTime");
         category.setUpdateTime(LocalDateTime.now());

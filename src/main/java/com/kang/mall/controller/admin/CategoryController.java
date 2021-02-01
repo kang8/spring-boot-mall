@@ -1,8 +1,8 @@
 package com.kang.mall.controller.admin;
 
 import com.kang.mall.common.Result;
-import com.kang.mall.param.admin.GoodsCategoryParam;
-import com.kang.mall.service.admin.GoodsCategoryService;
+import com.kang.mall.param.admin.CategoryParam;
+import com.kang.mall.service.admin.CategoryService;
 import com.kang.mall.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,15 +12,15 @@ import javax.validation.Valid;
 
 /**
  * @author yikang
- * ClassName: GoodsCategoryController
+ * ClassName: CategoryController
  * Create Date: 2021/2/1 16:35
  */
 @RestController
 @RequestMapping("/admin")
-public class GoodsCategoryController {
+public class CategoryController {
 
     @Autowired
-    private GoodsCategoryService categoryService;
+    private CategoryService categoryService;
 
     @GetMapping("/category")
     public Result list() {
@@ -33,7 +33,7 @@ public class GoodsCategoryController {
     }
 
     @PostMapping("/category")
-    public Result create(@RequestBody @Valid GoodsCategoryParam categoryParam,
+    public Result create(@RequestBody @Valid CategoryParam categoryParam,
                          HttpSession session) {
         Long userId = CommonUtil.getAdminUserId(session);
         categoryParam.setCreateUser(userId);
@@ -43,7 +43,7 @@ public class GoodsCategoryController {
 
     @RequestMapping(value = "/category/{id}", method = RequestMethod.PUT)
     public Result update(@PathVariable Long id,
-                         @RequestBody @Valid GoodsCategoryParam categoryParam,
+                         @RequestBody @Valid CategoryParam categoryParam,
                          HttpSession session) {
         Long userId = CommonUtil.getAdminUserId(session);
         categoryParam.setUpdateUser(userId);

@@ -1,4 +1,4 @@
-CREATE TABLE `goods_category`
+CREATE TABLE `category`
 (
     `category_id`    bigint AUTO_INCREMENT PRIMARY KEY COMMENT '分类id',
     `parent_id`      bigint      NOT NULL DEFAULT '0' COMMENT '父分类id',
@@ -12,7 +12,7 @@ CREATE TABLE `goods_category`
     `update_user`    bigint      NOT NULL DEFAULT '0' COMMENT '修改者id'
 ) COMMENT '商品三级分类表';
 
-INSERT INTO `goods_category` (category_id, category_level, parent_id, category_rank, create_user, update_user, category_name)
+INSERT INTO `category` (category_id, category_level, parent_id, category_rank, create_user, update_user, category_name)
 VALUES (1, 1, 0, 100, 1, 1, '家电 数码 手机'),
        (2, 1, 0, 99, 1, 1, '女装 男装 穿搭'),
        (3, 1, 0, 97, 1, 1, '运动 户外 乐器'),
