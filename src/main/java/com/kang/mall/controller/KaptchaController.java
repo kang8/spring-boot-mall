@@ -13,6 +13,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.NotBlank;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,10 +54,7 @@ public class KaptchaController {
 
     @GetMapping("/verify")
     @ResponseBody
-    public Result verify(String code, HttpSession session) {
-        if (StringUtils.isBlank(code)) {
-            return Result.error("请输入验证码");
-        }
+    public Result verify(@NotBlank(message = "请输入验证码") String code, HttpSession session) {
         String verifyCode = session.getAttribute("verifyCode") + "";
 
         code = code.toLowerCase();
