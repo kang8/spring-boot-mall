@@ -31,7 +31,7 @@ public class LoginController {
         AdminUser user = loginService.login(loginParam);
 
         if (ObjectUtils.isNotEmpty(user)) {
-            session.setAttribute("loginUser", user.getUsername());
+            session.setAttribute("adminLoginId", user.getAdminUserId());
             return Result.ok("登陆成功", ClassUtil.copyProperties(user, new AdminUserVO()));
         }
         return Result.error("login fail");
@@ -39,7 +39,7 @@ public class LoginController {
 
     @PostMapping("/logout")
     public Result logout(HttpServletRequest request) {
-        request.getSession().removeAttribute("loginUser");
+        request.getSession().removeAttribute("adminLoginId");
         return Result.ok("成功退出");
     }
 }

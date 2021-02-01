@@ -7,6 +7,7 @@ CREATE TABLE `admin_user`
     `locked`        tinyint     NOT NULL DEFAULT 0 COMMENT '是否锁定 0未锁定 1已锁定无法登陆'
 ) COMMENT '管理员表';
 
+# password: 123456
 INSERT INTO `admin_user` (username, password, nick_name)
 VALUES ("admin", "79c94a818605044fe21510f4d7304c64", "yikang"),
        ("test1", "988c9192194e2842a8b93090407ccc1d", "test1"),

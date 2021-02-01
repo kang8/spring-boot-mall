@@ -30,7 +30,7 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
         return (
                 uri.startsWith("/admin") || "/upload".equals(uri)
         ) &&
-                null == request.getSession().getAttribute("loginUser");
+                null == request.getSession().getAttribute("adminLoginId");
     }
 
 }

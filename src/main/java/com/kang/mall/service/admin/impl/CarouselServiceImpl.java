@@ -28,8 +28,7 @@ public class CarouselServiceImpl implements CarouselService {
     @Override
     public Result list() {
         QueryWrapper<Carousel> query = new QueryWrapper<>();
-        query.eq("is_deleted", 0)
-                .orderByDesc("carousel_rank")
+        query.orderByDesc("carousel_rank")
                 .select("carousel_id", "carousel_url", "redirect_url", "carousel_rank", "create_time");
         List<Carousel> carousels = carouselMapper.selectList(query);
 
@@ -42,7 +41,7 @@ public class CarouselServiceImpl implements CarouselService {
     public Result get(Long id) {
         Carousel carousel = carouselMapper.selectById(id);
         return carousel != null ?
-                Result.ok(carousel) :
+                Result.ok("查询成功", carousel) :
                 Result.error("查询失败");
     }
 
@@ -61,14 +60,6 @@ public class CarouselServiceImpl implements CarouselService {
     }
 
     @Override
-    public Result remove(Long id) {
-        int isDelete = carouselMapper.deleteById(id);
-        return isDelete > 0 ?
-                Result.ok("删除成功") :
-                Result.error("删除失败");
-    }
-
-    @Override
     public Result update(Long id, CarouselParam carouselParam) {
         Carousel queryCarousel = carouselMapper.selectById(id);
 
@@ -80,5 +71,13 @@ public class CarouselServiceImpl implements CarouselService {
         return isUpdate > 0 ?
                 Result.ok("更新成功", queryCarousel) :
                 Result.error("更新失败");
+    }
+
+    @Override
+    public Result remove(Long id) {
+        int isDelete = carouselMapper.deleteById(id);
+        return isDelete > 0 ?
+                Result.ok("删除成功") :
+                Result.error("删除失败");
     }
 }
