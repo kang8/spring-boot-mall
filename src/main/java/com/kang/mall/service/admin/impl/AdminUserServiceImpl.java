@@ -8,9 +8,7 @@ import com.kang.mall.mapper.AdminUserMapper;
 import com.kang.mall.param.admin.profile.NameParam;
 import com.kang.mall.param.admin.profile.PasswordParam;
 import com.kang.mall.service.admin.AdminUserService;
-import com.kang.mall.util.ClassUtil;
 import com.kang.mall.util.MD5Util;
-import com.kang.mall.vo.AdminUserVO;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +39,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public Result updateName(NameParam nameParam) {
         AdminUser user = adminUserMapper.selectById(nameParam.getAdminUserId());
+        user.setPassword(null);
 
         if (ObjectUtils.isNotEmpty(user)) {
             user.setUsername(nameParam.getUsername());
@@ -48,7 +47,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 
             int isUpdate = adminUserMapper.updateById(user);
             return isUpdate >= 0 ?
-                    Result.ok("更新成功", ClassUtil.copyProperties(user, new AdminUserVO())) :
+                    Result.ok("更新成功", user) :
                     Result.error("更新失败");
         } else {
             return Result.error("没有找到这个用户");

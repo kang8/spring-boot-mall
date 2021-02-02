@@ -26,7 +26,8 @@ public class LoginServiceImpl implements LoginService {
         // TODO: 根据不同的状态返回不同的消息。是没有这个用户还是密码错误
 
         QueryWrapper<AdminUser> query = new QueryWrapper<>();
-        query.eq("username", loginParam.getUsername()).eq("password", hashPassword);
+        query.eq("username", loginParam.getUsername()).eq("password", hashPassword)
+                .select("username", "admin_user_id", "nick_name");
         return adminUserMapper.selectOne(query);
     }
 }

@@ -23,8 +23,8 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/category")
-    public Result list() {
-        return categoryService.list();
+    public Result list(@RequestParam(value = "categoryId", required = false) Long id) {
+        return categoryService.list(id);
     }
 
     @GetMapping("category/{id}")
@@ -55,5 +55,8 @@ public class CategoryController {
         return categoryService.remove(id);
     }
 
-
+    @GetMapping("/category/option")
+    public Result option() {
+        return categoryService.option();
+    }
 }

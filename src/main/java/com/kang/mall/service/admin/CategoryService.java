@@ -12,9 +12,10 @@ public interface CategoryService {
     /**
      * 获取商品分类信息
      *
+     * @param id 商品 ID，用来懒加载树形结构
      * @return Result
      */
-    Result list();
+    Result list(Long id);
 
     /**
      * 根据商品分类 Id 获取商品分类信息
@@ -48,4 +49,11 @@ public interface CategoryService {
      * @return Result
      */
     Result remove(Long id);
+
+    /**
+     * 得到分类表中的全部父级，用于表单选择
+     *
+     * @return Result
+     */
+    Result option();
 }

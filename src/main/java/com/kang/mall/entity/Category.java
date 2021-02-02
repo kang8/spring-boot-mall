@@ -1,6 +1,7 @@
 package com.kang.mall.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -47,6 +48,11 @@ public class Category {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime updateTime;
+
     private Long createUser;
+
     private Long updateUser;
+
+    @TableField(exist = false)
+    private Boolean hasChildren;
 }
