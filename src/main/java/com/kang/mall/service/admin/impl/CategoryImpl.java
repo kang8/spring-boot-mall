@@ -1,14 +1,16 @@
 package com.kang.mall.service.admin.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.kang.mall.common.Constants;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kang.mall.common.Result;
 import com.kang.mall.entity.Category;
 import com.kang.mall.mapper.CategoryMapper;
 import com.kang.mall.param.admin.CategoryParam;
 import com.kang.mall.result.category.Option;
 import com.kang.mall.service.admin.CategoryService;
-import com.kang.mall.util.ClassUtil;
+import com.kang.mall.util.ClassUtils;
+import com.kang.mall.util.JsonUtils;
+import com.kang.mall.util.RedisUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.kang.mall.common.Constants.*;
 
 /**
  * @author yikang
@@ -30,8 +34,19 @@ public class CategoryImpl implements CategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
 
+    @Autowired
+    private RedisUtils redisUtils;
+
+    @Autowired
+    private JsonUtils jsonUtils;
+
     @Override
-    public Result list() {
+    public Result list() throws JsonProcessingException {
+        String categoryList = redisUtils.getValueForString("category_list");
+        if (categoryList != null) {
+            return Result.ok("查询成功", jsonUtils.toJson(categoryList));
+        }
+
         QueryWrapper<Category> query = new QueryWrapper<>();
         query
                 .orderByAsc("category_level", "parent_id")
@@ -39,6 +54,7 @@ public class CategoryImpl implements CategoryService {
                 .select("category_id", "category_level", "parent_id", "category_name", "category_rank", "create_time");
 
         List<Category> categories = categoryMapper.selectList(query);
+
         if (categories == null) {
             return Result.error("查询失败");
         }
@@ -50,14 +66,14 @@ public class CategoryImpl implements CategoryService {
         categories.forEach(category -> {
             Byte level = category.getCategoryLevel();
 
-            if (Constants.FIRST_LEVEL.equals(level)) {
+            if (FIRST_LEVEL.equals(level)) {
                 List<Category> firstChildren = new ArrayList<>();
 
                 category.setChildren(firstChildren);
                 firstCategories.add(category);
 
                 secondHashMap.put(category.getCategoryId(), firstChildren);
-            } else if (Constants.SECOND_LEVEL.equals(level)) {
+            } else if (SECOND_LEVEL.equals(level)) {
                 List<Category> thirdChildren = new ArrayList<>();
                 List<Category> secondCategories = secondHashMap.get(category.getParentId());
 
@@ -65,15 +81,16 @@ public class CategoryImpl implements CategoryService {
                 secondCategories.add(category);
 
                 thirdHaspMap.put(category.getCategoryId(), thirdChildren);
-            } else if (Constants.THIRD_LEVEL.equals(level)) {
+            } else if (THIRD_LEVEL.equals(level)) {
                 List<Category> thirdCategories = thirdHaspMap.get(category.getParentId());
 
                 thirdCategories.add(category);
             }
         });
 
-        return Result.ok(firstCategories);
+        redisUtils.storeObjectAsJson("category_list", firstCategories);
 
+        return Result.ok(firstCategories);
     }
 
     @Override
@@ -86,7 +103,7 @@ public class CategoryImpl implements CategoryService {
 
     @Override
     public Result create(CategoryParam categoryParam) {
-        Category category = ClassUtil.copyProperties(categoryParam, new Category());
+        Category category = ClassUtils.copyProperties(categoryParam, new Category());
         int isInsert = categoryMapper.insert(category);
         return isInsert > 0 ?
                 Result.ok("添加成功", category) :
@@ -115,9 +132,14 @@ public class CategoryImpl implements CategoryService {
     }
 
     @Override
-    public Result option() {
+    public Result option() throws JsonProcessingException {
+        String categoryOption = redisUtils.getValueForString("category_option");
+        if (categoryOption != null) {
+            return Result.ok("查询成功", jsonUtils.toJson(categoryOption));
+        }
+
         QueryWrapper<Category> query = new QueryWrapper<>();
-        query.ne("category_level", Constants.THIRD_LEVEL)
+        query.ne("category_level", THIRD_LEVEL)
                 .orderByAsc("category_level", "parent_id");
         List<Category> categoryOptions = categoryMapper.selectList(query);
 
@@ -129,14 +151,14 @@ public class CategoryImpl implements CategoryService {
         Map<Long, List<Option>> optionMap = new HashMap<>(16);
 
         categoryOptions.forEach(category -> {
-            if (Constants.FIRST_LEVEL.equals(category.getCategoryLevel())) {
+            if (FIRST_LEVEL.equals(category.getCategoryLevel())) {
                 List<Option> options = new ArrayList<>();
 
                 optionMap.put(category.getCategoryId(), options);
                 Option option = new Option(category.getCategoryId(), category.getCategoryName(), options);
 
                 firstOptions.add(option);
-            } else if (Constants.SECOND_LEVEL.equals(category.getCategoryLevel())) {
+            } else if (SECOND_LEVEL.equals(category.getCategoryLevel())) {
                 List<Option> options = optionMap.get(category.getParentId());
 
                 Option option = new Option(category.getCategoryId(), category.getCategoryName(), null);
@@ -147,12 +169,11 @@ public class CategoryImpl implements CategoryService {
 
         List<Option> rootList = new ArrayList<>();
 
-        Option rootOption = new Option();
-        rootOption.setCategoryName("根节点");
-        rootOption.setChildren(firstOptions);
-        rootOption.setCategoryId(0L);
+        Option rootOption = new Option(ROOT_CATEGORY_ID, ROOT_CATEGORY_NAME, firstOptions);
 
         rootList.add(rootOption);
+
+        redisUtils.storeObjectAsJson("category_option", rootList);
 
         return Result.ok(rootList);
     }

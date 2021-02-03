@@ -19,4 +19,6 @@ public class Constants {
     public final static Byte FIRST_LEVEL = 1;
     public final static Byte SECOND_LEVEL = 2;
     public final static Byte THIRD_LEVEL = 3;
+    public final static Long ROOT_CATEGORY_ID = 0L;
+    public final static String ROOT_CATEGORY_NAME = "根节点";
 }

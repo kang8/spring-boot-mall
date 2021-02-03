@@ -7,7 +7,7 @@ import com.kang.mall.entity.Carousel;
 import com.kang.mall.mapper.CarouselMapper;
 import com.kang.mall.param.admin.CarouselParam;
 import com.kang.mall.service.admin.CarouselService;
-import com.kang.mall.util.ClassUtil;
+import com.kang.mall.util.ClassUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,7 +52,7 @@ public class CarouselServiceImpl implements CarouselService {
             return Result.error("轮播图数量不能超过 10 个！！！");
         }
 
-        Carousel copyCarousel = ClassUtil.copyProperties(carouselParam, new Carousel());
+        Carousel copyCarousel = ClassUtils.copyProperties(carouselParam, new Carousel());
         int isInsert = carouselMapper.insert(copyCarousel);
         return isInsert > 0 ?
                 Result.ok("添加成功", copyCarousel) :

@@ -1,17 +1,16 @@
 package com.kang.mall.util;
 
-import com.kang.mall.common.Constants;
 import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
 
 /**
  * @author yikang
- * ClassName: MD5Util
+ * ClassName: MD5Utils
  * Description: md5 工具类
  * Create Date: 2021/1/15 20:37
  */
-public class MD5Util {
+public class MD5Utils {
 
     public static String customizeMd5Encode(String username, String password) {
         String hashUsername = md5(username);

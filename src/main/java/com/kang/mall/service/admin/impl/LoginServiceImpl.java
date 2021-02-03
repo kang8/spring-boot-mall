@@ -5,7 +5,7 @@ import com.kang.mall.entity.AdminUser;
 import com.kang.mall.mapper.AdminUserMapper;
 import com.kang.mall.param.admin.LoginParam;
 import com.kang.mall.service.admin.LoginService;
-import com.kang.mall.util.MD5Util;
+import com.kang.mall.util.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public AdminUser login(LoginParam loginParam) {
-        String hashPassword = MD5Util.customizeMd5Encode(loginParam.getUsername(), loginParam.getPassword());
+        String hashPassword = MD5Utils.customizeMd5Encode(loginParam.getUsername(), loginParam.getPassword());
 
         // TODO: 根据不同的状态返回不同的消息。是没有这个用户还是密码错误
 

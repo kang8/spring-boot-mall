@@ -8,7 +8,7 @@ import com.kang.mall.mapper.AdminUserMapper;
 import com.kang.mall.param.admin.profile.NameParam;
 import com.kang.mall.param.admin.profile.PasswordParam;
 import com.kang.mall.service.admin.AdminUserService;
-import com.kang.mall.util.MD5Util;
+import com.kang.mall.util.MD5Utils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,10 +58,10 @@ public class AdminUserServiceImpl implements AdminUserService {
     public Result updatePassword(PasswordParam passwordParam) {
         AdminUser user = adminUserMapper.selectById(passwordParam.getAdminUserId());
 
-        String databasePass = MD5Util.customizeMd5Encode(user.getUsername(), passwordParam.getOriginPassword());
+        String databasePass = MD5Utils.customizeMd5Encode(user.getUsername(), passwordParam.getOriginPassword());
 
         if (databasePass.equals(user.getPassword())) {
-            String newDatabasePass = MD5Util.customizeMd5Encode(user.getUsername(), passwordParam.getNewPassword());
+            String newDatabasePass = MD5Utils.customizeMd5Encode(user.getUsername(), passwordParam.getNewPassword());
             user.setPassword(newDatabasePass);
 
             int isUpdate = adminUserMapper.updateById(user);
