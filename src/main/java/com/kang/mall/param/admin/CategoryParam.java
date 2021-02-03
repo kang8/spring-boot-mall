@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
  * Create Date: 2021/2/1 16:59
  */
 @Data
-public class CategoryParam {
+public class CategoryParam implements Serializable {
 
     @NotNull(message = "请传入分类等级")
     @Range(max = 3, message = "只支持三级分类，请传入 1, 2, 3")

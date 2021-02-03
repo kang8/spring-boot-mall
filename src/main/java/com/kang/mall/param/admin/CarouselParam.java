@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
  * Create Date: 2021/1/29 15:47
  */
 @Data
-public class CarouselParam {
+public class CarouselParam implements Serializable {
     @NotBlank(message = "请上传轮播图")
     @Size(max = 100, message = "轮播图文件名可能过长，请将文件名缩短一点")
     private String carouselUrl;

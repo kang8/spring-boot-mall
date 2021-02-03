@@ -4,13 +4,15 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author yikang
  * ClassName: AdminUser
  * Create Date: 2021/1/15 20:49
  */
 @Data
-public class AdminUser {
+public class AdminUser implements Serializable {
 
     @TableId
     private Long adminUserId;

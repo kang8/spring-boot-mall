@@ -12,10 +12,9 @@ public interface CategoryService {
     /**
      * 获取商品分类信息
      *
-     * @param id 商品 ID，用来懒加载树形结构
      * @return Result
      */
-    Result list(Long id);
+    Result list();
 
     /**
      * 根据商品分类 Id 获取商品分类信息

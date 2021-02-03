@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
  * Create Date: 2021/1/27 14:53
  */
 @Data
-public class Carousel {
+public class Carousel implements Serializable {
 
     @SuppressWarnings("AlibabaCommentsMustBeJavadocFormat")
     @TableId(type = IdType.AUTO) //主键的类型为自动递增

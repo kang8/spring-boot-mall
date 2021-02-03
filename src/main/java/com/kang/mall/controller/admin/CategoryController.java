@@ -23,8 +23,8 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/category")
-    public Result list(@RequestParam(value = "categoryId", required = false) Long id) {
-        return categoryService.list(id);
+    public Result list() {
+        return categoryService.list();
     }
 
     @GetMapping("category/{id}")

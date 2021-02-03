@@ -9,7 +9,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author yikang
@@ -17,7 +19,7 @@ import java.time.LocalDateTime;
  * Create Date: 2021/2/1 15:45
  */
 @Data
-public class Category {
+public class Category implements Serializable {
     @TableId(type = IdType.AUTO)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long categoryId;
@@ -54,5 +56,5 @@ public class Category {
     private Long updateUser;
 
     @TableField(exist = false)
-    private Boolean hasChildren;
+    private List<Category> children;
 }
