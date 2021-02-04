@@ -109,20 +109,55 @@ public class CategoryImpl implements CategoryService {
 
     @Override
     public Result create(CategoryParam categoryParam) {
+        byte level;
+        Category parentCategory = categoryMapper.selectById(categoryParam.getParentId());
+        if (parentCategory == null) {
+            level = 1;
+        } else {
+            level = (byte) (parentCategory.getCategoryLevel() + 1);
+        }
+
+
         Category category = ClassUtils.copyProperties(categoryParam, new Category());
+        category.setCategoryLevel(level);
         int isInsert = categoryMapper.insert(category);
+
+        cleanCacheByParentId(category.getParentId());
+
         return isInsert > 0 ?
                 Result.ok("添加成功", category) :
                 Result.error("添加失败");
     }
 
+    private void cleanCacheByParentId(Long parentId) {
+        redisUtils.deleteKey("category_list");
+        Category parentCategory = categoryMapper.selectById(parentId);
+        if (parentCategory == null || !THIRD_LEVEL.equals(parentCategory.getCategoryLevel())) {
+            redisUtils.deleteKey("category_option");
+        }
+    }
+
     @Override
     public Result update(Long id, CategoryParam categoryParam) {
+        if (categoryParam.getParentId().equals(id)) {
+            return Result.error("父节点不能选择标签");
+        }
+
         Category category = categoryMapper.selectById(id);
+        byte level;
+        Category parentCategory = categoryMapper.selectById(categoryParam.getParentId());
+        if (parentCategory == null) {
+            level = 1;
+        } else {
+            level = (byte) (parentCategory.getCategoryLevel() + 1);
+        }
 
         BeanUtils.copyProperties(categoryParam, category, "createUser", "createTime");
         category.setUpdateTime(LocalDateTime.now());
+        category.setCategoryLevel(level);
         int isUpdate = categoryMapper.updateById(category);
+
+        cleanCacheByParentId(category.getParentId());
 
         return isUpdate > 0 ?
                 Result.ok("更新成功", category) :
@@ -155,7 +190,6 @@ public class CategoryImpl implements CategoryService {
         if (hasThirdLevel(category.getCategoryLevel())) {
             return;
         }
-
         // 如果长度为 1，则代表这是第一次进入。而处在这个位置代表删除这里的元素会改变 category_option 中的元素。
         // 所以这里将 category_option 的缓存删除
         if (deletes.size() == 1) {
