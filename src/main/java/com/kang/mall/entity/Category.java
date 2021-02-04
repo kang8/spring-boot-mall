@@ -35,6 +35,7 @@ public class Category implements Serializable {
     /**
      * 父节点
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
     /**
      * 分类名称

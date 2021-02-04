@@ -14,12 +14,10 @@ import com.kang.mall.util.RedisUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.kang.mall.common.Constants.*;
 
@@ -66,14 +64,14 @@ public class CategoryImpl implements CategoryService {
         categories.forEach(category -> {
             Byte level = category.getCategoryLevel();
 
-            if (FIRST_LEVEL.equals(level)) {
+            if (hasFirstLevel(level)) {
                 List<Category> firstChildren = new ArrayList<>();
 
                 category.setChildren(firstChildren);
                 firstCategories.add(category);
 
                 secondHashMap.put(category.getCategoryId(), firstChildren);
-            } else if (SECOND_LEVEL.equals(level)) {
+            } else if (hasSecondLevel(level)) {
                 List<Category> thirdChildren = new ArrayList<>();
                 List<Category> secondCategories = secondHashMap.get(category.getParentId());
 
@@ -81,7 +79,7 @@ public class CategoryImpl implements CategoryService {
                 secondCategories.add(category);
 
                 thirdHaspMap.put(category.getCategoryId(), thirdChildren);
-            } else if (THIRD_LEVEL.equals(level)) {
+            } else if (hasThirdLevel(level)) {
                 List<Category> thirdCategories = thirdHaspMap.get(category.getParentId());
 
                 thirdCategories.add(category);
@@ -91,6 +89,14 @@ public class CategoryImpl implements CategoryService {
         redisUtils.storeObjectAsJson("category_list", firstCategories);
 
         return Result.ok(firstCategories);
+    }
+
+    private boolean hasThirdLevel(Byte level) {
+        return THIRD_LEVEL.equals(level);
+    }
+
+    private boolean hasFirstLevel(Byte level) {
+        return FIRST_LEVEL.equals(level);
     }
 
     @Override
@@ -124,11 +130,51 @@ public class CategoryImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public Result remove(Long id) {
-        int isDelete = categoryMapper.deleteById(id);
-        return isDelete > 0 ?
-                Result.ok("删除成功") :
-                Result.error("删除失败");
+        Category category = categoryMapper.selectById(id);
+
+        if (category == null) {
+            return Result.error("没有该分类");
+        }
+
+        List<Long> deleteArray = new LinkedList<>();
+        deleteChildren(category, deleteArray);
+        categoryMapper.deleteBatchIds(deleteArray);
+        redisUtils.deleteKey("category_list");
+
+        return Result.ok("删除成功");
+    }
+
+    /**
+     * 使用递归来查找要删除的 category 主键
+     */
+    private void deleteChildren(Category category, List<Long> deletes) {
+        deletes.add(category.getCategoryId());
+
+        if (hasThirdLevel(category.getCategoryLevel())) {
+            return;
+        }
+
+        // 如果长度为 1，则代表这是第一次进入。而处在这个位置代表删除这里的元素会改变 category_option 中的元素。
+        // 所以这里将 category_option 的缓存删除
+        if (deletes.size() == 1) {
+            redisUtils.deleteKey("category_option");
+        }
+
+        List<Category> childrenCategories = getCategoriesByParentId(category.getCategoryId());
+        childrenCategories.forEach(childrenCategory -> deleteChildren(childrenCategory, deletes));
+    }
+
+    private List<Category> getCategoriesByParentId(Long id) {
+        QueryWrapper<Category> searchChildren = usingIdGetQueryMapperForParentId(id);
+        return categoryMapper.selectList(searchChildren);
+    }
+
+    private QueryWrapper<Category> usingIdGetQueryMapperForParentId(Long categoryId) {
+        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("parent_id", categoryId);
+        return queryWrapper;
     }
 
     @Override
@@ -140,7 +186,8 @@ public class CategoryImpl implements CategoryService {
 
         QueryWrapper<Category> query = new QueryWrapper<>();
         query.ne("category_level", THIRD_LEVEL)
-                .orderByAsc("category_level", "parent_id");
+                .orderByAsc("category_level", "parent_id")
+                .orderByDesc("category_rank");
         List<Category> categoryOptions = categoryMapper.selectList(query);
 
         if (categoryOptions == null) {
@@ -151,14 +198,16 @@ public class CategoryImpl implements CategoryService {
         Map<Long, List<Option>> optionMap = new HashMap<>(16);
 
         categoryOptions.forEach(category -> {
-            if (FIRST_LEVEL.equals(category.getCategoryLevel())) {
+            Byte level = category.getCategoryLevel();
+
+            if (hasFirstLevel(level)) {
                 List<Option> options = new ArrayList<>();
 
                 optionMap.put(category.getCategoryId(), options);
                 Option option = new Option(category.getCategoryId(), category.getCategoryName(), options);
 
                 firstOptions.add(option);
-            } else if (SECOND_LEVEL.equals(category.getCategoryLevel())) {
+            } else if (hasSecondLevel(level)) {
                 List<Option> options = optionMap.get(category.getParentId());
 
                 Option option = new Option(category.getCategoryId(), category.getCategoryName(), null);
@@ -176,5 +225,9 @@ public class CategoryImpl implements CategoryService {
         redisUtils.storeObjectAsJson("category_option", rootList);
 
         return Result.ok(rootList);
+    }
+
+    private boolean hasSecondLevel(Byte level) {
+        return SECOND_LEVEL.equals(level);
     }
 }

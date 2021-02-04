@@ -89,7 +89,7 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>7.5.1</version>
                 <configuration>
-                    <url>jdbc:mysql://yikang.pub:3306/mall?serverTimezone=GMT</url>
+                    <url>jdbc:mysql://121.36.19.76:3306/mall?serverTimezone=GMT</url>
                     <user>root</user>
                     <password>asdf;lkj</password>
                 </configuration>
