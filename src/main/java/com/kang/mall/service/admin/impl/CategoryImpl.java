@@ -243,9 +243,9 @@ public class CategoryImpl implements CategoryService {
     }
 
     private Option createRootOption(List<Option> firstOptions) throws JsonProcessingException {
-        Map<String, Long> idAndParentId = new HashMap<>(4);
-        idAndParentId.put("categoryId", 0L);
-        idAndParentId.put("parentId", -1L);
+        Map<String, String> idAndParentId = new HashMap<>(4);
+        idAndParentId.put("categoryId", "0");
+        idAndParentId.put("parentId", "-1");
         String rootValue = jsonUtils.objectToJsonString(idAndParentId);
 
         return new Option(rootValue, ROOT_CATEGORY_NAME, firstOptions);
@@ -254,11 +254,11 @@ public class CategoryImpl implements CategoryService {
     private List<Option> dealDataForTree(List<Category> categories) {
         List<Option> optionsTree = new ArrayList<>();
         Map<Long, List<Option>> optionMap = new HashMap<>(16);
-        Map<String, Long> idAndParentId = new HashMap<>(4);
+        Map<String, String> idAndParentId = new HashMap<>(4);
 
         categories.forEach(category -> {
-            idAndParentId.put("categoryId", category.getCategoryId());
-            idAndParentId.put("parentId", category.getParentId());
+            idAndParentId.put("categoryId", String.valueOf(category.getCategoryId()));
+            idAndParentId.put("parentId", String.valueOf(category.getParentId()));
             String valueString = null;
             try {
                 valueString = jsonUtils.objectToJsonString(idAndParentId);
