@@ -109,17 +109,8 @@ public class CategoryImpl implements CategoryService {
 
     @Override
     public Result create(CategoryParam categoryParam) {
-        byte level;
-        Category parentCategory = categoryMapper.selectById(categoryParam.getParentId());
-        if (parentCategory == null) {
-            level = 1;
-        } else {
-            level = (byte) (parentCategory.getCategoryLevel() + 1);
-        }
-
-
         Category category = ClassUtils.copyProperties(categoryParam, new Category());
-        category.setCategoryLevel(level);
+        category.setCategoryLevel((byte) (categoryParam.getParentLevel() + 1));
         int isInsert = categoryMapper.insert(category);
 
         cleanCacheByParentId(category.getParentId());
@@ -144,17 +135,9 @@ public class CategoryImpl implements CategoryService {
         }
 
         Category category = categoryMapper.selectById(id);
-        byte level;
-        Category parentCategory = categoryMapper.selectById(categoryParam.getParentId());
-        if (parentCategory == null) {
-            level = 1;
-        } else {
-            level = (byte) (parentCategory.getCategoryLevel() + 1);
-        }
-
         BeanUtils.copyProperties(categoryParam, category, "createUser", "createTime");
         category.setUpdateTime(LocalDateTime.now());
-        category.setCategoryLevel(level);
+        category.setCategoryLevel((byte) (categoryParam.getParentLevel() + 1));
         int isUpdate = categoryMapper.updateById(category);
 
         cleanCacheByParentId(category.getParentId());
@@ -245,6 +228,7 @@ public class CategoryImpl implements CategoryService {
     private Option createRootOption(List<Option> firstOptions) throws JsonProcessingException {
         Map<String, String> idAndParentId = new HashMap<>(4);
         idAndParentId.put("categoryId", "0");
+        idAndParentId.put("categoryLevel", "0");
         idAndParentId.put("parentId", "-1");
         String rootValue = jsonUtils.objectToJsonString(idAndParentId);
 
@@ -258,6 +242,7 @@ public class CategoryImpl implements CategoryService {
 
         categories.forEach(category -> {
             idAndParentId.put("categoryId", String.valueOf(category.getCategoryId()));
+            idAndParentId.put("categoryLevel", String.valueOf(category.getCategoryLevel()));
             idAndParentId.put("parentId", String.valueOf(category.getParentId()));
             String valueString = null;
             try {

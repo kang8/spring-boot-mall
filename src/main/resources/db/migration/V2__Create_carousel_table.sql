@@ -11,3 +11,11 @@ CREATE TABLE `carousel`
     `update_user`   int          NOT NULL DEFAULT '0' COMMENT '修改者id',
     KEY `is_deleted_index` (`is_deleted`)
 ) COMMENT '轮播图';
+
+INSERT INTO `carousel`(`carousel_url`, `create_user`, `update_user`)
+VALUES ('https://cdn.jsdelivr.net/gh/yk17310320725/picBed/img/clock.png', 1, 1),
+       ('https://cdn.jsdelivr.net/gh/yk17310320725/picBed/img/clockwise.png', 1, 1),
+       ('https://cdn.jsdelivr.net/gh/yk17310320725/picBed/img/anticlockwise.png', 1, 1),
+       ('https://cdn.jsdelivr.net/gh/yk17310320725/picBed/img/unsigned_integer.png', 1, 1),
+       ('https://cdn.jsdelivr.net/gh/yk17310320725/picBed/img/wrong_integer.png', 1, 1);
+
