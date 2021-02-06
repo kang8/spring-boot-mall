@@ -22,9 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL) // 添加该注解之后，返回值为 null 时，不输出
 public class Option implements Serializable {
-
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long categoryId;
+    private String value;
 
     private String categoryName;
 

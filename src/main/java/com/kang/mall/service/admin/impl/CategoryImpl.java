@@ -222,43 +222,63 @@ public class CategoryImpl implements CategoryService {
         query.ne("category_level", THIRD_LEVEL)
                 .orderByAsc("category_level", "parent_id")
                 .orderByDesc("category_rank");
-        List<Category> categoryOptions = categoryMapper.selectList(query);
+        List<Category> categories = categoryMapper.selectList(query);
 
-        if (categoryOptions == null) {
-            return Result.error("查询失败");
+        if (categories == null) {
+            return Result.ok();
         }
+        List<Option> optionsTree = dealDataForTree(categories);
+        List<Option> root = createRootByOptionsTree(optionsTree);
+        redisUtils.storeObjectAsJson("category_option", root);
 
-        List<Option> firstOptions = new ArrayList<>();
+        return Result.ok(root);
+    }
+
+    private List<Option> createRootByOptionsTree(List<Option> firstOptions) throws JsonProcessingException {
+        Option rootOption = createRootOption(firstOptions);
+
+        List<Option> rootList = new ArrayList<>();
+        rootList.add(rootOption);
+        return rootList;
+    }
+
+    private Option createRootOption(List<Option> firstOptions) throws JsonProcessingException {
+        Map<String, Long> idAndParentId = new HashMap<>(4);
+        idAndParentId.put("categoryId", 0L);
+        idAndParentId.put("parentId", -1L);
+        String rootValue = jsonUtils.objectToJsonString(idAndParentId);
+
+        return new Option(rootValue, ROOT_CATEGORY_NAME, firstOptions);
+    }
+
+    private List<Option> dealDataForTree(List<Category> categories) {
+        List<Option> optionsTree = new ArrayList<>();
         Map<Long, List<Option>> optionMap = new HashMap<>(16);
+        Map<String, Long> idAndParentId = new HashMap<>(4);
 
-        categoryOptions.forEach(category -> {
-            Byte level = category.getCategoryLevel();
+        categories.forEach(category -> {
+            idAndParentId.put("categoryId", category.getCategoryId());
+            idAndParentId.put("parentId", category.getParentId());
+            String valueString = null;
+            try {
+                valueString = jsonUtils.objectToJsonString(idAndParentId);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            Option option = new Option(valueString, category.getCategoryName(), null);
 
-            if (hasFirstLevel(level)) {
+            if (hasFirstLevel(category.getCategoryLevel())) {
                 List<Option> options = new ArrayList<>();
-
+                option.setChildren(options);
+                optionsTree.add(option);
                 optionMap.put(category.getCategoryId(), options);
-                Option option = new Option(category.getCategoryId(), category.getCategoryName(), options);
-
-                firstOptions.add(option);
-            } else if (hasSecondLevel(level)) {
+            } else if (hasSecondLevel(category.getCategoryLevel())) {
                 List<Option> options = optionMap.get(category.getParentId());
-
-                Option option = new Option(category.getCategoryId(), category.getCategoryName(), null);
-
                 options.add(option);
             }
         });
 
-        List<Option> rootList = new ArrayList<>();
-
-        Option rootOption = new Option(ROOT_CATEGORY_ID, ROOT_CATEGORY_NAME, firstOptions);
-
-        rootList.add(rootOption);
-
-        redisUtils.storeObjectAsJson("category_option", rootList);
-
-        return Result.ok(rootList);
+        return optionsTree;
     }
 
     private boolean hasSecondLevel(Byte level) {
