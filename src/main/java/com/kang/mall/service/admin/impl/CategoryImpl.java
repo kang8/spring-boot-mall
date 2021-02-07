@@ -7,8 +7,10 @@ import com.kang.mall.config.properties.MallCategoryProperties;
 import com.kang.mall.entity.Category;
 import com.kang.mall.mapper.CategoryMapper;
 import com.kang.mall.param.admin.CategoryParam;
+import com.kang.mall.pojo.BaseCategory;
 import com.kang.mall.result.category.Option;
 import com.kang.mall.service.admin.CategoryService;
+import com.kang.mall.util.CategoryUtils;
 import com.kang.mall.util.ClassUtils;
 import com.kang.mall.util.JsonUtils;
 import com.kang.mall.util.RedisUtils;
@@ -40,6 +42,9 @@ public class CategoryImpl implements CategoryService {
     private JsonUtils jsonUtils;
 
     @Autowired
+    private CategoryUtils categoryUtils;
+
+    @Autowired
     private MallCategoryProperties categoryProperties;
 
     @Override
@@ -53,16 +58,16 @@ public class CategoryImpl implements CategoryService {
             return Result.ok();
         }
 
-        List categoriesTree = recursionGetTreeList(categories, ROOT_CATEGORY_ID);
+        List categoriesTree = recursionGetTree(categories, ROOT_CATEGORY_ID);
         redisUtils.set(CATEGORY_LIST, categoriesTree);
 
         return Result.ok(categoriesTree);
     }
 
-    private List recursionGetTreeList(List<Category> categoriesByOrder, Long parentId) {
-        List<Category> children = new ArrayList<>(10);
+    private List recursionGetTree(List<? extends BaseCategory> baseCategories, Long parentId) {
+        List<BaseCategory> children = new ArrayList<>(10);
 
-        for (Category category : categoriesByOrder) {
+        for (BaseCategory category : baseCategories) {
             if (parentId.equals(category.getCategoryId())) {
                 children = category.getChildren();
             } else if (parentId.equals(category.getParentId())) {
@@ -71,17 +76,11 @@ public class CategoryImpl implements CategoryService {
             }
         }
 
-        children.forEach(category -> {
-            if (hasLastLevel(category.getCategoryLevel())) {
-                return;
-            }
-            recursionGetTreeList(categoriesByOrder, category.getCategoryId());
-        });
+        if (children.size() == 0) {
+            return null;
+        }
+        children.forEach(category -> recursionGetTree(baseCategories, category.getCategoryId()));
         return children;
-    }
-
-    private boolean hasLastLevel(Byte level) {
-        return categoryProperties.getLevel().equals(level);
     }
 
     private List<Category> getCategoriesByOrder() {
@@ -92,14 +91,6 @@ public class CategoryImpl implements CategoryService {
                 .select("category_id", "category_level", "parent_id", "category_name", "category_rank", "create_time");
 
         return categoryMapper.selectList(query);
-    }
-
-    private boolean hasThirdLevel(Byte level) {
-        return THIRD_LEVEL.equals(level);
-    }
-
-    private boolean hasFirstLevel(Byte level) {
-        return FIRST_LEVEL.equals(level);
     }
 
     @Override
@@ -175,7 +166,7 @@ public class CategoryImpl implements CategoryService {
     private void deleteChildren(Category category, List<Long> deletes) {
         deletes.add(category.getCategoryId());
 
-        if (hasThirdLevel(category.getCategoryLevel())) {
+        if (categoryUtils.hasThirdLevel(category.getCategoryLevel())) {
             return;
         }
         // 如果长度为 1，则代表这是第一次进入。而处在这个位置代表删除这里的元素会改变 category_option 中的元素。
@@ -205,97 +196,61 @@ public class CategoryImpl implements CategoryService {
             return Result.ok("查询成功", redisUtils.get(CATEGORY_OPTION));
         }
 
-        QueryWrapper<Category> query = new QueryWrapper<>();
-        query.ne("category_level", THIRD_LEVEL)
-                .orderByAsc("category_level", "parent_id")
-                .orderByDesc("category_rank");
-        List<Category> categories = categoryMapper.selectList(query);
+        List<Category> categories = getCategoriesByOption();
+
         Category root = new Category(ROOT_CATEGORY_ID, ROOT_LEVEL, ROOT_PARENT_ID, ROOT_CATEGORY_NAME);
         // time complexity O(n)
         categories.add(0, root);
 
-        List<Option> optionsTree = recursionGetTreeOption(categories, ROOT_PARENT_ID);
-        //List<Option> root = createRootByOptionsTree(optionsTree);
-        redisUtils.set(CATEGORY_OPTION, root);
+        List<Option> options = toOption(categories);
 
-        return Result.ok(root);
+        List rootOption = recursionGetTree(options, ROOT_PARENT_ID);
+        redisUtils.set(CATEGORY_OPTION, rootOption);
+
+        return Result.ok(rootOption);
     }
 
-    private List<Option> recursionGetTreeOption(List<Category> categories, Long parentId) {
-        return null;
+    private List<Category> getCategoriesByOption() {
+        QueryWrapper<Category> query = new QueryWrapper<>();
+        query.ne("category_level", categoryProperties.getLevel())
+                .orderByAsc("category_level", "parent_id")
+                .orderByDesc("category_rank")
+                .select("category_id", "category_level", "parent_id", "category_name");
+        return categoryMapper.selectList(query);
     }
 
-    private List<Option> createRootByOptionsTree(List<Option> firstOptions) throws JsonProcessingException {
-        Option rootOption = createRootOption(firstOptions);
+    private List<Option> toOption(List<Category> categories) throws JsonProcessingException {
+        List<Option> options = new ArrayList<>();
+        Map<String, String> value = new HashMap<>(4);
+        for (Category category : categories) {
+            Option option = ClassUtils.copyProperties(category, new Option());
 
-        List<Option> rootList = new ArrayList<>();
-        rootList.add(rootOption);
-        return rootList;
-    }
-
-    private Option createRootOption(List<Option> firstOptions) throws JsonProcessingException {
-        Map<String, String> idAndParentId = new HashMap<>(4);
-        idAndParentId.put("categoryId", String.valueOf(ROOT_CATEGORY_ID));
-        idAndParentId.put("categoryLevel", String.valueOf(ROOT_LEVEL));
-        idAndParentId.put("parentId", String.valueOf(ROOT_PARENT_ID));
-        String rootValue = jsonUtils.objectToJsonString(idAndParentId);
-
-        return new Option(rootValue, ROOT_CATEGORY_NAME, firstOptions);
-    }
-
-    private List<Option> dealDataForTree(List<Category> categories) {
-        List<Option> optionsTree = new ArrayList<>();
-        Map<Long, List<Option>> optionMap = new HashMap<>(16);
-        Map<String, String> idAndParentId = new HashMap<>(4);
-
-        categories.forEach(category -> {
-            idAndParentId.put("categoryId", String.valueOf(category.getCategoryId()));
-            idAndParentId.put("categoryLevel", String.valueOf(category.getCategoryLevel()));
-            idAndParentId.put("parentId", String.valueOf(category.getParentId()));
-            String valueString = null;
-            try {
-                valueString = jsonUtils.objectToJsonString(idAndParentId);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            Option option = new Option(valueString, category.getCategoryName(), null);
-
-            if (hasFirstLevel(category.getCategoryLevel())) {
-                List<Option> options = new ArrayList<>();
-                option.setChildren(options);
-                optionsTree.add(option);
-                optionMap.put(category.getCategoryId(), options);
-            } else if (hasSecondLevel(category.getCategoryLevel())) {
-                List<Option> options = optionMap.get(category.getParentId());
-                options.add(option);
-            }
-        });
-
-        return optionsTree;
-    }
-
-    private boolean hasSecondLevel(Byte level) {
-        return SECOND_LEVEL.equals(level);
+            value.put("categoryId", String.valueOf(category.getCategoryId()));
+            value.put("categoryLevel", String.valueOf(category.getCategoryLevel()));
+            value.put("parentId", String.valueOf(category.getParentId()));
+            String valueOfJson = jsonUtils.objectToJsonString(value);
+            option.setValue(valueOfJson);
+            options.add(option);
+        }
+        return options;
     }
 
     public void testTreeList() throws JsonProcessingException {
         List<Category> categoriesByOrder = getCategoriesByOrder();
-        List list = recursionGetTreeList(categoriesByOrder, ROOT_CATEGORY_ID);
+        List list = recursionGetTree(categoriesByOrder, ROOT_CATEGORY_ID);
         String s = jsonUtils.objectToJsonString(list);
         System.out.println(s);
     }
 
-    public void testTreeOption() {
-        QueryWrapper<Category> query = new QueryWrapper<>();
-        query.ne("category_level", THIRD_LEVEL)
-                .orderByAsc("category_level", "parent_id")
-                .orderByDesc("category_rank");
-        List<Category> categories = categoryMapper.selectList(query);
+    public void testTreeOption() throws JsonProcessingException {
+        List<Category> categories = getCategoriesByOption();
         Category root = new Category(ROOT_CATEGORY_ID, ROOT_LEVEL, ROOT_PARENT_ID, ROOT_CATEGORY_NAME);
         // time complexity O(n)
         categories.add(0, root);
+        List<Option> options = toOption(categories);
 
-        recursionGetTreeList(categories, ROOT_PARENT_ID);
-        System.out.println(categories);
+        List rootOptions = recursionGetTree(options, ROOT_PARENT_ID);
+        String s = jsonUtils.objectToJsonString(rootOptions);
+        System.out.println(s);
     }
 }

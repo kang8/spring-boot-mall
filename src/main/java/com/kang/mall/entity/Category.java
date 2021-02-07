@@ -1,22 +1,17 @@
 package com.kang.mall.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.kang.mall.pojo.BaseCategory;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author yikang
@@ -26,23 +21,7 @@ import java.util.List;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
-public class Category implements Serializable {
-    @TableId(type = IdType.AUTO)
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long categoryId;
-    /**
-     * 排序等级
-     */
-    private Byte categoryLevel;
-    /**
-     * 父节点
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long parentId;
-    /**
-     * 分类名称
-     */
-    private String categoryName;
+public class Category extends BaseCategory {
     /**
      * 排序值
      */
@@ -66,13 +45,7 @@ public class Category implements Serializable {
 
     private Long updateUser;
 
-    @TableField(exist = false)
-    private List<Category> children;
-
     public Category(Long categoryId, Byte categoryLevel, Long parentId, String categoryName) {
-        this.categoryId = categoryId;
-        this.categoryLevel = categoryLevel;
-        this.parentId = parentId;
-        this.categoryName = categoryName;
+        super(categoryId, categoryLevel, parentId, categoryName, null);
     }
 }

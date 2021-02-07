@@ -1,5 +1,6 @@
 package com.kang.mall.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kang.mall.service.admin.impl.CategoryImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class CategoryText {
     }
 
     @Test
-    public void testGetTreeOption() {
+    public void testGetTreeOption() throws JsonProcessingException {
         category.testTreeOption();
     }
 
