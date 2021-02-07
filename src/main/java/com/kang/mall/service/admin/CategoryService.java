@@ -16,9 +16,8 @@ public interface CategoryService {
      * 获取商品分类信息
      *
      * @return Result
-     * @throws JsonProcessingException  json 解析异常
      */
-    Result list() throws JsonProcessingException;
+    Result list() ;
 
     /**
      * 根据商品分类 Id 获取商品分类信息

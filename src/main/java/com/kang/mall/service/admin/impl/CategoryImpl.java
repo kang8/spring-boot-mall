@@ -43,19 +43,18 @@ public class CategoryImpl implements CategoryService {
     private MallCategoryProperties categoryProperties;
 
     @Override
-    public Result list() throws JsonProcessingException {
-        String categoryList = redisUtils.getValueForString("category_list");
-        if (categoryList != null) {
-            return Result.ok("查询成功", jsonUtils.toJson(categoryList));
+    public Result list() {
+        if (redisUtils.hasKey(CATEGORY_LIST)) {
+            return Result.ok("查询成功", redisUtils.get(CATEGORY_LIST));
         }
 
         List<Category> categories = getCategoriesByOrder();
         if (categories == null) {
-            return Result.error("查询失败");
+            return Result.ok();
         }
 
-        List categoriesTree = recursionGetTreeList(categories, 0L);
-        redisUtils.storeObjectAsJson("category_list", categoriesTree);
+        List categoriesTree = recursionGetTreeList(categories, ROOT_CATEGORY_ID);
+        redisUtils.set(CATEGORY_LIST, categoriesTree);
 
         return Result.ok(categoriesTree);
     }
@@ -126,10 +125,10 @@ public class CategoryImpl implements CategoryService {
     }
 
     private void cleanCacheByParentId(Long parentId) {
-        redisUtils.deleteKey("category_list");
+        redisUtils.del(CATEGORY_LIST);
         Category parentCategory = categoryMapper.selectById(parentId);
         if (parentCategory == null || !THIRD_LEVEL.equals(parentCategory.getCategoryLevel())) {
-            redisUtils.deleteKey("category_option");
+            redisUtils.del(CATEGORY_OPTION);
         }
     }
 
@@ -165,7 +164,7 @@ public class CategoryImpl implements CategoryService {
         List<Long> deleteArray = new LinkedList<>();
         deleteChildren(category, deleteArray);
         categoryMapper.deleteBatchIds(deleteArray);
-        redisUtils.deleteKey("category_list");
+        redisUtils.del(CATEGORY_LIST);
 
         return Result.ok("删除成功");
     }
@@ -182,7 +181,7 @@ public class CategoryImpl implements CategoryService {
         // 如果长度为 1，则代表这是第一次进入。而处在这个位置代表删除这里的元素会改变 category_option 中的元素。
         // 所以这里将 category_option 的缓存删除
         if (deletes.size() == 1) {
-            redisUtils.deleteKey("category_option");
+            redisUtils.del(CATEGORY_OPTION);
         }
 
         List<Category> childrenCategories = getCategoriesByParentId(category.getCategoryId());
@@ -202,9 +201,8 @@ public class CategoryImpl implements CategoryService {
 
     @Override
     public Result option() throws JsonProcessingException {
-        String categoryOption = redisUtils.getValueForString("category_option");
-        if (categoryOption != null) {
-            return Result.ok("查询成功", jsonUtils.toJson(categoryOption));
+        if (redisUtils.hasKey(CATEGORY_OPTION)) {
+            return Result.ok("查询成功", redisUtils.get(CATEGORY_OPTION));
         }
 
         QueryWrapper<Category> query = new QueryWrapper<>();
@@ -212,15 +210,19 @@ public class CategoryImpl implements CategoryService {
                 .orderByAsc("category_level", "parent_id")
                 .orderByDesc("category_rank");
         List<Category> categories = categoryMapper.selectList(query);
+        Category root = new Category(ROOT_CATEGORY_ID, ROOT_LEVEL, ROOT_PARENT_ID, ROOT_CATEGORY_NAME);
+        // time complexity O(n)
+        categories.add(0, root);
 
-        if (categories == null) {
-            return Result.ok();
-        }
-        List<Option> optionsTree = dealDataForTree(categories);
-        List<Option> root = createRootByOptionsTree(optionsTree);
-        redisUtils.storeObjectAsJson("category_option", root);
+        List<Option> optionsTree = recursionGetTreeOption(categories, ROOT_PARENT_ID);
+        //List<Option> root = createRootByOptionsTree(optionsTree);
+        redisUtils.set(CATEGORY_OPTION, root);
 
         return Result.ok(root);
+    }
+
+    private List<Option> recursionGetTreeOption(List<Category> categories, Long parentId) {
+        return null;
     }
 
     private List<Option> createRootByOptionsTree(List<Option> firstOptions) throws JsonProcessingException {
@@ -233,9 +235,9 @@ public class CategoryImpl implements CategoryService {
 
     private Option createRootOption(List<Option> firstOptions) throws JsonProcessingException {
         Map<String, String> idAndParentId = new HashMap<>(4);
-        idAndParentId.put("categoryId", "0");
-        idAndParentId.put("categoryLevel", "0");
-        idAndParentId.put("parentId", "-1");
+        idAndParentId.put("categoryId", String.valueOf(ROOT_CATEGORY_ID));
+        idAndParentId.put("categoryLevel", String.valueOf(ROOT_LEVEL));
+        idAndParentId.put("parentId", String.valueOf(ROOT_PARENT_ID));
         String rootValue = jsonUtils.objectToJsonString(idAndParentId);
 
         return new Option(rootValue, ROOT_CATEGORY_NAME, firstOptions);
@@ -276,10 +278,24 @@ public class CategoryImpl implements CategoryService {
         return SECOND_LEVEL.equals(level);
     }
 
-    public void testlist() throws JsonProcessingException {
+    public void testTreeList() throws JsonProcessingException {
         List<Category> categoriesByOrder = getCategoriesByOrder();
-        List list = recursionGetTreeList(categoriesByOrder, 0L);
+        List list = recursionGetTreeList(categoriesByOrder, ROOT_CATEGORY_ID);
         String s = jsonUtils.objectToJsonString(list);
         System.out.println(s);
+    }
+
+    public void testTreeOption() {
+        QueryWrapper<Category> query = new QueryWrapper<>();
+        query.ne("category_level", THIRD_LEVEL)
+                .orderByAsc("category_level", "parent_id")
+                .orderByDesc("category_rank");
+        List<Category> categories = categoryMapper.selectList(query);
+        Category root = new Category(ROOT_CATEGORY_ID, ROOT_LEVEL, ROOT_PARENT_ID, ROOT_CATEGORY_NAME);
+        // time complexity O(n)
+        categories.add(0, root);
+
+        recursionGetTreeList(categories, ROOT_PARENT_ID);
+        System.out.println(categories);
     }
 }

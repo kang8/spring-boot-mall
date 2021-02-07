@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ import java.util.List;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
 public class Category implements Serializable {
     @TableId(type = IdType.AUTO)
     @JsonSerialize(using = ToStringSerializer.class)
@@ -66,4 +68,11 @@ public class Category implements Serializable {
 
     @TableField(exist = false)
     private List<Category> children;
+
+    public Category(Long categoryId, Byte categoryLevel, Long parentId, String categoryName) {
+        this.categoryId = categoryId;
+        this.categoryLevel = categoryLevel;
+        this.parentId = parentId;
+        this.categoryName = categoryName;
+    }
 }

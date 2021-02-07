@@ -1,10 +1,10 @@
 package com.kang.mall.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 /**
  * @author yikang
@@ -14,20 +14,38 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisUtils {
     @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
-    public void storeObjectAsJson(String key, Object value) throws JsonProcessingException {
-        String json = objectMapper.writeValueAsString(value);
-        stringRedisTemplate.opsForValue().set(key, json);
+    public boolean set(String key, Object value) {
+        try {
+            redisTemplate.opsForValue().set(key, value);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public String getValueForString(String key) {
-        return stringRedisTemplate.opsForValue().get(key);
+    public Object get(String key) {
+        return key == null ? null : redisTemplate.opsForValue().get(key);
     }
 
-    public Boolean deleteKey(String key) {
-        return stringRedisTemplate.delete(key);
+    public void del(String... key) {
+        if (key != null && key.length > 0) {
+            if (key.length == 1) {
+                redisTemplate.delete(key[0]);
+            } else {
+                redisTemplate.delete(Arrays.asList(key));
+            }
+        }
+    }
+
+    public Boolean hasKey(String key) {
+        try {
+            return redisTemplate.hasKey(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

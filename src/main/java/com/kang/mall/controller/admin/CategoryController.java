@@ -24,7 +24,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/category")
-    public Result list() throws JsonProcessingException {
+    public Result list() {
         return categoryService.list();
     }
 

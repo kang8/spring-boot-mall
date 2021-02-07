@@ -16,8 +16,13 @@ public class CategoryText {
     private CategoryImpl category;
 
     @Test
-    public void testGetTree() throws Exception{
-        category.testlist();
+    public void testGetTreeList() throws Exception {
+        category.testTreeList();
+    }
+
+    @Test
+    public void testGetTreeOption() {
+        category.testTreeOption();
     }
 
 }
