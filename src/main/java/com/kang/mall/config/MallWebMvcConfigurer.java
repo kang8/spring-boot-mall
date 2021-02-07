@@ -1,8 +1,8 @@
 package com.kang.mall.config;
 
+import com.kang.mall.config.properties.MallUploadProperties;
 import com.kang.mall.interceptor.AdminLoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -16,8 +16,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class MallWebMvcConfigurer implements WebMvcConfigurer {
-    @Value("${mall.upload.directory}")
-    private String fileUploadPath;
+    @Autowired
+    private MallUploadProperties upload;
 
     @Autowired
     private AdminLoginInterceptor adminLoginInterceptor;
@@ -34,6 +34,6 @@ public class MallWebMvcConfigurer implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 将 /upload 上的请求转发到 F:\\upload 上.
         // 如请求 /upload/123.png 就相当于请求 F:\\upload\123.png
-        registry.addResourceHandler("/upload/**").addResourceLocations("file:" + fileUploadPath);
+        registry.addResourceHandler("/upload/**").addResourceLocations("file:" + upload.getDirectory());
     }
 }

@@ -1,7 +1,8 @@
 package com.kang.mall.controller;
 
 import com.kang.mall.common.Result;
-import org.springframework.beans.factory.annotation.Value;
+import com.kang.mall.config.properties.MallUploadProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,8 +25,8 @@ import java.util.Random;
  */
 @RestController
 public class UploadController {
-    @Value("${mall.upload.directory}")
-    private String fileUploadPath;
+    @Autowired
+    private MallUploadProperties upload;
 
     @PostMapping("/upload")
     public Result upload(@RequestParam("file") MultipartFile file) {
@@ -45,7 +46,7 @@ public class UploadController {
 
         try {
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(fileUploadPath + newFileName);
+            Path path = Paths.get(upload.getDirectory() + newFileName);
             Files.write(path, bytes);
         } catch (IOException e) {
             e.printStackTrace();

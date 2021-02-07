@@ -17,3 +17,5 @@ mybatis-plus:
 mall:
   upload:
     directory: F:\\upload\\
+  category:
+    level: 3
