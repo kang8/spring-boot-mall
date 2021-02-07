@@ -4,10 +4,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.io.Serializable;
+import javax.sql.DataSource;
 
 /**
  * @author yikang
@@ -16,14 +18,19 @@ import java.io.Serializable;
  * Create Date: 2021/2/3 13:55
  */
 @Configuration
+@EnableTransactionManagement
 public class LettuceRedisConfig {
 
     @Bean
-    public RedisTemplate<String, Serializable> redisTemplate(LettuceConnectionFactory factory) {
-        RedisTemplate<String, Serializable> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-        redisTemplate.setConnectionFactory(factory);
-        return redisTemplate;
+    public RedisTemplate stringRedisTemplate(LettuceConnectionFactory factory) {
+        StringRedisTemplate stringRedisTemplate = new StringRedisTemplate(factory);
+        stringRedisTemplate.setEnableTransactionSupport(false);
+        return stringRedisTemplate;
+    }
+
+
+    @Bean
+    public PlatformTransactionManager transactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
     }
 }

@@ -3,6 +3,7 @@ package com.kang.mall.service.admin.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kang.mall.common.Result;
+import com.kang.mall.config.properties.MallCategoryProperties;
 import com.kang.mall.entity.Category;
 import com.kang.mall.mapper.CategoryMapper;
 import com.kang.mall.param.admin.CategoryParam;
@@ -38,6 +39,9 @@ public class CategoryImpl implements CategoryService {
     @Autowired
     private JsonUtils jsonUtils;
 
+    @Autowired
+    private MallCategoryProperties categoryProperties;
+
     @Override
     public Result list() throws JsonProcessingException {
         String categoryList = redisUtils.getValueForString("category_list");
@@ -45,50 +49,50 @@ public class CategoryImpl implements CategoryService {
             return Result.ok("查询成功", jsonUtils.toJson(categoryList));
         }
 
+        List<Category> categories = getCategoriesByOrder();
+        if (categories == null) {
+            return Result.error("查询失败");
+        }
+
+        List categoriesTree = recursionGetTreeList(categories, 0L);
+        redisUtils.storeObjectAsJson("category_list", categoriesTree);
+
+        return Result.ok(categoriesTree);
+    }
+
+    private List recursionGetTreeList(List<Category> categoriesByOrder, Long parentId) {
+        List<Category> children = new ArrayList<>(10);
+
+        for (Category category : categoriesByOrder) {
+            if (parentId.equals(category.getCategoryId())) {
+                children = category.getChildren();
+            } else if (parentId.equals(category.getParentId())) {
+                children.add(category);
+                category.setChildren(new ArrayList<>(10));
+            }
+        }
+
+        children.forEach(category -> {
+            if (hasLastLevel(category.getCategoryLevel())) {
+                return;
+            }
+            recursionGetTreeList(categoriesByOrder, category.getCategoryId());
+        });
+        return children;
+    }
+
+    private boolean hasLastLevel(Byte level) {
+        return categoryProperties.getLevel().equals(level);
+    }
+
+    private List<Category> getCategoriesByOrder() {
         QueryWrapper<Category> query = new QueryWrapper<>();
         query
                 .orderByAsc("category_level", "parent_id")
                 .orderByDesc("category_rank")
                 .select("category_id", "category_level", "parent_id", "category_name", "category_rank", "create_time");
 
-        List<Category> categories = categoryMapper.selectList(query);
-
-        if (categories == null) {
-            return Result.error("查询失败");
-        }
-
-        Map<Long, List<Category>> secondHashMap = new HashMap<>(8);
-        Map<Long, List<Category>> thirdHaspMap = new HashMap<>(20);
-        List<Category> firstCategories = new ArrayList<>();
-
-        categories.forEach(category -> {
-            Byte level = category.getCategoryLevel();
-
-            if (hasFirstLevel(level)) {
-                List<Category> firstChildren = new ArrayList<>();
-
-                category.setChildren(firstChildren);
-                firstCategories.add(category);
-
-                secondHashMap.put(category.getCategoryId(), firstChildren);
-            } else if (hasSecondLevel(level)) {
-                List<Category> thirdChildren = new ArrayList<>();
-                List<Category> secondCategories = secondHashMap.get(category.getParentId());
-
-                category.setChildren(thirdChildren);
-                secondCategories.add(category);
-
-                thirdHaspMap.put(category.getCategoryId(), thirdChildren);
-            } else if (hasThirdLevel(level)) {
-                List<Category> thirdCategories = thirdHaspMap.get(category.getParentId());
-
-                thirdCategories.add(category);
-            }
-        });
-
-        redisUtils.storeObjectAsJson("category_list", firstCategories);
-
-        return Result.ok(firstCategories);
+        return categoryMapper.selectList(query);
     }
 
     private boolean hasThirdLevel(Byte level) {
@@ -108,6 +112,7 @@ public class CategoryImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public Result create(CategoryParam categoryParam) {
         Category category = ClassUtils.copyProperties(categoryParam, new Category());
         category.setCategoryLevel((byte) (categoryParam.getParentLevel() + 1));
@@ -129,6 +134,7 @@ public class CategoryImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result update(Long id, CategoryParam categoryParam) {
         if (categoryParam.getParentId().equals(id)) {
             return Result.error("父节点不能选择标签");
@@ -148,7 +154,7 @@ public class CategoryImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result remove(Long id) {
         Category category = categoryMapper.selectById(id);
 
@@ -268,5 +274,12 @@ public class CategoryImpl implements CategoryService {
 
     private boolean hasSecondLevel(Byte level) {
         return SECOND_LEVEL.equals(level);
+    }
+
+    public void testlist() throws JsonProcessingException {
+        List<Category> categoriesByOrder = getCategoriesByOrder();
+        List list = recursionGetTreeList(categoriesByOrder, 0L);
+        String s = jsonUtils.objectToJsonString(list);
+        System.out.println(s);
     }
 }
