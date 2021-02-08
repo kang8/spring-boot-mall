@@ -23,4 +23,16 @@ public class PasswordEncodeTest {
         boolean matches = passwordEncoder.matches("yikang", password);
         Assertions.assertTrue(matches);
     }
+
+    @Test
+    void generatePassword() {
+        String password = passwordEncoder.encode("yikang");
+        System.out.println(password);
+
+        for (int i = 1; i < 80; i++) {
+            String temp = "test" + i;
+            String testPassword = passwordEncoder.encode("123456");
+            System.out.println("(\"" + temp + "\", \"" + testPassword + "\" ,\"" + temp + "\"),");
+        }
+    }
 }

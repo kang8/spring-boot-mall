@@ -2,6 +2,7 @@ package com.kang.mall.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * Create Date: 2021/1/15 20:49
  */
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AdminUser implements Serializable {
 
     @TableId

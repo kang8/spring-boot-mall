@@ -29,13 +29,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public Result login(@RequestBody @Valid LoginParam loginParam, HttpSession session) {
-        AdminUser user = loginService.login(loginParam);
-
-        if (ObjectUtils.isNotEmpty(user)) {
-            session.setAttribute("adminLoginId", user.getAdminUserId());
-            return Result.ok("登陆成功", user);
-        }
-        return Result.error("login fail");
+        return loginService.login(loginParam, session);
     }
 
     @PostMapping("/logout")

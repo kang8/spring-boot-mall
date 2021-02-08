@@ -8,9 +8,9 @@ import com.kang.mall.mapper.AdminUserMapper;
 import com.kang.mall.param.admin.profile.NameParam;
 import com.kang.mall.param.admin.profile.PasswordParam;
 import com.kang.mall.service.admin.AdminUserService;
-import com.kang.mall.util.MD5Utils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,6 +23,9 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Autowired
     private AdminUserMapper adminUserMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Result list(Integer page, Integer size) {
@@ -58,18 +61,18 @@ public class AdminUserServiceImpl implements AdminUserService {
     public Result updatePassword(PasswordParam passwordParam) {
         AdminUser user = adminUserMapper.selectById(passwordParam.getAdminUserId());
 
-        String databasePass = MD5Utils.customizeMd5Encode(user.getUsername(), passwordParam.getOriginPassword());
+        if (ObjectUtils.isEmpty(user)) {
+            return Result.error("用户不存在");
+        }
 
-        if (databasePass.equals(user.getPassword())) {
-            String newDatabasePass = MD5Utils.customizeMd5Encode(user.getUsername(), passwordParam.getNewPassword());
-            user.setPassword(newDatabasePass);
-
-            int isUpdate = adminUserMapper.updateById(user);
-            return isUpdate >= 0 ?
-                    Result.ok("更新成功") :
-                    Result.error("更新失败");
-        } else {
+        if (!passwordEncoder.matches(passwordParam.getOriginPassword(), user.getPassword())) {
             return Result.error("密码错误");
         }
+        user.setPassword(passwordEncoder.encode(passwordParam.getNewPassword()));
+
+        int isUpdate = adminUserMapper.updateById(user);
+        return isUpdate >= 0 ?
+                Result.ok("更新成功") :
+                Result.error("更新失败");
     }
 }
