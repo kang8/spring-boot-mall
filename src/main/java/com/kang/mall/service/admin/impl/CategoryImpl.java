@@ -14,6 +14,7 @@ import com.kang.mall.util.CategoryUtils;
 import com.kang.mall.util.ClassUtils;
 import com.kang.mall.util.JsonUtils;
 import com.kang.mall.util.RedisUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,19 +69,31 @@ public class CategoryImpl implements CategoryService {
         List<BaseCategory> children = new ArrayList<>(10);
 
         for (BaseCategory category : baseCategories) {
+
             if (parentId.equals(category.getCategoryId())) {
                 children = category.getChildren();
             } else if (parentId.equals(category.getParentId())) {
                 children.add(category);
-                category.setChildren(new ArrayList<>(10));
+                if (isExtendBaseCategory(category)) {
+                    category.setChildren(new ArrayList<>(10));
+                }
             }
         }
 
-        if (children.size() == 0) {
+        if (ObjectUtils.isEmpty(children)) {
             return null;
         }
         children.forEach(category -> recursionGetTree(baseCategories, category.getCategoryId()));
         return children;
+    }
+
+    /**
+     * 验证 category 是否为 BaseCategory 的继承类。并且当为 Option 时，判断是否为倒数第二个分类。
+     */
+    private boolean isExtendBaseCategory(BaseCategory category) {
+        return (category instanceof Category) ||
+                ((category instanceof Option) &&
+                        (!categoryUtils.hasSecondLevel(category.getCategoryLevel())));
     }
 
     private List<Category> getCategoriesByOrder() {
