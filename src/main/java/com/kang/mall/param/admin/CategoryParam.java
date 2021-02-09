@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
@@ -19,14 +20,19 @@ import java.time.LocalDateTime;
  * Create Date: 2021/2/1 16:59
  */
 @Data
+@NoArgsConstructor
 public class CategoryParam implements Serializable {
 
     @NotNull(message = "请传入父节点分类等级")
-    @Range(max = 3, message = "父节点分类等级。只支持三级分类，请传入 0, 1, 2")
+    @Range(max = 3, message = "父节点分类等级为三级分类，请传入 0, 1, 2")
     private Byte parentLevel;
 
+    @NotNull(message = "请传入分类等级")
+    @Range(max = 3, message = "分类等级为三级分类，请传入 1, 2, 3")
+    private Byte categoryLevel;
+
     @NotNull(message = "请传入父节点")
-    @Min(value = 0,message = "父节点必须大于等于 0")
+    @Min(value = 0, message = "父节点必须大于等于 0")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
@@ -46,4 +52,10 @@ public class CategoryParam implements Serializable {
     private Long createUser;
 
     private Long updateUser;
+
+    public CategoryParam(Byte parentLevel, Byte categoryLevel, Long parentId) {
+        this.parentLevel = parentLevel;
+        this.categoryLevel = categoryLevel;
+        this.parentId = parentId;
+    }
 }

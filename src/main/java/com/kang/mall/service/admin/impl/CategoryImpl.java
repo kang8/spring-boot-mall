@@ -102,7 +102,7 @@ public class CategoryImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Result create(CategoryParam categoryParam) {
         Category category = ClassUtils.copyProperties(categoryParam, new Category());
         category.setCategoryLevel((byte) (categoryParam.getParentLevel() + 1));
@@ -129,6 +129,9 @@ public class CategoryImpl implements CategoryService {
         if (categoryParam.getParentId().equals(id)) {
             return Result.error("父节点不能选择标签");
         }
+        if (validateParent(id, categoryParam)) {
+            return Result.error("父节点选择非法");
+        }
 
         Category category = categoryMapper.selectById(id);
         BeanUtils.copyProperties(categoryParam, category, "createUser", "createTime");
@@ -141,6 +144,61 @@ public class CategoryImpl implements CategoryService {
         return isUpdate > 0 ?
                 Result.ok("更新成功", category) :
                 Result.error("更新失败");
+    }
+
+    private boolean validateParent(Long categoryId, CategoryParam categoryParam) {
+        Byte parentLevel = categoryParam.getParentLevel();
+
+        QueryWrapper<Category> query = new QueryWrapper<>();
+        query.ge("category_level", parentLevel).orderByAsc("parent_id").select("category_id", "parent_id", "category_level");
+        List<Category> categories = categoryMapper.selectList(query);
+        int deep = getDeepById(categories, categoryId, 0, 0);
+        return categoryUtils.hasLessThanOrEqualToLastLevel((byte) (deep + parentLevel));
+    }
+
+    /**
+     * 此处写的比较复杂，有时间要优化。优化思路为减少传参
+     */
+    private int getDeepById(List<Category> categories, Long id, int currentDeep, int resultDeep) {
+        currentDeep++;
+        int lower = binarySearchLower(categories, id);
+        if (lower == -1) {
+            return Math.max(currentDeep, resultDeep);
+        }
+
+        Category lowerCategory = categories.get(lower);
+        for (int i = lower; i < categories.size(); i++) {
+            Category category = categories.get(i);
+            if (categoryUtils.hasGreaterThanToLastLevel(category.getCategoryLevel()) ||
+                    category.getParentId() > lowerCategory.getParentId()) {
+                break;
+            }
+
+            resultDeep = getDeepById(categories, category.getCategoryId(), currentDeep, Math.max(currentDeep, resultDeep));
+        }
+        return Math.max(currentDeep, resultDeep);
+    }
+
+    private int binarySearchLower(List<Category> list, Long result) {
+        int l = 0;
+        int r = list.size() - 1;
+
+        while (l <= r) {
+            int mid = l + ((r - l) >> 1);
+
+            Long parentId = list.get(mid).getParentId();
+            if (parentId > result) {
+                r = mid - 1;
+            } else if (parentId < result) {
+                l = mid + 1;
+            } else {
+                if (mid == 0 || !result.equals(list.get(mid - 1).getParentId())) {
+                    return mid;
+                }
+                r = mid - 1;
+            }
+        }
+        return -1;
     }
 
     @Override
@@ -166,7 +224,7 @@ public class CategoryImpl implements CategoryService {
     private void deleteChildren(Category category, List<Long> deletes) {
         deletes.add(category.getCategoryId());
 
-        if (categoryUtils.hasThirdLevel(category.getCategoryLevel())) {
+        if (categoryUtils.hasLastLevel(category.getCategoryLevel())) {
             return;
         }
         // 如果长度为 1，则代表这是第一次进入。而处在这个位置代表删除这里的元素会改变 category_option 中的元素。
@@ -252,5 +310,9 @@ public class CategoryImpl implements CategoryService {
         List rootOptions = recursionGetTree(options, ROOT_PARENT_ID);
         String s = jsonUtils.objectToJsonString(rootOptions);
         System.out.println(s);
+    }
+
+    public boolean testValidateParent(Long categoryId, CategoryParam categoryParam) {
+        return validateParent(categoryId, categoryParam);
     }
 }

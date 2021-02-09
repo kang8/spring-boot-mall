@@ -25,11 +25,19 @@ public class CategoryUtils {
         return Constants.SECOND_LEVEL.equals(level);
     }
 
-    public boolean hasThirdLevel(Byte level) {
-        return Constants.THIRD_LEVEL.equals(level);
-    }
-
     public boolean hasLastLevel(Byte level) {
         return categoryProperties.getLevel().equals(level);
+    }
+
+    public boolean hasLastSecondLevel(Byte level) {
+        return categoryProperties.getLevel() == level + 1;
+    }
+
+    public boolean hasGreaterThanToLastLevel(Byte level) {
+        return level > categoryProperties.getLevel();
+    }
+
+    public boolean hasLessThanOrEqualToLastLevel(Byte level) {
+        return !hasGreaterThanToLastLevel(level);
     }
 }
