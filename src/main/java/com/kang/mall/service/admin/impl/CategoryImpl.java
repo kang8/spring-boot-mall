@@ -142,7 +142,7 @@ public class CategoryImpl implements CategoryService {
         if (categoryParam.getParentId().equals(id)) {
             return Result.error("父节点不能选择标签");
         }
-        if (validateParent(id, categoryParam)) {
+        if (!validateParent(id, categoryParam)) {
             return Result.error("父节点选择非法");
         }
 
@@ -159,14 +159,18 @@ public class CategoryImpl implements CategoryService {
                 Result.error("更新失败");
     }
 
+    /**
+     * 验证父节点合法性
+     * @return bool 值。 true 合法，false 不合法。
+     */
     private boolean validateParent(Long categoryId, CategoryParam categoryParam) {
         Byte parentLevel = categoryParam.getParentLevel();
 
         QueryWrapper<Category> query = new QueryWrapper<>();
         query.ge("category_level", parentLevel).orderByAsc("parent_id").select("category_id", "parent_id", "category_level");
         List<Category> categories = categoryMapper.selectList(query);
-        int deep = getDeepById(categories, categoryId, 0, 0);
-        return categoryUtils.hasLessThanOrEqualToLastLevel((byte) (deep + parentLevel));
+        int categoryIdDeep = getDeepById(categories, categoryId, 0, 0);
+        return categoryUtils.hasLessThanOrEqualToLastLevel((byte) (categoryIdDeep + parentLevel));
     }
 
     /**
