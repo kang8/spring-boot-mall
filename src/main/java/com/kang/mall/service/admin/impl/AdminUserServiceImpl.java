@@ -29,12 +29,11 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Override
     public Result list(Integer page, Integer size) {
-        Page<AdminUser> pages = new Page<>(page, size);
 
         QueryWrapper<AdminUser> query = new QueryWrapper<>();
         query.eq("locked", 0).select("admin_user_id", "username", "nick_name");
 
-        Page<AdminUser> adminUserPage = adminUserMapper.selectPage(pages, query);
+        Page<AdminUser> adminUserPage = adminUserMapper.selectPage(new Page<AdminUser>(page, size), query);
 
         return Result.ok(adminUserPage);
     }

@@ -1,7 +1,7 @@
 package com.kang.mall.controller.admin;
 
 import com.kang.mall.common.Result;
-import com.kang.mall.entity.Goods;
+import com.kang.mall.param.admin.GoodsParam;
 import com.kang.mall.service.admin.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,14 +33,15 @@ public class GoodsController {
         return goodsService.get(id);
     }
 
-    public Result create(@RequestBody @Valid Goods goods) {
-        return goodsService.create(goods);
+    @PostMapping("/goods")
+    public Result create(@RequestBody @Valid GoodsParam goodsParam) {
+        return goodsService.create(goodsParam);
     }
 
     @RequestMapping(value = "goods/{id}", method = RequestMethod.PUT)
     public Result update(@PathVariable("id") Long id,
-                         @RequestBody @Valid Goods goods) {
-        return goodsService.update(id, goods);
+                         @RequestBody @Valid GoodsParam goodsParam) {
+        return goodsService.update(id, goodsParam);
     }
 
     @RequestMapping(value = "/goods/{id}", method = RequestMethod.DELETE)

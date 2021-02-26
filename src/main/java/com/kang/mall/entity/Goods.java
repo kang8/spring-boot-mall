@@ -2,18 +2,20 @@ package com.kang.mall.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.kang.mall.entity.base.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.time.LocalDateTime;
+import java.io.Serializable;
 
 /**
  * @author yikang
  * ClassName: Goods
  * Create Date: 2021/2/22 16:43
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class Goods {
+public class Goods extends BaseEntity implements Serializable {
 
     @TableId(type = IdType.AUTO)
     private Long goodsId;
@@ -68,14 +70,10 @@ public class Goods {
      */
     private String tag;
 
+    /**
+     * 商品上架状态
+     * 0 -> 下架
+     * 1 -> 上架
+     */
     private Byte goodsSellStatus;
-
-    private Long createUser;
-
-    private Long updateUser;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime createTime;
-
-    private LocalDateTime updateTime;
 }

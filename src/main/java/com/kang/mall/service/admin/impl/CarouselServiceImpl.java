@@ -8,7 +8,6 @@ import com.kang.mall.mapper.CarouselMapper;
 import com.kang.mall.param.admin.CarouselParam;
 import com.kang.mall.service.admin.CarouselService;
 import com.kang.mall.util.ClassUtils;
-import com.kang.mall.util.CommonUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,17 +58,11 @@ public class CarouselServiceImpl implements CarouselService {
         }
 
         Carousel carousel = ClassUtils.copyProperties(carouselParam, new Carousel());
-        setCreateUserAndUpdateUser(carousel);
+        carousel.setCreateUserAndUpdateUser(session);
         int isInsert = carouselMapper.insert(carousel);
         return isInsert > 0 ?
                 Result.ok("添加成功", carousel) :
                 Result.error("添加失败");
-    }
-
-    private void setCreateUserAndUpdateUser(Carousel carousel) {
-        Long userId = getUserId();
-        carousel.setCreateUser(userId);
-        carousel.setUpdateUser(userId);
     }
 
     @Override
@@ -77,7 +70,7 @@ public class CarouselServiceImpl implements CarouselService {
         Carousel queryCarousel = carouselMapper.selectById(id);
 
         BeanUtils.copyProperties(carouselParam, queryCarousel, "createTime", "createUser");
-        setUpdateUser(queryCarousel);
+        queryCarousel.setUpdateUser(session);
 
         queryCarousel.setUpdateTime(LocalDateTime.now());
         int isUpdate = carouselMapper.updateById(queryCarousel);
@@ -85,15 +78,6 @@ public class CarouselServiceImpl implements CarouselService {
         return isUpdate > 0 ?
                 Result.ok("更新成功", queryCarousel) :
                 Result.error("更新失败");
-    }
-
-    private void setUpdateUser(Carousel carousel) {
-        Long userId = getUserId();
-        carousel.setUpdateUser(userId);
-    }
-
-    private Long getUserId() {
-        return CommonUtils.getAdminUserId(session);
     }
 
     @Override

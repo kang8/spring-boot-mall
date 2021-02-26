@@ -1,13 +1,19 @@
 package com.kang.mall.service.admin.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kang.mall.common.Result;
 import com.kang.mall.entity.Goods;
+import com.kang.mall.mapper.GoodsMapper;
+import com.kang.mall.param.admin.GoodsParam;
 import com.kang.mall.service.admin.GoodsService;
-import com.kang.mall.util.CommonUtils;
+import com.kang.mall.util.ClassUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 
 /**
  * @author yikang
@@ -16,32 +22,59 @@ import javax.servlet.http.HttpSession;
  */
 @Service
 public class GoodsServiceImpl implements GoodsService {
+
     @Autowired
     private HttpSession session;
 
+    @Autowired
+    private GoodsMapper goodsMapper;
+
     @Override
     public Result list(Integer page, Integer size) {
-        return null;
+        QueryWrapper<Goods> query = new QueryWrapper<>();
+        Page<Goods> goodsPage = goodsMapper.selectPage(new Page<>(page, size), query);
+
+        return Result.ok(goodsPage);
     }
 
     @Override
     public Result get(Long id) {
-        Long adminUserId = CommonUtils.getAdminUserId(session);
-        return Result.ok(adminUserId);
+        Goods goods = goodsMapper.selectById(id);
+        return Result.ok(goods);
     }
 
     @Override
-    public Result create(Goods goods) {
-        return null;
+    public Result create(GoodsParam goodsParam) {
+        Goods goods = ClassUtils.copyProperties(goodsParam, new Goods());
+        goods.setCreateUserAndUpdateUser(session);
+        LocalDateTime now = LocalDateTime.now();
+        goods.setCreateTime(now);
+        goods.setUpdateTime(now);
+        int isInsert = goodsMapper.insert(goods);
+        return isInsert > 0 ?
+                Result.ok("添加成功", goods) :
+                Result.error("添加失败");
     }
 
     @Override
-    public Result update(Long id, Goods goods) {
-        return null;
+    public Result update(Long id, GoodsParam goodsParam) {
+        Goods queryGoods = goodsMapper.selectById(id);
+
+        BeanUtils.copyProperties(goodsParam, queryGoods, "createTime", "createUser");
+        queryGoods.setUpdateUser(session);
+
+        queryGoods.setUpdateTime(LocalDateTime.now());
+        int isUpdate = goodsMapper.updateById(queryGoods);
+        return isUpdate > 0 ?
+                Result.ok("更新成功", queryGoods) :
+                Result.error("更新失败");
     }
 
     @Override
     public Result remove(Long id) {
-        return null;
+        int isDelete = goodsMapper.deleteById(id);
+        return isDelete > 0 ?
+                Result.ok("删除成功") :
+                Result.error("删除失败");
     }
 }

@@ -1,7 +1,7 @@
 package com.kang.mall.service.admin;
 
 import com.kang.mall.common.Result;
-import com.kang.mall.entity.Goods;
+import com.kang.mall.param.admin.GoodsParam;
 
 /**
  * @author yikang
@@ -29,19 +29,19 @@ public interface GoodsService {
     /**
      * 根据传来的商品信息创建商品
      *
-     * @param goods 商品信息
+     * @param goodsParam 商品信息入参
      * @return Result
      */
-    Result create(Goods goods);
+    Result create(GoodsParam goodsParam);
 
     /**
      * 根据传来的 ID 和商品信息更新商品信息
      *
      * @param id 商品主键 ID
-     * @param goods 商品信息
+     * @param goodsParam 商品信息入参
      * @return Result
      */
-    Result update(Long id, Goods goods);
+    Result update(Long id, GoodsParam goodsParam);
 
     /**
      * 根据 ID 删除对应的商品

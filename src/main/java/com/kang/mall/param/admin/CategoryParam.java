@@ -22,11 +22,11 @@ import java.time.LocalDateTime;
 public class CategoryParam implements Serializable {
 
     @NotNull(message = "请传入父节点分类等级")
-    @Range(max = 3, message = "父节点分类等级为三级分类，请传入 0, 1, 2")
+    @Range(max = 2, message = "父节点分类等级为三级分类，请传入 0, 1, 2")
     private Byte parentLevel;
 
     @NotNull(message = "请传入分类等级")
-    @Range(max = 3, message = "分类等级为三级分类，请传入 1, 2, 3")
+    @Range(min = 1, max = 3, message = "分类等级为三级分类，请传入 1, 2, 3")
     private Byte categoryLevel;
 
     @NotNull(message = "请传入父节点")

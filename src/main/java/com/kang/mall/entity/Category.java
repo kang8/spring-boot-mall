@@ -1,16 +1,11 @@
 package com.kang.mall.entity;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.kang.mall.pojo.BaseCategory;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 /**
  * @author yikang
@@ -31,18 +26,6 @@ public class Category extends BaseCategory {
      */
     @TableLogic(value = "0", delval = "1")
     private Byte isDeleted;
-
-    @SuppressWarnings("AlibabaCommentsMustBeJavadocFormat")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime createTime;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime updateTime;
-
-    private Long createUser;
-
-    private Long updateUser;
 
     public Category(Long categoryId, Byte categoryLevel, Long parentId, String categoryName) {
         super(categoryId, categoryLevel, parentId, categoryName, null);

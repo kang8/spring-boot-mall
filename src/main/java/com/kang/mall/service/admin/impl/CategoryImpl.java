@@ -119,7 +119,7 @@ public class CategoryImpl implements CategoryService {
     @Transactional(rollbackFor = Exception.class)
     public Result create(CategoryParam categoryParam) {
         Category category = ClassUtils.copyProperties(categoryParam, new Category());
-        setCreateUserAndUpdateUser(category);
+        category.setCreateUserAndUpdateUser(session);
         category.setCategoryLevel((byte) (categoryParam.getParentLevel() + 1));
         int isInsert = categoryMapper.insert(category);
 
@@ -128,16 +128,6 @@ public class CategoryImpl implements CategoryService {
         return isInsert > 0 ?
                 Result.ok("添加成功", category) :
                 Result.error("添加失败");
-    }
-
-    private void setCreateUserAndUpdateUser(Category category) {
-        Long userId = getUserId();
-        category.setCreateUser(userId);
-        category.setUpdateUser(userId);
-    }
-
-    private Long getUserId() {
-        return CommonUtils.getAdminUserId(session);
     }
 
     private void cleanCacheByParentId(Long parentId) {
@@ -160,7 +150,7 @@ public class CategoryImpl implements CategoryService {
 
         Category category = categoryMapper.selectById(id);
         BeanUtils.copyProperties(categoryParam, category, "createUser", "createTime");
-        setUpdateUser(category);
+        category.setUpdateUser(session);
         category.setUpdateTime(LocalDateTime.now());
         category.setCategoryLevel((byte) (categoryParam.getParentLevel() + 1));
         int isUpdate = categoryMapper.updateById(category);
@@ -170,11 +160,6 @@ public class CategoryImpl implements CategoryService {
         return isUpdate > 0 ?
                 Result.ok("更新成功", category) :
                 Result.error("更新失败");
-    }
-
-    private void setUpdateUser(Category category) {
-        Long userId = getUserId();
-        category.setUpdateUser(userId);
     }
 
     /**
