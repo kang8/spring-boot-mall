@@ -3,8 +3,6 @@ package com.kang.mall.pojo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +21,6 @@ import java.util.List;
 @NoArgsConstructor
 public class BaseCategory implements Serializable {
     @TableId(type = IdType.AUTO)
-    @JsonSerialize(using = ToStringSerializer.class)
     protected Long categoryId;
     /**
      * 排序等级
@@ -32,7 +29,6 @@ public class BaseCategory implements Serializable {
     /**
      * 父节点
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     protected Long parentId;
     /**
      * 分类名称

@@ -10,16 +10,14 @@ import com.kang.mall.param.admin.CategoryParam;
 import com.kang.mall.pojo.BaseCategory;
 import com.kang.mall.result.category.Option;
 import com.kang.mall.service.admin.CategoryService;
-import com.kang.mall.util.CategoryUtils;
-import com.kang.mall.util.ClassUtils;
-import com.kang.mall.util.JsonUtils;
-import com.kang.mall.util.RedisUtils;
+import com.kang.mall.util.*;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -47,6 +45,9 @@ public class CategoryImpl implements CategoryService {
 
     @Autowired
     private MallCategoryProperties categoryProperties;
+
+    @Autowired
+    private HttpSession session;
 
     @Override
     public Result list() {
@@ -118,6 +119,7 @@ public class CategoryImpl implements CategoryService {
     @Transactional(rollbackFor = Exception.class)
     public Result create(CategoryParam categoryParam) {
         Category category = ClassUtils.copyProperties(categoryParam, new Category());
+        setCreateUserAndUpdateUser(category);
         category.setCategoryLevel((byte) (categoryParam.getParentLevel() + 1));
         int isInsert = categoryMapper.insert(category);
 
@@ -126,6 +128,16 @@ public class CategoryImpl implements CategoryService {
         return isInsert > 0 ?
                 Result.ok("添加成功", category) :
                 Result.error("添加失败");
+    }
+
+    private void setCreateUserAndUpdateUser(Category category) {
+        Long userId = getUserId();
+        category.setCreateUser(userId);
+        category.setUpdateUser(userId);
+    }
+
+    private Long getUserId() {
+        return CommonUtils.getAdminUserId(session);
     }
 
     private void cleanCacheByParentId(Long parentId) {
@@ -148,6 +160,7 @@ public class CategoryImpl implements CategoryService {
 
         Category category = categoryMapper.selectById(id);
         BeanUtils.copyProperties(categoryParam, category, "createUser", "createTime");
+        setUpdateUser(category);
         category.setUpdateTime(LocalDateTime.now());
         category.setCategoryLevel((byte) (categoryParam.getParentLevel() + 1));
         int isUpdate = categoryMapper.updateById(category);
@@ -157,6 +170,11 @@ public class CategoryImpl implements CategoryService {
         return isUpdate > 0 ?
                 Result.ok("更新成功", category) :
                 Result.error("更新失败");
+    }
+
+    private void setUpdateUser(Category category) {
+        Long userId = getUserId();
+        category.setUpdateUser(userId);
     }
 
     /**

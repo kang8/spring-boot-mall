@@ -1,10 +1,8 @@
 package com.kang.mall.controller.admin;
 
 import com.kang.mall.common.Result;
-import com.kang.mall.entity.AdminUser;
 import com.kang.mall.param.admin.LoginParam;
 import com.kang.mall.service.admin.LoginService;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
@@ -28,8 +25,8 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/login")
-    public Result login(@RequestBody @Valid LoginParam loginParam, HttpSession session) {
-        return loginService.login(loginParam, session);
+    public Result login(@RequestBody @Valid LoginParam loginParam) {
+        return loginService.login(loginParam);
     }
 
     @PostMapping("/logout")

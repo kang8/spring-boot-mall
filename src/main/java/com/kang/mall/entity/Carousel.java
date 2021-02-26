@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,7 +19,6 @@ public class Carousel implements Serializable {
 
     @SuppressWarnings("AlibabaCommentsMustBeJavadocFormat")
     @TableId(type = IdType.AUTO) //主键的类型为自动递增
-    @JsonSerialize(using = ToStringSerializer.class) // Long 转换成 JSON 时，转换成字符串。这是因为 javascript number 类型（只能准确表示 (-2^53~2^53)）可能会丢失 Long 的进度。
     private Long carouselId;
     /**
      * 轮播图图片地址

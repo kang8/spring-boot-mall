@@ -1,8 +1,6 @@
 package com.kang.mall.param.admin;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
@@ -33,7 +31,6 @@ public class CategoryParam implements Serializable {
 
     @NotNull(message = "请传入父节点")
     @Min(value = 0, message = "父节点必须大于等于 0")
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long parentId;
 
     @NotBlank(message = "请传入分类名称")

@@ -26,8 +26,11 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private HttpSession session;
+
     @Override
-    public Result login(LoginParam loginParam, HttpSession session) {
+    public Result login(LoginParam loginParam) {
         QueryWrapper<AdminUser> query = new QueryWrapper<>();
         query.eq("username", loginParam.getUsername())
                 .select("username", "admin_user_id", "nick_name", "password");

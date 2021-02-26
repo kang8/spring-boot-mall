@@ -18,4 +18,3 @@ VALUES ('https://cdn.jsdelivr.net/gh/yk17310320725/picBed/img/clock.png', 1, 1),
        ('https://cdn.jsdelivr.net/gh/yk17310320725/picBed/img/anticlockwise.png', 1, 1),
        ('https://cdn.jsdelivr.net/gh/yk17310320725/picBed/img/unsigned_integer.png', 1, 1),
        ('https://cdn.jsdelivr.net/gh/yk17310320725/picBed/img/wrong_integer.png', 1, 1);
-
