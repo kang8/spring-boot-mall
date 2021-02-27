@@ -9,7 +9,6 @@ spring:
       max-lifetime: 61000
   redis:
     host: 121.36.19.76
-    port: 6379
     password: asdf;lkj
 mybatis-plus:
   configuration:
@@ -17,5 +16,6 @@ mybatis-plus:
 mall:
   upload:
     directory: F:\\upload\\
+    path[0]: image
   category:
     level: 3

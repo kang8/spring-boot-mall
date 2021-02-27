@@ -32,8 +32,14 @@ public class MallWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 将 /upload 上的请求转发到 F:\\upload 上.
+        String[] paths = upload.getPath();
+        String[] pathPatterns = new String[paths.length];
+        for (int i = 0; i < paths.length; i++) {
+            pathPatterns[i] = "/" + paths[i] + "/**";
+        }
+        // 假设 pathPatterns[0] = "/upload/**
+        // 下面这条语句的作用为将 /upload 上的请求转发到 F:\\upload 上.
         // 如请求 /upload/123.png 就相当于请求 F:\\upload\123.png
-        registry.addResourceHandler("/upload/**").addResourceLocations("file:" + upload.getDirectory());
+        registry.addResourceHandler(pathPatterns).addResourceLocations("file:" + upload.getDirectory());
     }
 }
