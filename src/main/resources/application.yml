@@ -16,6 +16,5 @@ mybatis-plus:
 mall:
   upload:
     directory: F:\\upload\\
-    path[0]: image
   category:
     level: 3

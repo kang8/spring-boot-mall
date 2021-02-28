@@ -2,12 +2,14 @@ package com.kang.mall.service.admin.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kang.mall.common.Constants;
 import com.kang.mall.common.Result;
 import com.kang.mall.entity.Goods;
 import com.kang.mall.mapper.GoodsMapper;
 import com.kang.mall.param.admin.GoodsParam;
 import com.kang.mall.service.admin.GoodsService;
 import com.kang.mall.util.ClassUtils;
+import com.kang.mall.util.CommonUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,11 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public Result list(Integer page, Integer size) {
+        String goodsCoverImage = "CONCAT('" + Constants.PATH_FOR_ACCESS_UPLOAD_FILE + "' , goods_cover_image) AS goodsCoverImage";
         QueryWrapper<Goods> query = new QueryWrapper<>();
+        query.select("goods_id", "category_id", goodsCoverImage, "goods_name", "goods_introduce",
+                "goods_detail_content", "original_price", "selling_price",
+                "stock_num", "tag", "goods_sell_status", "create_time");
         Page<Goods> goodsPage = goodsMapper.selectPage(new Page<>(page, size), query);
 
         return Result.ok(goodsPage);
@@ -50,7 +56,11 @@ public class GoodsServiceImpl implements GoodsService {
         LocalDateTime now = LocalDateTime.now();
         goods.setCreateTime(now);
         goods.setUpdateTime(now);
+        String originGoodsCoverImage = goods.getGoodsCoverImage();
+        goods.setGoodsCoverImage(CommonUtils.removeUploadFilePath(originGoodsCoverImage));
         int isInsert = goodsMapper.insert(goods);
+
+        goods.setGoodsCoverImage(originGoodsCoverImage);
         return isInsert > 0 ?
                 Result.ok("添加成功", goods) :
                 Result.error("添加失败");
@@ -62,9 +72,12 @@ public class GoodsServiceImpl implements GoodsService {
 
         BeanUtils.copyProperties(goodsParam, queryGoods, "createTime", "createUser");
         queryGoods.setUpdateUser(session);
-
+        String originGoodsCoverImage = queryGoods.getGoodsCoverImage();
+        queryGoods.setGoodsCoverImage(CommonUtils.removeUploadFilePath(originGoodsCoverImage));
         queryGoods.setUpdateTime(LocalDateTime.now());
         int isUpdate = goodsMapper.updateById(queryGoods);
+
+        queryGoods.setGoodsCoverImage(originGoodsCoverImage);
         return isUpdate > 0 ?
                 Result.ok("更新成功", queryGoods) :
                 Result.error("更新失败");

@@ -8,6 +8,7 @@ import com.kang.mall.mapper.CarouselMapper;
 import com.kang.mall.param.admin.CarouselParam;
 import com.kang.mall.service.admin.CarouselService;
 import com.kang.mall.util.ClassUtils;
+import com.kang.mall.util.CommonUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,10 @@ public class CarouselServiceImpl implements CarouselService {
 
     @Override
     public Result list() {
+        String carouselUrl = "CONCAT('" + Constants.PATH_FOR_ACCESS_UPLOAD_FILE + "', carousel_url) AS carouselUrl";
         QueryWrapper<Carousel> query = new QueryWrapper<>();
         query.orderByDesc("carousel_rank")
-                .select("carousel_id", "carousel_url", "redirect_url", "carousel_rank", "create_time");
+                .select("carousel_id", carouselUrl, "redirect_url", "carousel_rank", "create_time");
         List<Carousel> carousels = carouselMapper.selectList(query);
 
         return carousels != null ?
@@ -59,7 +61,11 @@ public class CarouselServiceImpl implements CarouselService {
 
         Carousel carousel = ClassUtils.copyProperties(carouselParam, new Carousel());
         carousel.setCreateUserAndUpdateUser(session);
+        String originCarouselUrl = carousel.getCarouselUrl();
+        carousel.setCarouselUrl(CommonUtils.removeUploadFilePath(carousel.getCarouselUrl()));
         int isInsert = carouselMapper.insert(carousel);
+
+        carousel.setCarouselUrl(originCarouselUrl);
         return isInsert > 0 ?
                 Result.ok("添加成功", carousel) :
                 Result.error("添加失败");
@@ -73,8 +79,11 @@ public class CarouselServiceImpl implements CarouselService {
         queryCarousel.setUpdateUser(session);
 
         queryCarousel.setUpdateTime(LocalDateTime.now());
+        String originCarouselUrl = queryCarousel.getCarouselUrl();
+        queryCarousel.setCarouselUrl(CommonUtils.removeUploadFilePath(originCarouselUrl));
         int isUpdate = carouselMapper.updateById(queryCarousel);
 
+        queryCarousel.setCarouselUrl(originCarouselUrl);
         return isUpdate > 0 ?
                 Result.ok("更新成功", queryCarousel) :
                 Result.error("更新失败");

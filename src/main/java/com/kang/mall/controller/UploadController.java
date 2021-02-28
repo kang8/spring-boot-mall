@@ -1,5 +1,6 @@
 package com.kang.mall.controller;
 
+import com.kang.mall.common.Constants;
 import com.kang.mall.common.Result;
 import com.kang.mall.config.properties.MallUploadProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,7 @@ public class UploadController {
         // generate new filename
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         Random r = new Random();
-        StringBuilder tempName = new StringBuilder();
-        tempName.append(prefixName).append('-').append(sdf.format(new Date())).append(r.nextInt(100)).append(suffixName);
-        String newFileName = tempName.toString();
+        String newFileName = prefixName + '-' + sdf.format(new Date()) + r.nextInt(100) + suffixName;
 
         try {
             byte[] bytes = file.getBytes();
@@ -52,6 +51,8 @@ public class UploadController {
             e.printStackTrace();
             return Result.error("上传失败");
         }
+
+        newFileName = Constants.PATH_FOR_ACCESS_UPLOAD_FILE + "/" + newFileName;
 
         return Result.ok("上传成功", newFileName);
     }

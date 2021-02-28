@@ -26,4 +26,10 @@ public class Constants {
 
     public final static String CATEGORY_LIST = "category_list";
     public final static String CATEGORY_OPTION = "category_option";
+
+    /**
+     * 文件上传后请求文件的路径
+     */
+    public final static String PATH_PATTERN_FOR_ACCESS_UPLOAD_FILE = "/file/**";
+    public final static String PATH_FOR_ACCESS_UPLOAD_FILE = "/file";
 }

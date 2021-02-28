@@ -15,13 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "mall.upload")
 public class MallUploadProperties {
     /**
-     * 文件上传后指定的本地文件夹路径
+     * 文件上传后，上传文件储存在本地的文件夹
      */
     private String directory;
-    /**
-     * 访问 directory 文件里的静态资源，为一个数组。
-     * 如 {"upload", "image"}
-     * 表示既可以访问 /upload 也可以访问 /image
-     */
-    private String[] path = {"upload"};
 }
