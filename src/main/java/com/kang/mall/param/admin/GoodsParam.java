@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -41,15 +43,17 @@ public class GoodsParam implements Serializable {
     private String goodsDetailContent;
 
     @NotNull(message = "请输入商品价格")
-    @Range(min = 1, max = Integer.MAX_VALUE, message = "商品价格的范围为 int，且不能为 0")
-    private Integer originalPrice;
+    @Range(min = 1, message = "商品价格不能为负数")
+    @Digits(integer = 19, fraction = 2, message = "商品的价格只能有两位小数")
+    private BigDecimal originalPrice;
 
     @NotNull(message = "请输入商品实际价格")
-    @Range(min = 1, max = Integer.MAX_VALUE, message = "商品实际价格的范围为 int，且不能为 0")
-    private Integer sellingPrice;
+    @Range(min = 0, message = "商品实际价格不能为负数")
+    @Digits(integer = 19, fraction = 2, message = "商品实际的价格只能有两位小数")
+    private BigDecimal sellingPrice;
 
     @NotNull(message = "请输入商品库存")
-    @Range(min = 1, max = Integer.MAX_VALUE, message = "商品库存的范围为 int，且不能为 0")
+    @Range(min = 0, max = Integer.MAX_VALUE, message = "商品库存的范围为 int，且不能为负数")
     private Integer stockNum;
 
     @NotBlank(message = "请输入商品标签")

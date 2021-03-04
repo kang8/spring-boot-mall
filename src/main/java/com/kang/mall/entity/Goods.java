@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author yikang
@@ -53,12 +54,12 @@ public class Goods extends BaseEntity implements Serializable {
     /**
      * 商品价格
      */
-    private Integer originalPrice;
+    private BigDecimal originalPrice;
 
     /**
      * 商品实际价格
      */
-    private Integer sellingPrice;
+    private BigDecimal sellingPrice;
 
     /**
      * 商品库存数

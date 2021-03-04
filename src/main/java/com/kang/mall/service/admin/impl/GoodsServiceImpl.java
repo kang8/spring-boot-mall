@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author yikang
@@ -39,6 +40,10 @@ public class GoodsServiceImpl implements GoodsService {
                 "goods_detail_content", "original_price", "selling_price",
                 "stock_num", "tag", "goods_sell_status", "create_time");
         Page<Goods> goodsPage = goodsMapper.selectPage(new Page<>(page, size), query);
+
+        List<Goods> records = goodsPage.getRecords();
+
+        records.forEach(System.out::println);
 
         return Result.ok(goodsPage);
     }
