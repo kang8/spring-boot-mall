@@ -11,6 +11,8 @@ public class Constants {
      * 轮播图 carousel
      */
     public final static Integer CAROUSEL_MAX = 10;
+    public final static String TABLE_FIELD_CAROUSEL_URL = "carousel_url";
+    public final static String ENTITY_FIELD_CAROUSEL_URL = "carouselUrl";
 
     /**
      * 商品分类 category
@@ -32,4 +34,10 @@ public class Constants {
      */
     public final static String PATH_PATTERN_FOR_ACCESS_UPLOAD_FILE = "/file/**";
     public final static String PATH_FOR_ACCESS_UPLOAD_FILE = "/file";
+
+    /**
+     * 商品 goods
+     */
+    public final static String TABLE_FIELD_GOODS_COVER_IMAGE = "goods_cover_image";
+    public final static String ENTITY_FIELD_GOODS_COVER_IMAGE = "goodsCoverImage";
 }

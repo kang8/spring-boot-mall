@@ -33,7 +33,8 @@ public class CarouselServiceImpl implements CarouselService {
 
     @Override
     public Result list() {
-        String carouselUrl = "CONCAT('" + Constants.PATH_FOR_ACCESS_UPLOAD_FILE + "', carousel_url) AS carouselUrl";
+        String carouselUrl = CommonUtils.queryUrl(Constants.TABLE_FIELD_CAROUSEL_URL, Constants.ENTITY_FIELD_CAROUSEL_URL);
+
         QueryWrapper<Carousel> query = new QueryWrapper<>();
         query.orderByDesc("carousel_rank")
                 .select("carousel_id", carouselUrl, "redirect_url", "carousel_rank", "create_time");

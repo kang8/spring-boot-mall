@@ -34,7 +34,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public Result list(Integer page, Integer size) {
-        String goodsCoverImage = "CONCAT('" + Constants.PATH_FOR_ACCESS_UPLOAD_FILE + "' , goods_cover_image) AS goodsCoverImage";
+        String goodsCoverImage = CommonUtils.queryUrl(Constants.TABLE_FIELD_GOODS_COVER_IMAGE, Constants.ENTITY_FIELD_GOODS_COVER_IMAGE);
         QueryWrapper<Goods> query = new QueryWrapper<>();
         query.select("goods_id", "category_id", goodsCoverImage, "goods_name", "goods_introduce",
                 "goods_detail_content", "original_price", "selling_price",
