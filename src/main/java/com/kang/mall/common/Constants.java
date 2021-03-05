@@ -28,6 +28,7 @@ public class Constants {
 
     public final static String CATEGORY_LIST = "category_list";
     public final static String CATEGORY_OPTION = "category_option";
+    public final static String CATEGORY_OPTION_PARENT = "category_option_parent";
 
     /**
      * 文件上传后请求文件的路径

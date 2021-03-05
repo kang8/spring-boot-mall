@@ -53,10 +53,18 @@ public interface CategoryService {
     Result remove(Long id);
 
     /**
-     * 得到分类表中的全部父级，用于表单选择
+     * 得到分类表中的全部父级，用于分类管理中的表单选择
+     * 并自己加上不存在的根节点
      *
      * @return Result
      * @throws JsonProcessingException  json 解析异常
      */
-    Result option() throws JsonProcessingException;
+    Result optionOfParent() throws JsonProcessingException;
+
+    /**
+     * 获取全部分类，用于商品管理中的表单选择
+     *
+     * @return Result
+     */
+    Result option();
 }

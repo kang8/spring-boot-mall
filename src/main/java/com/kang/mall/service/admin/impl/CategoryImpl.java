@@ -70,7 +70,6 @@ public class CategoryImpl implements CategoryService {
         List<BaseCategory> children = new ArrayList<>(10);
 
         for (BaseCategory category : baseCategories) {
-
             if (parentId.equals(category.getCategoryId())) {
                 children = category.getChildren();
             } else if (parentId.equals(category.getParentId())) {
@@ -89,12 +88,14 @@ public class CategoryImpl implements CategoryService {
     }
 
     /**
-     * 验证 category 是否为 BaseCategory 的继承类。并且当为 Option 时，判断是否为倒数第二个分类。
+     * 验证 category 是否为 BaseCategory 的继承类。
+     * 并且当为 Option 时，判断是否为倒数第二个分类。
+     * 当为 Category 时，判断是否为最后一个分类
      */
     private boolean isExtendBaseCategory(BaseCategory category) {
-        return (category instanceof Category) ||
-                ((category instanceof Option) &&
-                        (!categoryUtils.hasSecondLevel(category.getCategoryLevel())));
+        return ((category instanceof Category) && (!categoryUtils.hasLastLevel(category.getCategoryLevel())))
+                ||
+                ((category instanceof Option) && (!categoryUtils.hasLastSecondLevel(category.getCategoryLevel())));
     }
 
     private List<Category> getCategoriesByOrder() {
@@ -132,9 +133,10 @@ public class CategoryImpl implements CategoryService {
 
     private void cleanCacheByParentId(Long parentId) {
         redisUtils.del(CATEGORY_LIST);
+        redisUtils.del(CATEGORY_OPTION);
         Category parentCategory = categoryMapper.selectById(parentId);
         if (parentCategory == null || !THIRD_LEVEL.equals(parentCategory.getCategoryLevel())) {
-            redisUtils.del(CATEGORY_OPTION);
+            redisUtils.del(CATEGORY_OPTION_PARENT);
         }
     }
 
@@ -164,6 +166,7 @@ public class CategoryImpl implements CategoryService {
 
     /**
      * 验证父节点合法性
+     *
      * @return bool 值。 true 合法，false 不合法。
      */
     private boolean validateParent(Long categoryId, CategoryParam categoryParam) {
@@ -234,6 +237,7 @@ public class CategoryImpl implements CategoryService {
         deleteChildren(category, deleteArray);
         categoryMapper.deleteBatchIds(deleteArray);
         redisUtils.del(CATEGORY_LIST);
+        redisUtils.del(CATEGORY_OPTION);
 
         return Result.ok("删除成功");
     }
@@ -247,10 +251,10 @@ public class CategoryImpl implements CategoryService {
         if (categoryUtils.hasLastLevel(category.getCategoryLevel())) {
             return;
         }
-        // 如果长度为 1，则代表这是第一次进入。而处在这个位置代表删除这里的元素会改变 category_option 中的元素。
-        // 所以这里将 category_option 的缓存删除
+        // 如果长度为 1，则代表这是第一次进入。而处在这个位置代表删除这里的元素会改变 category_option_parent 中的元素。
+        // 所以这里将 category_option_parent 的缓存删除
         if (deletes.size() == 1) {
-            redisUtils.del(CATEGORY_OPTION);
+            redisUtils.del(CATEGORY_OPTION_PARENT);
         }
 
         List<Category> childrenCategories = getCategoriesByParentId(category.getCategoryId());
@@ -269,12 +273,12 @@ public class CategoryImpl implements CategoryService {
     }
 
     @Override
-    public Result option() throws JsonProcessingException {
-        if (redisUtils.hasKey(CATEGORY_OPTION)) {
-            return Result.ok("查询成功", redisUtils.get(CATEGORY_OPTION));
+    public Result optionOfParent() throws JsonProcessingException {
+        if (redisUtils.hasKey(CATEGORY_OPTION_PARENT)) {
+            return Result.ok("查询成功", redisUtils.get(CATEGORY_OPTION_PARENT));
         }
 
-        List<Category> categories = getCategoriesByOption();
+        List<Category> categories = getCategoriesByOption((byte) (categoryProperties.getLevel() - 1));
 
         Category root = new Category(ROOT_CATEGORY_ID, ROOT_LEVEL, ROOT_PARENT_ID, ROOT_CATEGORY_NAME);
         // time complexity O(n)
@@ -283,14 +287,27 @@ public class CategoryImpl implements CategoryService {
         List<Option> options = toOption(categories);
 
         List rootOption = recursionGetTree(options, ROOT_PARENT_ID);
-        redisUtils.set(CATEGORY_OPTION, rootOption);
+        redisUtils.set(CATEGORY_OPTION_PARENT, rootOption);
 
         return Result.ok(rootOption);
     }
 
-    private List<Category> getCategoriesByOption() {
+    @Override
+    public Result option() {
+        if (redisUtils.hasKey(CATEGORY_OPTION)) {
+            return Result.ok("查询成功", redisUtils.get(CATEGORY_OPTION));
+        }
+
+        List<Category> categories = getCategoriesByOption(categoryProperties.getLevel());
+        List options = recursionGetTree(categories, ROOT_CATEGORY_ID);
+        redisUtils.set(CATEGORY_OPTION, options);
+
+        return Result.ok(options);
+    }
+
+    private List<Category> getCategoriesByOption(Byte level) {
         QueryWrapper<Category> query = new QueryWrapper<>();
-        query.ne("category_level", categoryProperties.getLevel())
+        query.le("category_level", level)
                 .orderByAsc("category_level", "parent_id")
                 .orderByDesc("category_rank")
                 .select("category_id", "category_level", "parent_id", "category_name");
@@ -321,7 +338,7 @@ public class CategoryImpl implements CategoryService {
     }
 
     public void testTreeOption() throws JsonProcessingException {
-        List<Category> categories = getCategoriesByOption();
+        List<Category> categories = getCategoriesByOption(categoryProperties.getLevel());
         Category root = new Category(ROOT_CATEGORY_ID, ROOT_LEVEL, ROOT_PARENT_ID, ROOT_CATEGORY_NAME);
         // time complexity O(n)
         categories.add(0, root);

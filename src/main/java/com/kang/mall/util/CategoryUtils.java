@@ -30,7 +30,10 @@ public class CategoryUtils {
     }
 
     public boolean hasLastSecondLevel(Byte level) {
-        return categoryProperties.getLevel() == level + 1;
+        int lastSecondLevel = categoryProperties.getLevel() - 1;
+        int levelParam = level.intValue();
+
+        return lastSecondLevel == levelParam;
     }
 
     public boolean hasGreaterThanToLastLevel(Byte level) {

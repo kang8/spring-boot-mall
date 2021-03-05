@@ -47,8 +47,13 @@ public class CategoryController {
         return categoryService.remove(id);
     }
 
+    @GetMapping("/category/option/parent")
+    public Result optionOfParent() throws JsonProcessingException {
+        return categoryService.optionOfParent();
+    }
+
     @GetMapping("/category/option")
-    public Result option() throws JsonProcessingException {
+    public Result option() {
         return categoryService.option();
     }
 }
