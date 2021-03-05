@@ -28,7 +28,7 @@ public class GoodsParam implements Serializable {
     private String goodsIntroduce;
 
     @NotNull(message = "请传入分类 ID")
-    @Range(min = 1L, message = "分类 ID 的范围为 Long类型，且不能为 0")
+    @Range(min = 0L, message = "分类 ID 的范围为 Long类型，且不能为负数")
     private Long categoryId;
 
     @NotBlank(message = "请上传商品主图")
@@ -56,7 +56,7 @@ public class GoodsParam implements Serializable {
     @Range(min = 0, max = Integer.MAX_VALUE, message = "商品库存的范围为 int，且不能为负数")
     private Integer stockNum;
 
-    @NotBlank(message = "请输入商品标签")
+    //@NotBlank(message = "请输入商品标签")
     @Size(max = 20, message = "商品标签不能超过 20 个字符")
     private String tag;
 
