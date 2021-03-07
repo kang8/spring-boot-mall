@@ -14,7 +14,7 @@ import javax.validation.Valid;
  * ClassName: CategoryController
  * Create Date: 2021/2/1 16:35
  */
-@RestController
+@RestController("CategoryAdminController")
 @RequestMapping("/admin")
 public class CategoryController {
 
