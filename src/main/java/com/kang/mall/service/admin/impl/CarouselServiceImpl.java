@@ -22,7 +22,7 @@ import java.util.List;
  * ClassName: CarouselServiceImpl
  * Create Date: 2021/1/28 10:18
  */
-@Service
+@Service("CarouselAdminService")
 public class CarouselServiceImpl implements CarouselService {
 
     @Autowired

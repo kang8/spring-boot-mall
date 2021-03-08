@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * ClassName: CategoryController
  * Create Date: 2021/3/7 18:30
  */
-@RestController("/")
+@RestController
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
