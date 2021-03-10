@@ -47,7 +47,7 @@ public class GoodsConfigController {
         GoodsConfig goodsConfig = goodsConfigService.create(type, goodsConfigParam);
         return ObjectUtils.isEmpty(goodsConfig) ?
                 Result.error("创建失败") :
-                Result.ok(goodsConfig);
+                Result.ok("创建成功", goodsConfig);
     }
 
     @RequestMapping(value = "/config/{type}/goods/{id}", method = RequestMethod.PUT)
@@ -57,7 +57,7 @@ public class GoodsConfigController {
         GoodsConfig goodsConfig = goodsConfigService.update(type, id, goodsConfigParam);
         return ObjectUtils.isEmpty(goodsConfig) ?
                 Result.error("更新失败") :
-                Result.ok(goodsConfig);
+                Result.ok("更新成功", goodsConfig);
     }
 
     @RequestMapping(value = "/config/{type}/goods/{id}", method = RequestMethod.DELETE)
