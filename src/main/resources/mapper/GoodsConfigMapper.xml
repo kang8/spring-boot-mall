@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kang.mall.mapper.GoodsConfigMapper">
+
+
+    <select id="get" resultType="com.kang.mall.result.GoodsConfigResult">
+        SELECT config.config_id,
+               config.config_rank,
+               config.create_time,
+               IF(LEFT(goods.goods_cover_image, 1) = '/',
+                  CONCAT('/file', goods.goods_cover_image),
+                  goods.goods_cover_image) AS goodsCoverImage,
+               goods.goods_name,
+               goods.goods_sell_status
+        FROM goods_config AS config
+                 CROSS JOIN goods
+                            ON config.goods_id = goods.goods_id
+        WHERE config.config_id = #{id}
+          AND config.config_type = #{type}
+    </select>
+    <select id="listPage" resultType="com.kang.mall.result.GoodsConfigResult">
+        SELECT config.config_id,
+               config.config_rank,
+               config.create_time,
+               IF(LEFT(goods.goods_cover_image, 1) = '/',
+                  CONCAT('/file', goods.goods_cover_image),
+                  goods.goods_cover_image) AS goodsCoverImage,
+               goods.goods_name,
+               goods.goods_sell_status
+        FROM goods_config AS config
+                 CROSS JOIN goods
+                            ON config.goods_id = goods.goods_id
+        WHERE config.config_type = #{type}
+    </select>
+</mapper>

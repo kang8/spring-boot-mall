@@ -1,6 +1,7 @@
 package com.kang.mall.util;
 
 import com.kang.mall.common.Constants;
+import com.kang.mall.exception.CustomizeException;
 
 import javax.servlet.http.HttpSession;
 
@@ -45,9 +46,29 @@ public class CommonUtils {
      * @return 查询
      */
     public static String queryUrl(String tableField, String entityField) {
-        // IF(LEFT(tableField, 1), CONCAT('/file', tableField), tableField) AS entityField
+        // IF(LEFT(tableField, 1) = '/', CONCAT('/file', tableField), tableField) AS entityField
         return "IF(LEFT(" + tableField + ", 1) = '/', CONCAT('" +
                 Constants.PATH_FOR_ACCESS_UPLOAD_FILE + "', " +
                 tableField + "), " + tableField + ") AS " + entityField;
+    }
+
+    /**
+     * 将字符串的 type 转换成 Byte 类型，以储存在数据库中
+     *
+     * @param type 传入的类型
+     * @return Byte
+     */
+    public static Byte getType(String type) {
+        String lowerType = type.toLowerCase();
+        switch (lowerType) {
+            case Constants.NEW:
+                return Constants.TYPE_FOR_NEW;
+            case Constants.HOT:
+                return Constants.TYPE_FOR_HOT;
+            case Constants.RECOMMENDATION:
+                return Constants.TYPE_FOR_RECOMMENDATION;
+            default:
+                throw new CustomizeException(String.format("没有 %s 这个类型", type));
+        }
     }
 }

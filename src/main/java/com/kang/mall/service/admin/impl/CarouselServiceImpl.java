@@ -33,17 +33,21 @@ public class CarouselServiceImpl implements CarouselService {
 
     @Override
     public Result list() {
-        String carouselUrl = CommonUtils.queryUrl(Constants.TABLE_FIELD_CAROUSEL_URL, Constants.ENTITY_FIELD_CAROUSEL_URL);
-
         QueryWrapper<Carousel> query = new QueryWrapper<>();
+
         query.orderByDesc("carousel_rank")
-                .select("carousel_id", carouselUrl, "redirect_url", "carousel_rank", "create_time");
+                .select("carousel_id", getCarouselUrl(), "redirect_url", "carousel_rank", "create_time");
         List<Carousel> carousels = carouselMapper.selectList(query);
 
         return carousels != null ?
                 Result.ok(carousels) :
                 Result.error("查询失败");
     }
+
+    private String getCarouselUrl() {
+        return CommonUtils.queryUrl(Constants.TABLE_FIELD_CAROUSEL_URL, Constants.ENTITY_FIELD_CAROUSEL_URL);
+    }
+
 
     @Override
     public Result get(Long id) {

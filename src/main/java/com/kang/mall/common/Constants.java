@@ -41,4 +41,16 @@ public class Constants {
      */
     public final static String TABLE_FIELD_GOODS_COVER_IMAGE = "goods_cover_image";
     public final static String ENTITY_FIELD_GOODS_COVER_IMAGE = "goodsCoverImage";
+
+    public final static Byte SELLING = 1;
+
+    /**
+     * 商品配置 goods_config
+     */
+    public final static Byte TYPE_FOR_NEW = 1;
+    public final static Byte TYPE_FOR_HOT = 2;
+    public final static Byte TYPE_FOR_RECOMMENDATION = 3;
+    public final static String NEW = "new";
+    public final static String HOT = "hot";
+    public final static String RECOMMENDATION = "recommendation";
 }

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author yikang
@@ -34,18 +33,18 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public Result list(Integer page, Integer size) {
-        String goodsCoverImage = CommonUtils.queryUrl(Constants.TABLE_FIELD_GOODS_COVER_IMAGE, Constants.ENTITY_FIELD_GOODS_COVER_IMAGE);
         QueryWrapper<Goods> query = new QueryWrapper<>();
-        query.select("goods_id", "category_id", goodsCoverImage, "goods_name", "goods_introduce",
+
+        query.select("goods_id", "category_id", getGoodsCoverImage(), "goods_name", "goods_introduce",
                 "goods_detail_content", "original_price", "selling_price",
                 "stock_num", "tag", "goods_sell_status", "create_time");
         Page<Goods> goodsPage = goodsMapper.selectPage(new Page<>(page, size), query);
 
-        List<Goods> records = goodsPage.getRecords();
-
-        records.forEach(System.out::println);
-
         return Result.ok(goodsPage);
+    }
+
+    private String getGoodsCoverImage() {
+        return CommonUtils.queryUrl(Constants.TABLE_FIELD_GOODS_COVER_IMAGE, Constants.ENTITY_FIELD_GOODS_COVER_IMAGE);
     }
 
     @Override

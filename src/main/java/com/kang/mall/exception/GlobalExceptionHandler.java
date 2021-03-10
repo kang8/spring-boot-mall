@@ -20,10 +20,10 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<Result> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+        Map<String, String> errors = new HashMap<>(16);
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
@@ -31,5 +31,23 @@ public class GlobalExceptionHandler {
         });
 
         return ResponseEntity.status(HttpStatus.OK).body(Result.error(errors));
+    }
+
+    @ExceptionHandler(value = CustomizeException.class)
+    public ResponseEntity<Result> handleCustomizeExceptions(
+            CustomizeException e) {
+        Map<String, String> errors = new HashMap<>(4);
+        errors.put("error", e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.OK).body(Result.error(errors));
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<Result> handleExceptions(
+            Exception e) {
+        // 日志待输出
+        e.printStackTrace();
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Result.error("服务器异常"));
     }
 }
