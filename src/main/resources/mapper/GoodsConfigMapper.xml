@@ -11,8 +11,7 @@
                IF(LEFT(goods.goods_cover_image, 1) = '/',
                   CONCAT('/file', goods.goods_cover_image),
                   goods.goods_cover_image) AS goodsCoverImage,
-               goods.goods_name,
-               goods.goods_sell_status
+               goods.goods_name
         FROM goods_config AS config
                  CROSS JOIN goods
                             ON config.goods_id = goods.goods_id
@@ -26,11 +25,22 @@
                IF(LEFT(goods.goods_cover_image, 1) = '/',
                   CONCAT('/file', goods.goods_cover_image),
                   goods.goods_cover_image) AS goodsCoverImage,
-               goods.goods_name,
-               goods.goods_sell_status
+               goods.goods_name
         FROM goods_config AS config
                  CROSS JOIN goods
                             ON config.goods_id = goods.goods_id
         WHERE config.config_type = #{type}
+    </select>
+    <select id="list" resultType="com.kang.mall.entity.Goods">
+        SELECT IF(LEFT(goods.goods_cover_image, 1) = '/',
+                  CONCAT('/file', goods.goods_cover_image),
+                  goods.goods_cover_image) AS goodsCoverImage,
+               goods.goods_name,
+               goods.selling_price
+        FROM goods_config AS config
+                 CROSS JOIN goods
+                            ON config.goods_id = goods.goods_id
+        WHERE config.config_type = #{type}
+        ORDER BY config.config_rank DESC
     </select>
 </mapper>
