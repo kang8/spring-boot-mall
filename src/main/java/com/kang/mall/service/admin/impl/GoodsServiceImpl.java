@@ -2,7 +2,6 @@ package com.kang.mall.service.admin.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.kang.mall.common.Constants;
 import com.kang.mall.common.Result;
 import com.kang.mall.entity.Goods;
 import com.kang.mall.mapper.GoodsMapper;
@@ -10,6 +9,7 @@ import com.kang.mall.param.admin.GoodsParam;
 import com.kang.mall.service.admin.GoodsService;
 import com.kang.mall.util.ClassUtils;
 import com.kang.mall.util.CommonUtils;
+import com.kang.mall.util.GoodsUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,16 +35,12 @@ public class GoodsServiceImpl implements GoodsService {
     public Result list(Integer page, Integer size) {
         QueryWrapper<Goods> query = new QueryWrapper<>();
 
-        query.select("goods_id", "category_id", getGoodsCoverImage(), "goods_name", "goods_introduce",
+        query.select("goods_id", "category_id", GoodsUtils.getGoodsCoverImage(), "goods_name", "goods_introduce",
                 "goods_detail_content", "original_price", "selling_price",
                 "stock_num", "tag", "goods_sell_status", "create_time");
         Page<Goods> goodsPage = goodsMapper.selectPage(new Page<>(page, size), query);
 
         return Result.ok(goodsPage);
-    }
-
-    private String getGoodsCoverImage() {
-        return CommonUtils.queryUrl(Constants.TABLE_FIELD_GOODS_COVER_IMAGE, Constants.ENTITY_FIELD_GOODS_COVER_IMAGE);
     }
 
     @Override

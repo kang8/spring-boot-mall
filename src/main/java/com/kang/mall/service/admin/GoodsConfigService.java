@@ -1,6 +1,8 @@
 package com.kang.mall.service.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kang.mall.entity.Goods;
 import com.kang.mall.entity.GoodsConfig;
 import com.kang.mall.param.admin.GoodsConfigParam;
 import com.kang.mall.result.GoodsConfigResult;
@@ -17,7 +19,7 @@ public interface GoodsConfigService {
      * @param type 配置类型
      * @param page 页码
      * @param size 单页长度
-     * @return List
+     * @return IPage<GoodsConfigResult>
      */
     IPage<GoodsConfigResult> list(String type, Integer page, Integer size);
 
@@ -35,7 +37,7 @@ public interface GoodsConfigService {
      *
      * @param type             配置类型
      * @param goodsConfigParam 商品配置入参
-     * @return GoodsConfigResult
+     * @return GoodsConfig
      */
     GoodsConfig create(String type, GoodsConfigParam goodsConfigParam);
 
@@ -45,7 +47,7 @@ public interface GoodsConfigService {
      * @param type             配置类型
      * @param id               商品配置 ID
      * @param goodsConfigParam 商品配置入参
-     * @return GoodsConfigResult
+     * @return GoodsConfig
      */
     GoodsConfig update(String type, Long id, GoodsConfigParam goodsConfigParam);
 
@@ -57,4 +59,13 @@ public interface GoodsConfigService {
      * @return Boolean
      */
     Boolean remove(String type, Long id);
+
+    /**
+     * 商品配置中的选择商品时的列表
+     *
+     * @param page 页码
+     * @param size 单页长度
+     * @return Page<Goods>
+     */
+    Page<Goods> chooseGoodsList(Integer page, Integer size);
 }

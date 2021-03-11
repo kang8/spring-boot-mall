@@ -3,6 +3,7 @@ package com.kang.mall.service.admin.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kang.mall.common.Constants;
 import com.kang.mall.entity.Goods;
 import com.kang.mall.entity.GoodsConfig;
 import com.kang.mall.exception.CustomizeException;
@@ -89,7 +90,7 @@ public class GoodsConfigServiceImpl implements GoodsConfigService {
             throw new CustomizeException(String.format("找不到商品 ID 为 %d 的商品", goodsId));
         }
         if (!GoodsUtils.isSell(goods.getGoodsSellStatus())) {
-            throw new CustomizeException("ID 为 %d 的商品还未上架");
+            throw new CustomizeException(String.format("ID 为 %d 的商品还未上架", goodsId));
         }
     }
 
@@ -99,5 +100,12 @@ public class GoodsConfigServiceImpl implements GoodsConfigService {
         deleteQuery.eq("config_id", id).eq("config_type", CommonUtils.getType(type));
 
         return goodsConfigMapper.delete(deleteQuery) > 0;
+    }
+
+    @Override
+    public Page<Goods> chooseGoodsList(Integer page, Integer size) {
+        QueryWrapper<Goods> query = new QueryWrapper<>();
+        query.select("goods_name", GoodsUtils.getGoodsCoverImage(), "selling_price").eq("goods_sell_status", Constants.NOT_SELLING);
+        return goodsMapper.selectPage(new Page<>(page, size), query);
     }
 }

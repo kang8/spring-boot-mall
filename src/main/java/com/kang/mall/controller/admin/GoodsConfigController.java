@@ -1,7 +1,9 @@
 package com.kang.mall.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kang.mall.common.Result;
+import com.kang.mall.entity.Goods;
 import com.kang.mall.entity.GoodsConfig;
 import com.kang.mall.param.admin.GoodsConfigParam;
 import com.kang.mall.result.GoodsConfigResult;
@@ -32,6 +34,15 @@ public class GoodsConfigController {
     ) {
         IPage<GoodsConfigResult> list = goodsConfigService.list(type, page, size);
         return Result.ok(list);
+    }
+
+    @GetMapping("/config/choose-goods")
+    public Result chooseGoodsList(
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size
+    ) {
+        Page<Goods> goodsPage = goodsConfigService.chooseGoodsList(page, size);
+        return Result.ok(goodsPage);
     }
 
     @GetMapping("/config/{type}/goods/{id}")

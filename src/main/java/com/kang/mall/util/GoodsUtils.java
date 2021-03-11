@@ -18,4 +18,14 @@ public class GoodsUtils {
     public static Boolean isSell(Byte status) {
         return status.equals(Constants.SELLING);
     }
+
+    /**
+     * 从数据库拿到的 URL 要加上 Constants 中设置的值
+     * 该方法就是判断 URL 是本地还是外部的链接，如果是本地，就将 goods_cover_image 加上该值
+     *
+     * @return String
+     */
+    public static String getGoodsCoverImage() {
+        return CommonUtils.queryUrl(Constants.TABLE_FIELD_GOODS_COVER_IMAGE, Constants.ENTITY_FIELD_GOODS_COVER_IMAGE);
+    }
 }

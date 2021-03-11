@@ -33,6 +33,7 @@
                             ON config.goods_id = goods.goods_id
         WHERE config.config_type = #{type}
           AND config.is_deleted = 0
+        ORDER BY config.config_rank DESC
     </select>
     <select id="list" resultType="com.kang.mall.entity.Goods">
         SELECT IF(LEFT(goods.goods_cover_image, 1) = '/',
