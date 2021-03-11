@@ -26,6 +26,10 @@ public class GoodsConfigResult implements Serializable {
      */
     private Long configId;
     /**
+     * 商品 ID
+     */
+    private Long goodsId;
+    /**
      * 配置排序值
      */
     private Integer configRank;

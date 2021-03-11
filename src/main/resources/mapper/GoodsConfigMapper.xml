@@ -23,6 +23,7 @@
         SELECT config.config_id,
                config.config_rank,
                config.create_time,
+               config.goods_id,
                IF(LEFT(goods.goods_cover_image, 1) = '/',
                   CONCAT('/file', goods.goods_cover_image),
                   goods.goods_cover_image) AS goodsCoverImage,
