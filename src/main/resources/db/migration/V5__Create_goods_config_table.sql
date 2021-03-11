@@ -9,8 +9,7 @@ CREATE TABLE `goods_config`
     `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最新修改时间',
     `create_user` bigint   NOT NULL DEFAULT 0 COMMENT '创建者id',
-    `update_user` bigint   NOT NULL DEFAULT 0 COMMENT '修改者id',
-    KEY `config_type_index` (`config_type`)
+    `update_user` bigint   NOT NULL DEFAULT 0 COMMENT '修改者id'
 );
 
 INSERT INTO `goods_config` (config_type, goods_id)

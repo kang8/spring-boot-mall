@@ -10,7 +10,6 @@ CREATE TABLE `category`
     `create_user`    bigint      NOT NULL DEFAULT '0' COMMENT '创建者id',
     `update_time`    datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
     `update_user`    bigint      NOT NULL DEFAULT '0' COMMENT '修改者id',
-    KEY `is_deleted_index` (`is_deleted`),
     KEY `parent_id_index` (`parent_id`)
 ) COMMENT '商品三级分类表';
 

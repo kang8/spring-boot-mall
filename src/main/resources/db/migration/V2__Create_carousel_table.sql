@@ -8,8 +8,7 @@ CREATE TABLE `carousel`
     `create_time`   datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `create_user`   bigint       NOT NULL DEFAULT '0' COMMENT '创建者id',
     `update_time`   datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    `update_user`   int          NOT NULL DEFAULT '0' COMMENT '修改者id',
-    KEY `is_deleted_index` (`is_deleted`)
+    `update_user`   int          NOT NULL DEFAULT '0' COMMENT '修改者id'
 ) COMMENT '轮播图';
 
 INSERT INTO `carousel`(`carousel_url`, `create_user`, `update_user`)
