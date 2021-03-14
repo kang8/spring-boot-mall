@@ -16,22 +16,23 @@ import java.io.Serializable;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AdminUser implements Serializable {
-
+    /**
+     * 管理员主键 ID
+     */
     @TableId(type = IdType.AUTO)
     private Long adminUserId;
-
     /**
      * 登录名称
      */
     private String username;
-
+    /**
+     * 密码
+     */
     private String password;
-
     /**
      * 昵称
      */
     private String nickName;
-
     /**
      * 是否锁定。0 为正常，1 为上锁。
      * 这里使用 mybatis-plus 的逻辑删除来实现

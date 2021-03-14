@@ -19,60 +19,51 @@ import java.math.BigDecimal;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Goods extends BaseEntity implements Serializable {
-
+    /**
+     * 商品主键 ID
+     */
     @TableId(type = IdType.AUTO)
     private Long goodsId;
-
     /**
      * 商品名
      */
     private String goodsName;
-
     /**
      * 商品简介
      */
     private String goodsIntroduce;
-
     /**
      * 三级分类 ID，注意这里关联的分类 ID 的等级只能为最低级，也就是 3
      */
     private Long categoryId;
-
     /**
      * 商品主图
      */
     private String goodsCoverImage;
-
     /**
      * 商品轮播图
      */
     private String goodsCarousel;
-
     /**
      * 商品详情
      */
     private String goodsDetailContent;
-
     /**
      * 商品价格
      */
     private BigDecimal originalPrice;
-
     /**
      * 商品实际价格
      */
     private BigDecimal sellingPrice;
-
     /**
      * 商品库存数
      */
     private Integer stockNum;
-
     /**
      * 标签
      */
     private String tag;
-
     /**
      * 商品上架状态
      * 0 -> 下架

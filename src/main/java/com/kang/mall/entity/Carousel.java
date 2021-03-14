@@ -19,7 +19,9 @@ import java.io.Serializable;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Carousel extends BaseEntity implements Serializable {
-
+    /**
+     * 轮播图主键 ID
+     */
     @SuppressWarnings("AlibabaCommentsMustBeJavadocFormat")
     @TableId(type = IdType.AUTO) //主键的类型为自动递增
     private Long carouselId;
@@ -35,7 +37,6 @@ public class Carousel extends BaseEntity implements Serializable {
      * 排序值
      */
     private Integer carouselRank;
-
     /**
      * 是否删除。0 为 false 未删除，1 为true 已删除
      */

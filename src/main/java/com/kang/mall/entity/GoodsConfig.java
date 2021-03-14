@@ -19,7 +19,9 @@ import java.io.Serializable;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GoodsConfig extends BaseEntity implements Serializable {
-
+    /**
+     * 商品管理主键 ID
+     */
     @TableId(type = IdType.AUTO)
     private Long configId;
     /**

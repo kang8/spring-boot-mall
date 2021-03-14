@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  * ClassName: LoginServiceImpl
  * Create Date: 2021/1/20 15:19
  */
-@Service
+@Service("LoginAdminService")
 public class LoginServiceImpl implements LoginService {
     @Autowired
     private AdminUserMapper adminUserMapper;

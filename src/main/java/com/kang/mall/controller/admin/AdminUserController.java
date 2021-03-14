@@ -21,7 +21,7 @@ public class AdminUserController {
     @Autowired
     private AdminUserService adminUserService;
 
-    @GetMapping("/user")
+    @GetMapping("/admin-user")
     public Result list(
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "size", defaultValue = "10") Integer size
