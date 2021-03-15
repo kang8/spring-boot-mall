@@ -7,7 +7,8 @@ CREATE TABLE `user`
     `address`     varchar(100) NOT NULL DEFAULT '' COMMENT '收货地址',
     `is_deleted`  tinyint      NOT NULL DEFAULT 0 COMMENT '注销标识字段(0-正常 1-已注销)',
     `is_locked`   tinyint      NOT NULL DEFAULT 0 COMMENT '锁定标识字段(0-未锁定 1-已锁定)',
-    `create_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间'
+    `create_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
+    UNIQUE KEY (`phone`)
 ) COMMENT '用户表';
 
 INSERT INTO `user` (username, phone, password)

@@ -71,4 +71,13 @@ public class CommonUtils {
                 throw new CustomizeException(String.format("没有 %s 这个类型", type));
         }
     }
+
+    /**
+     * 使用正则表达式判断手机号码是否合法
+     * @param phone 手机号码
+     * @return 是否为正确的手机号码
+     */
+    public static boolean validatePhoneNumber(String phone) {
+        return phone.matches("^1[3-9]\\d{9}$");
+    }
 }

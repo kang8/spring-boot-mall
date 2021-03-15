@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
@@ -24,14 +24,22 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
+    @Autowired
+    private HttpSession session;
+
     @PostMapping("/login")
     public Result login(@RequestBody @Valid LoginParam loginParam) {
         return loginService.login(loginParam);
     }
 
     @PostMapping("/logout")
-    public Result logout(HttpServletRequest request) {
-        request.getSession().removeAttribute("adminLoginId");
-        return Result.ok("成功退出");
+    public Result logout() {
+        try {
+            session.removeAttribute("adminLoginId");
+            return Result.ok("成功退出");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error("退出失败");
+        }
     }
 }
