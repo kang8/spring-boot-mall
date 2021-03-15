@@ -27,13 +27,13 @@ public class User {
     @TableId(type = IdType.AUTO)
     private Long userId;
     /**
-     * 用户昵称
-     */
-    private String nickName;
-    /**
-     * 登陆名称
+     * 用户名
      */
     private String username;
+    /**
+     * 手机号，用来登陆
+     */
+    private String phone;
     /**
      * 密码
      */
