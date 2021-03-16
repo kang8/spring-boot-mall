@@ -1,6 +1,7 @@
 package com.kang.mall.controller.mall;
 
 import com.kang.mall.common.Result;
+import com.kang.mall.entity.User;
 import com.kang.mall.param.mall.LoginParam;
 import com.kang.mall.service.mall.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class LoginController {
 
     @PostMapping("/login")
     public Result login(@RequestBody @Valid LoginParam loginParam) {
-        Boolean isLogin = loginService.login(loginParam);
-        return isLogin ? Result.ok("登陆成功") : Result.error("登陆失败");
+        User user = loginService.login(loginParam);
+        return user != null ? Result.ok("登陆成功", user) : Result.error("登陆失败");
     }
 
     @PostMapping("/logout")

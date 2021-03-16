@@ -34,7 +34,7 @@ public class LoginServiceImpl implements LoginService {
     private HttpSession session;
 
     @Override
-    public Boolean login(LoginParam loginParam) {
+    public User login(LoginParam loginParam) {
         QueryWrapper<User> query = new QueryWrapper<>();
         query.eq("phone", loginParam.getPhone())
                 .select("username", "password", "address", "user_id", "phone", "create_time");
@@ -48,9 +48,10 @@ public class LoginServiceImpl implements LoginService {
         if (isMatch) {
             session.setAttribute("mallLoginId", user.getUserId());
             user.setPassword(null);
-            return true;
+            return user;
+        } else {
+            throw new CustomizeException("密码错误");
         }
-        return false;
     }
 
     @Override

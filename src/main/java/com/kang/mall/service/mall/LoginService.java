@@ -1,5 +1,6 @@
 package com.kang.mall.service.mall;
 
+import com.kang.mall.entity.User;
 import com.kang.mall.param.mall.LoginParam;
 
 /**
@@ -14,7 +15,7 @@ public interface LoginService {
      * @param loginParam 登陆入参
      * @return 是否登陆成功
      */
-    Boolean login(LoginParam loginParam);
+    User login(LoginParam loginParam);
 
     /**
      * 注册一个新用户
