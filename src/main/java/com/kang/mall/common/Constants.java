@@ -54,4 +54,10 @@ public class Constants {
     public final static String NEW = "new";
     public final static String HOT = "hot";
     public final static String RECOMMENDATION = "recommendation";
+
+    /**
+     * Session for login
+     */
+    public final static String ADMIN_LOGIN_CREDENTIAL = "adminLoginId";
+    public final static String MALL_LOGIN_CREDENTIAL = "mallLoginId";
 }

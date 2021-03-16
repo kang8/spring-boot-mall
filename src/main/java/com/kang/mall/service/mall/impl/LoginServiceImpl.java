@@ -1,6 +1,7 @@
 package com.kang.mall.service.mall.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.kang.mall.common.Constants;
 import com.kang.mall.entity.User;
 import com.kang.mall.exception.CustomizeException;
 import com.kang.mall.mapper.UserMapper;
@@ -46,7 +47,7 @@ public class LoginServiceImpl implements LoginService {
 
         boolean isMatch = passwordEncoder.matches(loginParam.getPassword(), user.getPassword());
         if (isMatch) {
-            session.setAttribute("mallLoginId", user.getUserId());
+            session.setAttribute(Constants.MALL_LOGIN_CREDENTIAL, user.getUserId());
             user.setPassword(null);
             return user;
         } else {

@@ -1,6 +1,7 @@
 package com.kang.mall.service.admin.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.kang.mall.common.Constants;
 import com.kang.mall.common.Result;
 import com.kang.mall.entity.AdminUser;
 import com.kang.mall.mapper.AdminUserMapper;
@@ -40,7 +41,7 @@ public class LoginServiceImpl implements LoginService {
         }
         boolean isMatch = passwordEncoder.matches(loginParam.getPassword(), adminUser.getPassword());
         if (isMatch) {
-            session.setAttribute("adminLoginId", adminUser.getAdminUserId());
+            session.setAttribute(Constants.ADMIN_LOGIN_CREDENTIAL, adminUser.getAdminUserId());
             adminUser.setPassword(null);
             return Result.ok("登陆成功", adminUser);
         }

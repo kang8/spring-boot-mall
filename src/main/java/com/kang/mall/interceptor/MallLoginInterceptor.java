@@ -9,20 +9,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author yikang
- * ClassName: AdminLoginInterceptor
- * Description: 后台登陆拦截器
- * Create Date: 2021/1/19 20:14
+ * @author kang
+ * ClassName: MallLoginInterceptor
+ * Create Date: 2021/3/16 13:53
  */
 @Component
-public class AdminLoginInterceptor implements HandlerInterceptor {
+public class MallLoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (null == request.getSession().getAttribute(Constants.ADMIN_LOGIN_CREDENTIAL)) {
+        if (request.getSession().getAttribute(Constants.MALL_LOGIN_CREDENTIAL) == null) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 }

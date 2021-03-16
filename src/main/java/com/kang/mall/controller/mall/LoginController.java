@@ -1,5 +1,6 @@
 package com.kang.mall.controller.mall;
 
+import com.kang.mall.common.Constants;
 import com.kang.mall.common.Result;
 import com.kang.mall.entity.User;
 import com.kang.mall.param.mall.LoginParam;
@@ -35,7 +36,7 @@ public class LoginController {
     @PostMapping("/logout")
     public Result logout() {
         try {
-            session.removeAttribute("mallLoginId");
+            session.removeAttribute(Constants.MALL_LOGIN_CREDENTIAL);
             return Result.ok("成功退出");
         } catch (Exception e) {
             e.printStackTrace();

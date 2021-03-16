@@ -3,6 +3,7 @@ package com.kang.mall.config;
 import com.kang.mall.common.Constants;
 import com.kang.mall.config.properties.MallUploadProperties;
 import com.kang.mall.interceptor.AdminLoginInterceptor;
+import com.kang.mall.interceptor.MallLoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -23,12 +24,20 @@ public class MallWebMvcConfigurer implements WebMvcConfigurer {
     @Autowired
     private AdminLoginInterceptor adminLoginInterceptor;
 
+    @Autowired
+    private MallLoginInterceptor mallLoginInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(adminLoginInterceptor)
                 .addPathPatterns("/admin/**")
                 .addPathPatterns("/upload")
                 .excludePathPatterns("/admin/login");
+
+        registry.addInterceptor(mallLoginInterceptor)
+                .addPathPatterns("/mall/**")
+                .addPathPatterns("/logout")
+                .addPathPatterns("/upload");
     }
 
     @Override

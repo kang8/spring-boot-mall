@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 public class CommonUtils {
 
     public static Long getAdminUserId(HttpSession session) {
-        return (Long) session.getAttribute("adminLoginId");
+        return (Long) session.getAttribute(Constants.ADMIN_LOGIN_CREDENTIAL);
     }
 
     public static String removeUploadFilePath(String uploadUrl) {
