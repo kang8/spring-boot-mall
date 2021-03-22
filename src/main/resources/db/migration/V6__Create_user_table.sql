@@ -1,7 +1,7 @@
 CREATE TABLE `user`
 (
     `user_id`     bigint PRIMARY KEY AUTO_INCREMENT COMMENT '用户主键id',
-    `username`    varchar(50)  NOT NULL DEFAULT 'user' COMMENT '用户名',
+    `username`    varchar(50)  NOT NULL DEFAULT '' COMMENT '用户名',
     `phone`       char(11)     NOT NULL DEFAULT '' COMMENT '手机号',
     `password`    varchar(80)  NOT NULL DEFAULT '' COMMENT '密码',
     `address`     varchar(100) NOT NULL DEFAULT '' COMMENT '收货地址',

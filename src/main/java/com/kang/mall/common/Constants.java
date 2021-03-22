@@ -60,4 +60,11 @@ public class Constants {
      */
     public final static String ADMIN_LOGIN_CREDENTIAL = "adminLoginId";
     public final static String MALL_LOGIN_CREDENTIAL = "mallLoginId";
+
+    /**
+     * 商品排序规则
+     */
+    public final static String SORT_RULE_NORMAL = "normal";
+    public final static String SORT_RULE_NEW = "new";
+    public final static String SORT_RULE_PRICE = "price";
 }

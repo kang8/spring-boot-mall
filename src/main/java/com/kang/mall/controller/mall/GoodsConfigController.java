@@ -21,7 +21,7 @@ public class GoodsConfigController {
     private GoodsConfigService goodsConfigService;
 
     @GetMapping("/config/{type}/goods")
-    public Result list(@PathVariable String type) {
+    public Result<List> list(@PathVariable String type) {
         List list = goodsConfigService.list(type);
         return Result.ok(list);
     }

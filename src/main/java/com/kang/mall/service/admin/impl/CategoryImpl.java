@@ -28,7 +28,7 @@ import static com.kang.mall.common.Constants.*;
  * ClassName: CategoryImpl
  * Create Date: 2021/2/1 16:37
  */
-@Service
+@Service("CategoryAdminService")
 public class CategoryImpl implements CategoryService {
 
     @Autowired

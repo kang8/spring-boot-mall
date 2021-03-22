@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
  * ClassName: GoodsServiceImpl
  * Create Date: 2021/2/22 17:26
  */
-@Service
+@Service("GoodsAdminService")
 public class GoodsServiceImpl implements GoodsService {
 
     @Autowired

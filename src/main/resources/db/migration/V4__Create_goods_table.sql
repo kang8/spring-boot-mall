@@ -6,7 +6,7 @@ CREATE TABLE `goods`
     `category_id`          bigint         NOT NULL DEFAULT 0 COMMENT '关联分类id',
     `goods_cover_image`    varchar(200)   NOT NULL DEFAULT '/goods/empty.jpg' COMMENT '商品主图',
     `goods_carousel`       varchar(500)   NOT NULL DEFAULT '/goods/empty.jpg' COMMENT '商品轮播图',
-    `goods_detail_content` text           NOT NULL COMMENT '商品详情',
+    `goods_detail_content` text           NOT NULL DEFAULT '' COMMENT '商品详情',
     `original_price`       decimal(19, 2) NOT NULL DEFAULT 0 COMMENT '商品价格',
     `selling_price`        decimal(19, 2) NOT NULL DEFAULT 0 COMMENT '商品实际售价',
     `stock_num`            int            NOT NULL DEFAULT 0 COMMENT '商品库存数量',
