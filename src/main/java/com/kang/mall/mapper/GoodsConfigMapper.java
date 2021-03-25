@@ -34,6 +34,7 @@ public interface GoodsConfigMapper extends BaseMapper<GoodsConfig> {
     IPage<GoodsConfigResult> listPage(Page<?> page, Byte type);
 
     /**
+     * 根据商品配置表的类型查询对应的商品配置表中的商品
      *
      * @param type 商品配置表的类型
      * @return List

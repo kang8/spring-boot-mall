@@ -35,10 +35,6 @@ public class GoodsParam implements Serializable {
     @Size(max = 200, message = "商品主图文件名太长，请缩短再上传啊")
     private String goodsCoverImage;
 
-    //@NotBlank(message = "请上传商品轮播图")
-    @Size(max = 500, message = "商品轮播图文件名太长，请缩短再上传啊")
-    private String goodsCarousel;
-
     @NotBlank(message = "请输入商品详情")
     private String goodsDetailContent;
 

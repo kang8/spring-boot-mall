@@ -40,7 +40,8 @@
                   CONCAT('/file', goods.goods_cover_image),
                   goods.goods_cover_image) AS goodsCoverImage,
                goods.goods_name,
-               goods.selling_price
+               goods.selling_price,
+               goods.goods_id
         FROM goods_config AS config
                  CROSS JOIN goods
                             ON config.goods_id = goods.goods_id

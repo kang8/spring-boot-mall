@@ -1,6 +1,8 @@
 package com.kang.mall.service.mall;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kang.mall.common.Result;
+import com.kang.mall.entity.Goods;
 import com.kang.mall.param.mall.SearchParam;
 
 /**
@@ -16,4 +18,12 @@ public interface GoodsService {
      * @return Page
      */
     Page search(SearchParam searchParam);
+
+    /**
+     * 根据商品 ID 获取商品内容
+     *
+     * @param id 商品 Id
+     * @return Goods
+     */
+    Goods get(Long id);
 }

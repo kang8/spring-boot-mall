@@ -14,7 +14,7 @@ CREATE TABLE `goods_config`
 
 INSERT INTO `goods_config` (config_type, goods_id)
 VALUES (1, 1),
-       (1, 2),
+       (1, 269),
        (1, 3),
        (1, 4),
        (1, 5),

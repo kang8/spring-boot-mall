@@ -41,10 +41,6 @@ public class Goods extends BaseEntity implements Serializable {
      */
     private String goodsCoverImage;
     /**
-     * 商品轮播图
-     */
-    private String goodsCarousel;
-    /**
      * 商品详情
      */
     private String goodsDetailContent;

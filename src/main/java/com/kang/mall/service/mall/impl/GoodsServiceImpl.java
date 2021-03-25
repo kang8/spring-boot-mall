@@ -31,6 +31,15 @@ public class GoodsServiceImpl implements GoodsService {
                 query);
     }
 
+    @Override
+    public Goods get(Long id) {
+        QueryWrapper<Goods> query = new QueryWrapper<>();
+        query.eq("goods_id", id).eq("goods_sell_status", Constants.SELLING)
+                .select("goods_name", "goods_introduce", GoodsUtils.getGoodsCoverImage(),
+                        "goods_detail_content", "original_price", "selling_price");
+        return goodsMapper.selectOne(query);
+    }
+
     private QueryWrapper<Goods> getGoodsQueryWrapper(SearchParam searchParam) {
         QueryWrapper<Goods> query = new QueryWrapper<>();
 
