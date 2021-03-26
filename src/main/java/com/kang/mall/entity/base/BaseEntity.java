@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.kang.mall.util.CommonUtils;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -18,8 +19,9 @@ import java.time.LocalDateTime;
  * Description: 基础的实体类，包含公共的实体属性
  * Create Date: 2021/2/26 20:57
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class BaseEntity implements Serializable {
+public class BaseEntity extends BaseTimeEntity implements Serializable {
 
     /**
      * 创建用户 Id
