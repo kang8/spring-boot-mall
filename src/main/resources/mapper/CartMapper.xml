@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kang.mall.mapper.CartMapper">
+
+    <update id="incrementGoodsCount">
+        UPDATE cart
+        SET goods_count = goods_count + 1
+        where cart_id = #{cartId}
+    </update>
+
+
+    <select id="listPage" resultType="com.kang.mall.result.CartResult">
+        SELECT cart_id,
+               goods_count,
+               goods_name,
+               IF(LEFT(goods.goods_cover_image, 1) = '/',
+                  CONCAT('/file', goods.goods_cover_image),
+                  goods.goods_cover_image) AS goodsCoverImage,
+               selling_price
+        FROM cart
+                 CROSS JOIN goods ON cart.goods_id = goods.goods_id
+        where user_id = #{userId}
+    </select>
+</mapper>

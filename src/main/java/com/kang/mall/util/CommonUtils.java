@@ -16,6 +16,10 @@ public class CommonUtils {
         return (Long) session.getAttribute(Constants.ADMIN_LOGIN_CREDENTIAL);
     }
 
+    public static Long getUserId(HttpSession session) {
+        return (Long) session.getAttribute(Constants.MALL_LOGIN_CREDENTIAL);
+    }
+
     public static String removeUploadFilePath(String uploadUrl) {
         int index = uploadUrl.indexOf(Constants.PATH_FOR_ACCESS_UPLOAD_FILE);
         if (index != -1) {

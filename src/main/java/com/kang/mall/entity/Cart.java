@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.kang.mall.entity.base.BaseTimeEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -18,6 +19,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
 public class Cart extends BaseTimeEntity implements Serializable {
     /**
      * 货物车主键 ID
@@ -36,9 +38,9 @@ public class Cart extends BaseTimeEntity implements Serializable {
      * 商品数量
      */
     private Integer goodsCount;
-    /**
-     * 是否删除
-     */
-    @TableLogic(value = "0", delval = "1")
-    private Integer isDeleted;
+
+    public Cart(Long userId, Long goodsId) {
+        this.userId = userId;
+        this.goodsId = goodsId;
+    }
 }
