@@ -46,7 +46,7 @@ public class CartController {
 
     @RequestMapping(value = "/cart/{id}", method = RequestMethod.DELETE)
     public Result remove(@PathVariable String id) {
-        return cartService.remove(id) ? Result.ok() : Result.error();
+        return cartService.remove(id) ? Result.ok("删除成功") : Result.error();
     }
 
 }

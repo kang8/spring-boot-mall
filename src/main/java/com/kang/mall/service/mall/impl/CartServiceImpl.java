@@ -67,6 +67,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public boolean remove(String id) {
-        return false;
+        int isDelete = cartMapper.deleteById(id);
+        return isDelete > 0;
     }
 }
