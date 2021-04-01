@@ -12,9 +12,13 @@ import java.math.BigDecimal;
 @Data
 public class CartResult {
     /**
-     * 货物车 ID
+     * 购物车 ID
      */
     private Long cartId;
+    /**
+     * 商品 ID
+     */
+    private Long goodsId;
     /**
      * 商品数量
      */

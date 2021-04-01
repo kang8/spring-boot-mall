@@ -1,8 +1,9 @@
 package com.kang.mall.service.mall;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.kang.mall.entity.Cart;
 import com.kang.mall.result.CartResult;
+
+import java.util.List;
 
 /**
  * @author kang
@@ -13,11 +14,9 @@ public interface CartService {
     /**
      * 查询用户对应的购物车清单
      *
-     * @param page 页码
-     * @param size 单页长度
      * @return IPage
      */
-    IPage<CartResult> list(Integer page, Integer size);
+    List<CartResult> list();
 
     /**
      * 根据商品 id 后去对应的购物车信息
@@ -42,7 +41,7 @@ public interface CartService {
      * @param goodsCount 更新购物车添加的数量
      * @return 是个更新成功
      */
-    boolean update(String id, Long goodsCount);
+    boolean update(String id, Integer goodsCount);
 
     /**
      * 根据传来的购物车 Id 删除某行记录

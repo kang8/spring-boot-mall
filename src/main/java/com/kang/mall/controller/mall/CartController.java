@@ -7,6 +7,8 @@ import com.kang.mall.service.mall.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author kang
  * ClassName: CartController
@@ -20,11 +22,8 @@ public class CartController {
     private CartService cartService;
 
     @GetMapping("/cart")
-    public Result list(
-            @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "size", defaultValue = "10") Integer size
-    ) {
-        IPage<CartResult> list = cartService.list(page, size);
+    public Result list( ) {
+        List<CartResult> list = cartService.list();
         return Result.ok(list);
     }
 
@@ -40,8 +39,8 @@ public class CartController {
     }
 
     @RequestMapping(value = "/cart/{id}", method = RequestMethod.PUT)
-    public Result update(@PathVariable String id, Long goodsCount) {
-        return cartService.update(id, goodsCount) ? Result.ok() : Result.error();
+    public Result update(@PathVariable String id, Integer goodsCount) {
+        return cartService.update(id, goodsCount) ? Result.ok("更新成功") : Result.error();
     }
 
     @RequestMapping(value = "/cart/{id}", method = RequestMethod.DELETE)

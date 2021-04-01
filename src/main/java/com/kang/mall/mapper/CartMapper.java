@@ -2,9 +2,10 @@ package com.kang.mall.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kang.mall.entity.Cart;
 import com.kang.mall.result.CartResult;
+
+import java.util.List;
 
 /**
  * @author kang
@@ -15,11 +16,10 @@ public interface CartMapper extends BaseMapper<Cart> {
     /**
      * 查询用户的购物车列表
      *
-     * @param page 分页数据
      * @param userId 用户 id
      * @return IPage
      */
-    IPage<CartResult> listPage(Page<?> page, Long userId);
+    List<CartResult> listPage(Long userId);
 
     /**
      * 增加商品

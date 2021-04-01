@@ -17,7 +17,8 @@
                IF(LEFT(goods.goods_cover_image, 1) = '/',
                   CONCAT('/file', goods.goods_cover_image),
                   goods.goods_cover_image) AS goodsCoverImage,
-               selling_price
+               selling_price,
+               cart.goods_id
         FROM cart
                  CROSS JOIN goods ON cart.goods_id = goods.goods_id
         where user_id = #{userId}
