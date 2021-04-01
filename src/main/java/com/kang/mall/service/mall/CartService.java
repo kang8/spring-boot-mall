@@ -50,4 +50,11 @@ public interface CartService {
      * @return 是否删除成功
      */
     boolean remove(String id);
+
+    /**
+     * 获取该用户购物车中商品的数量
+     *
+     * @return Long
+     */
+    Integer getTotalCount();
 }

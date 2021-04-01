@@ -67,7 +67,7 @@ public class CartServiceImpl implements CartService {
         QueryWrapper<Cart> query = new QueryWrapper<>();
         query.eq("cart_id", cartId).eq("user_id", userId).select("cart_id");
         Cart cart = cartMapper.selectOne(query);
-        if (ObjectUtils.isEmpty(cart) ) {
+        if (ObjectUtils.isEmpty(cart)) {
             throw new CustomizeException("该商品没有添加到购物车中");
         }
 
@@ -82,5 +82,14 @@ public class CartServiceImpl implements CartService {
     public boolean remove(String id) {
         int isDelete = cartMapper.deleteById(id);
         return isDelete > 0;
+    }
+
+    @Override
+    public Integer getTotalCount() {
+        Long userId = CommonUtils.getUserId(session);
+        QueryWrapper<Cart> query = new QueryWrapper<>();
+        query.select("sum(goods_count) AS goodsCount").eq("user_id", userId);
+        Cart cart = cartMapper.selectOne(query);
+        return cart == null ? 0 : cart.getGoodsCount();
     }
 }

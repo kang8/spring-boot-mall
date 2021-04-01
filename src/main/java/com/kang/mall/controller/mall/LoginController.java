@@ -4,7 +4,12 @@ import com.kang.mall.common.Constants;
 import com.kang.mall.common.Result;
 import com.kang.mall.entity.User;
 import com.kang.mall.param.mall.LoginParam;
+import com.kang.mall.result.UserResult;
+import com.kang.mall.service.mall.CartService;
 import com.kang.mall.service.mall.LoginService;
+import com.kang.mall.util.ClassUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,12 +30,21 @@ public class LoginController {
     private LoginService loginService;
 
     @Autowired
+    private CartService cartService;
+
+    @Autowired
     private HttpSession session;
 
     @PostMapping("/login")
-    public Result login(@RequestBody @Valid LoginParam loginParam) {
+    public Result<UserResult> login(@RequestBody @Valid LoginParam loginParam) {
         User user = loginService.login(loginParam);
-        return user != null ? Result.ok("登陆成功", user) : Result.error("登陆失败");
+        if (ObjectUtils.isEmpty(user)) {
+            return Result.error("登陆失败", null);
+        }
+        UserResult userResult = ClassUtils.copyProperties(user, new UserResult());
+        userResult.setCartCount(cartService.getTotalCount());
+
+        return Result.ok("登陆成功", userResult);
     }
 
     @PostMapping("/logout")
