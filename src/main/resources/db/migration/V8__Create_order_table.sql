@@ -12,7 +12,6 @@ CREATE TABLE `order`
     `user_phone`   char(11)       NOT NULL COMMENT '收货人手机号',
     `user_address` varchar(100)   NOT NULL COMMENT '收货人收货地址',
     `is_deleted`   tinyint        NOT NULL DEFAULT 0 COMMENT '删除标识字段(0-未删除 1-已删除) 默认未删除',
-    `pay_time`     datetime       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '支付时间',
     `create_time`  datetime       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time`  datetime       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最新修改时间'
 )
