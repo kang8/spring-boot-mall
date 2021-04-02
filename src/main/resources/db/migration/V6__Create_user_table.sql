@@ -1,12 +1,12 @@
 CREATE TABLE `user`
 (
     `user_id`     bigint PRIMARY KEY AUTO_INCREMENT COMMENT '用户主键id',
-    `username`    varchar(50)  NOT NULL DEFAULT '' COMMENT '用户名',
-    `phone`       char(11)     NOT NULL DEFAULT '' COMMENT '手机号',
-    `password`    varchar(80)  NOT NULL DEFAULT '' COMMENT '密码',
+    `username`    varchar(50)  NOT NULL COMMENT '用户名',
+    `phone`       char(11)     NOT NULL COMMENT '手机号',
+    `password`    varchar(80)  NOT NULL COMMENT '密码',
     `address`     varchar(100) NOT NULL DEFAULT '' COMMENT '收货地址',
-    `is_deleted`  tinyint      NOT NULL DEFAULT 0 COMMENT '注销标识字段(0-正常 1-已注销)',
-    `is_locked`   tinyint      NOT NULL DEFAULT 0 COMMENT '锁定标识字段(0-未锁定 1-已锁定)',
+    `is_deleted`  tinyint      NOT NULL DEFAULT 0 COMMENT '注销标识字段(0-正常 1-已注销) 默认正常',
+    `is_locked`   tinyint      NOT NULL DEFAULT 0 COMMENT '锁定标识字段(0-未锁定 1-已锁定) 默认未锁定',
     `create_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
     UNIQUE KEY (`phone`)
 ) COMMENT '用户表';
