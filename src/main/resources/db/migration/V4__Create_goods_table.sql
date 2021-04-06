@@ -5,7 +5,7 @@ CREATE TABLE `goods`
     `goods_introduce`      varchar(200)   NOT NULL DEFAULT '' COMMENT '商品简介',
     `category_id`          bigint         NOT NULL COMMENT '关联分类id',
     `goods_cover_image`    varchar(200)   NOT NULL DEFAULT '/goods/empty.jpg' COMMENT '商品主图',
-    `goods_detail_content` text           NOT NULL DEFAULT '' COMMENT '商品详情',
+    `goods_detail_content` text           NOT NULL  COMMENT '商品详情', # TEXT 不能填写 default 值
     `original_price`       decimal(19, 2) NOT NULL COMMENT '商品价格',
     `selling_price`        decimal(19, 2) NOT NULL COMMENT '商品实际售价',
     `stock_num`            int            NOT NULL COMMENT '商品库存数量',

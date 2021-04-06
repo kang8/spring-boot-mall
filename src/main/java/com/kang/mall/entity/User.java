@@ -2,7 +2,6 @@ package com.kang.mall.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -47,7 +46,6 @@ public class User {
      * 0 正常
      * 1 已注销
      */
-    @TableLogic(value = "0", delval = "1")
     private Byte isDeleted;
     /**
      * 是否锁定

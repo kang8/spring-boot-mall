@@ -1,6 +1,5 @@
 package com.kang.mall.entity;
 
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.kang.mall.pojo.BaseCategory;
 import lombok.Data;
@@ -22,9 +21,8 @@ public class Category extends BaseCategory {
      */
     private Integer categoryRank;
     /**
-     * 是否删除。0 为 false 未删除，1 为true 已删除
+     * 是否删除
      */
-    @TableLogic(value = "0", delval = "1")
     private Byte isDeleted;
 
     public Category(Long categoryId, Byte categoryLevel, Long parentId, String categoryName) {

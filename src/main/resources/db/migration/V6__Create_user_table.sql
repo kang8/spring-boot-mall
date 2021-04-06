@@ -11,9 +11,9 @@ CREATE TABLE `user`
     UNIQUE KEY (`phone`)
 ) COMMENT '用户表';
 
-INSERT INTO `user` (username, phone, password)
-VALUES ("yikang", "18012344321", "$2a$13$8R92g7dM/HZ4XTQx3VqLjOqCgya0QV7BYSt0swIqPEPMQisfdQNPC"),
-       ("test1", "11111111111", "$2a$13$fQ.WLRhhhRqrVrt/YGPzBeBUyejYiY1xwaI/Xt6AuOCX2S4cY/4pm"),
-       ("test2", "22222222222", "$2a$13$giO3Fl.wBjKR5h9Keo6j5ugk2S60gLWcC8jlVu28A38epV1Xvlr7."),
-       ("test3", "33333333333", "$2a$13$DDkRROhOVd/1D0HKPlaC6eaBlSwxFG5XqqGL2U1WKzxpaxWPPhUfu");
+INSERT INTO `user` (username, phone, password, address)
+VALUES ("yikang", "18012344321", "$2a$13$8R92g7dM/HZ4XTQx3VqLjOqCgya0QV7BYSt0swIqPEPMQisfdQNPC", '四川 成都市 双流区 东升街道 瑞吉路199号白河左岸'),
+       ("test1", "11111111111", "$2a$13$fQ.WLRhhhRqrVrt/YGPzBeBUyejYiY1xwaI/Xt6AuOCX2S4cY/4pm", '中国'),
+       ("test2", "22222222222", "$2a$13$giO3Fl.wBjKR5h9Keo6j5ugk2S60gLWcC8jlVu28A38epV1Xvlr7.", '中国'),
+       ("test3", "33333333333", "$2a$13$DDkRROhOVd/1D0HKPlaC6eaBlSwxFG5XqqGL2U1WKzxpaxWPPhUfu", '中国');
 

@@ -1,6 +1,9 @@
 package com.kang.mall.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -16,10 +19,12 @@ import java.time.LocalDateTime;
  * Create Date: 2021/4/2 21:23
  */
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderItem {
     /**
      * 订单关联表主键 ID
      */
+    @TableId(type = IdType.AUTO)
     private Long orderItemId;
     /**
      * 订单 ID

@@ -8,4 +8,4 @@ CREATE TABLE `order_item`
     `selling_price`     decimal(19, 2) NOT NULL COMMENT '下单时商品的价格(订单快照)',
     `goods_count`       int            NOT NULL COMMENT '数量(订单快照)',
     `create_time`       datetime       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
-)
+)COMMENT '订单详情表';

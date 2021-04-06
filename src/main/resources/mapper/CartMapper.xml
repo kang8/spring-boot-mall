@@ -22,5 +22,6 @@
         FROM cart
                  CROSS JOIN goods ON cart.goods_id = goods.goods_id
         where user_id = #{userId}
+          AND cart.is_deleted = 0
     </select>
 </mapper>

@@ -2,7 +2,6 @@ package com.kang.mall.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.kang.mall.entity.base.BaseEntity;
 import lombok.Data;
@@ -38,9 +37,8 @@ public class Carousel extends BaseEntity implements Serializable {
      */
     private Integer carouselRank;
     /**
-     * 是否删除。0 为 false 未删除，1 为true 已删除
+     * 是否删除
      */
-    @TableLogic(value = "0", delval = "1")
     private Byte isDeleted;
 
 }

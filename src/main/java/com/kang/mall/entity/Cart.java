@@ -2,7 +2,6 @@ package com.kang.mall.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.kang.mall.entity.base.BaseTimeEntity;
 import lombok.Data;
@@ -38,6 +37,10 @@ public class Cart extends BaseTimeEntity implements Serializable {
      * 商品数量
      */
     private Integer goodsCount;
+    /**
+     * 是否删除
+     */
+    private Integer isDeleted;
 
     public Cart(Long userId, Long goodsId) {
         this.userId = userId;
