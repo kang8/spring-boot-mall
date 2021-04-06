@@ -22,7 +22,7 @@ public class GoodsController {
     private GoodsService goodsService;
 
     @GetMapping("/search")
-    public Result search(
+    public Result<Page> search(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "12") Integer size,
             String keyword,
@@ -35,7 +35,7 @@ public class GoodsController {
     }
 
     @GetMapping("goods/{id}")
-    public Result get(@PathVariable("id") Long id) {
+    public Result<Goods> get(@PathVariable("id") Long id) {
         Goods goods = goodsService.get(id);
         return Result.ok(goods);
     }

@@ -36,7 +36,7 @@ public class GoodsServiceImpl implements GoodsService {
         QueryWrapper<Goods> query = new QueryWrapper<>();
         query.eq("goods_id", id).eq("goods_sell_status", Constants.SELLING)
                 .select("goods_name", "goods_introduce", GoodsUtils.getGoodsCoverImage(),
-                        "goods_detail_content", "original_price", "selling_price");
+                        "goods_detail_content", "original_price", "selling_price", "stock_num");
         return goodsMapper.selectOne(query);
     }
 
