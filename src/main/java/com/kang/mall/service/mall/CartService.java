@@ -41,7 +41,7 @@ public interface CartService {
      * @param goodsCount 更新购物车添加的数量
      * @return 是个更新成功
      */
-    boolean update(String id, Integer goodsCount);
+    boolean update(Long id, Integer goodsCount);
 
     /**
      * 根据传来的购物车 Id 删除某行记录
@@ -49,7 +49,7 @@ public interface CartService {
      * @param id 购物车 ID
      * @return 是否删除成功
      */
-    boolean remove(String id);
+    boolean remove(Long id);
 
     /**
      * 获取该用户购物车中商品的数量

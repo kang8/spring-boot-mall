@@ -6,8 +6,14 @@
     <update id="incrementGoodsCount">
         UPDATE cart
         SET goods_count = goods_count + 1
-        where cart_id = #{cartId}
+        WHERE cart_id = #{cartId}
     </update>
+
+    <delete id="hardDeleteById">
+        DELETE
+        FROM cart
+        WHERE cart_id = #{id}
+    </delete>
 
 
     <select id="listPage" resultType="com.kang.mall.result.CartResult">
@@ -21,7 +27,7 @@
                cart.goods_id
         FROM cart
                  CROSS JOIN goods ON cart.goods_id = goods.goods_id
-        where user_id = #{userId}
+        WHERE user_id = #{userId}
           AND cart.is_deleted = 0
     </select>
 </mapper>

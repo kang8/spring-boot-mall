@@ -28,4 +28,12 @@ public interface CartMapper extends BaseMapper<Cart> {
      * @return int
      */
     int incrementGoodsCount(Long cartId);
+
+    /**
+     * 根据 ID 硬删除购物车数据
+     *
+     * @param id 购物车 ID
+     * @return 是否成功删除
+     */
+    int hardDeleteById(Long id);
 }

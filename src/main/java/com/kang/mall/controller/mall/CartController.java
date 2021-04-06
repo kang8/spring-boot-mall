@@ -39,12 +39,12 @@ public class CartController {
     }
 
     @RequestMapping(value = "/cart/{id}", method = RequestMethod.PUT)
-    public Result update(@PathVariable String id, Integer goodsCount) {
+    public Result update(@PathVariable Long id, Integer goodsCount) {
         return cartService.update(id, goodsCount) ? Result.ok("更新成功") : Result.error();
     }
 
     @RequestMapping(value = "/cart/{id}", method = RequestMethod.DELETE)
-    public Result remove(@PathVariable String id) {
+    public Result remove(@PathVariable Long id) {
         return cartService.remove(id) ? Result.ok("删除成功") : Result.error();
     }
 

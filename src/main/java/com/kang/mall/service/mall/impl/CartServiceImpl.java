@@ -62,7 +62,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public boolean update(String cartId, Integer goodsCount) {
+    public boolean update(Long cartId, Integer goodsCount) {
         Long userId = CommonUtils.getUserId(session);
         QueryWrapper<Cart> query = new QueryWrapper<>();
         query.eq("cart_id", cartId).eq("user_id", userId).select("cart_id");
@@ -79,8 +79,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public boolean remove(String id) {
-        int isDelete = cartMapper.deleteById(id);
+    public boolean remove(Long id) {
+        int isDelete = cartMapper.hardDeleteById(id);
         return isDelete > 0;
     }
 
