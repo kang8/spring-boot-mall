@@ -2,8 +2,10 @@ package com.kang.mall.controller.admin;
 
 import com.kang.mall.common.Constants;
 import com.kang.mall.common.Result;
+import com.kang.mall.entity.AdminUser;
 import com.kang.mall.param.admin.LoginParam;
 import com.kang.mall.service.admin.LoginService;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,18 +31,15 @@ public class LoginController {
     private HttpSession session;
 
     @PostMapping("/login")
-    public Result login(@RequestBody @Valid LoginParam loginParam) {
-        return loginService.login(loginParam);
+    public Result<AdminUser> login(@RequestBody @Valid LoginParam loginParam) {
+        AdminUser adminUser = loginService.login(loginParam);
+        return ObjectUtils.isEmpty(adminUser) ?
+                Result.error("登陆失败", null) :
+                Result.ok("登陆成功", adminUser);
     }
 
     @PostMapping("/logout")
     public Result logout() {
-        try {
-            session.removeAttribute(Constants.ADMIN_LOGIN_CREDENTIAL);
-            return Result.ok("成功退出");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.error("退出失败");
-        }
+        return loginService.logout() ? Result.ok("成功退出") : Result.error("退出失败");
     }
 }

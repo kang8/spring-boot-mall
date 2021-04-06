@@ -40,21 +40,17 @@ public class Order extends BaseTimeEntity {
      */
     private Byte orderStatus;
     /**
-     * 订单额外信息
-     */
-    private String extraInfo;
-    /**
      * 用户姓名
      */
-    private String userName;
+    private String username;
     /**
      * 用户手机号
      */
-    private String userPhone;
+    private String phone;
     /**
      * 用户地址
      */
-    private String userAddress;
+    private String address;
     /**
      * 是否删除
      */

@@ -1,5 +1,7 @@
 package com.kang.mall.controller.mall;
 
+import com.kang.mall.common.Result;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,4 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/mall")
 public class OrderController {
+
+    @PostMapping("/order")
+    public Result create() {
+        return null;
+    }
 }

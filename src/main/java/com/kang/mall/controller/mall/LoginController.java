@@ -8,6 +8,7 @@ import com.kang.mall.result.UserResult;
 import com.kang.mall.service.mall.CartService;
 import com.kang.mall.service.mall.LoginService;
 import com.kang.mall.util.ClassUtils;
+import com.kang.mall.util.CommonUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,6 @@ public class LoginController {
     @Autowired
     private CartService cartService;
 
-    @Autowired
-    private HttpSession session;
-
     @PostMapping("/login")
     public Result<UserResult> login(@RequestBody @Valid LoginParam loginParam) {
         User user = loginService.login(loginParam);
@@ -49,13 +47,7 @@ public class LoginController {
 
     @PostMapping("/logout")
     public Result logout() {
-        try {
-            session.removeAttribute(Constants.MALL_LOGIN_CREDENTIAL);
-            return Result.ok("成功退出");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.error("退出失败");
-        }
+        return loginService.logout() ? Result.ok("成功退出") : Result.error("退出失败");
     }
 
     @PostMapping("/register")

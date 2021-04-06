@@ -2,6 +2,7 @@ package com.kang.mall.service.mall.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kang.mall.common.Constants;
+import com.kang.mall.common.Result;
 import com.kang.mall.entity.User;
 import com.kang.mall.exception.CustomizeException;
 import com.kang.mall.mapper.UserMapper;
@@ -9,6 +10,7 @@ import com.kang.mall.param.mall.LoginParam;
 import com.kang.mall.service.mall.LoginService;
 import com.kang.mall.util.ClassUtils;
 import com.kang.mall.util.CommonUtils;
+import com.kang.mall.util.RedisUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpSession;
  * Create Date: 2021/3/14 18:46
  */
 @Service
+
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
@@ -33,6 +36,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private HttpSession session;
+
+    @Autowired
+    private RedisUtils redisUtils;
 
     @Override
     public User login(LoginParam loginParam) {
@@ -49,6 +55,8 @@ public class LoginServiceImpl implements LoginService {
         if (isMatch) {
             session.setAttribute(Constants.MALL_LOGIN_CREDENTIAL, user.getUserId());
             user.setPassword(null);
+
+            redisUtils.set("login_user_" + user.getUserId(), user);
             return user;
         } else {
             throw new CustomizeException("密码错误");
@@ -70,6 +78,20 @@ public class LoginServiceImpl implements LoginService {
             return userMapper.insert(user) > 0;
         } catch (DuplicateKeyException e) {
             throw new CustomizeException("该手机号已存在");
+        }
+    }
+
+    @Override
+    public Boolean logout() {
+        try {
+            Long userId = CommonUtils.getUserId(session);
+            redisUtils.del("login_user_" + userId);
+
+            session.removeAttribute(Constants.MALL_LOGIN_CREDENTIAL);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

@@ -24,4 +24,11 @@ public interface LoginService {
      * @return 是否注册成功了
      */
     Boolean register(LoginParam loginParam);
+
+    /**
+     * 登出
+     *
+     * @return 是否登出成功
+     */
+    Boolean logout();
 }

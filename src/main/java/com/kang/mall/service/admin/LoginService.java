@@ -1,7 +1,7 @@
 package com.kang.mall.service.admin;
 
 
-import com.kang.mall.common.Result;
+import com.kang.mall.entity.AdminUser;
 import com.kang.mall.param.admin.LoginParam;
 
 /**
@@ -16,5 +16,12 @@ public interface LoginService {
      * @param loginParam 登陆入参
      * @return AdminUser
      */
-    Result login(LoginParam loginParam);
+    AdminUser login(LoginParam loginParam);
+
+    /**
+     * 登出
+     *
+     * @return 是否成功登出
+     */
+    Boolean logout();
 }
