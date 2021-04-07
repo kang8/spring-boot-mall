@@ -2,6 +2,7 @@ package com.kang.mall.service.mall.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kang.mall.common.Constants;
 import com.kang.mall.entity.Goods;
 import com.kang.mall.exception.CustomizeException;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
  * Create Date: 2021/3/22 11:32
  */
 @Service
-public class GoodsServiceImpl implements GoodsService {
+public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements GoodsService {
     @Autowired
     private GoodsMapper goodsMapper;
 

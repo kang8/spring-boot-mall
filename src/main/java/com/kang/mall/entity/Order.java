@@ -2,6 +2,7 @@ package com.kang.mall.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.kang.mall.entity.base.BaseTimeEntity;
 import lombok.Data;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@TableName("`order`")
 public class Order extends BaseTimeEntity {
     /**
      * 订单主键 ID

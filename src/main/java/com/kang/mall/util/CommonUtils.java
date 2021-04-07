@@ -78,10 +78,22 @@ public class CommonUtils {
 
     /**
      * 使用正则表达式判断手机号码是否合法
+     *
      * @param phone 手机号码
      * @return 是否为正确的手机号码
      */
     public static boolean validatePhoneNumber(String phone) {
         return phone.matches("^1[3-9]\\d{9}$");
+    }
+
+    /**
+     * 验证手机号是否合法，如果不合法则抛出异常
+     *
+     * @param phone 手机号码
+     */
+    public static void validatePhoneNumberNotPassThrowException(String phone) {
+        if (!validatePhoneNumber(phone)) {
+            throw new CustomizeException("请输入正确的手机号");
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.kang.mall.service.mall;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.kang.mall.common.Result;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.kang.mall.entity.Goods;
 import com.kang.mall.param.mall.SearchParam;
 
@@ -10,7 +10,7 @@ import com.kang.mall.param.mall.SearchParam;
  * ClassName: GoodsService
  * Create Date: 2021/3/22 11:32
  */
-public interface GoodsService {
+public interface GoodsService extends IService<Goods> {
     /**
      * 根据传参查询商品
      *

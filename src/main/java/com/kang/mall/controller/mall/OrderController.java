@@ -3,6 +3,7 @@ package com.kang.mall.controller.mall;
 import com.kang.mall.common.Result;
 import com.kang.mall.param.mall.OrderParam;
 import com.kang.mall.service.mall.OrderService;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +25,8 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/order")
-    public Result create(@RequestBody @Valid OrderParam orderParam) {
-        orderService.create(orderParam);
-        return null;
+    public Result<Long> create(@RequestBody @Valid OrderParam orderParam) {
+        Long orderId = orderService.create(orderParam);
+        return ObjectUtils.isNotEmpty(orderId) ? Result.ok(orderId) : Result.error();
     }
 }

@@ -26,25 +26,28 @@ public class RedisConfig {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
 
-        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
-        ObjectMapper objectMapper = new ObjectMapper();
+        // 序列化规则
+        Jackson2JsonRedisSerializer serializer = new Jackson2JsonRedisSerializer(Object.class);
+        serializer.setObjectMapper(customizeObjectMapper());
 
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(serializer);
+        template.setHashValueSerializer(serializer);
+
+        template.afterPropertiesSet();
+        return template;
+    }
+
+    private ObjectMapper customizeObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
         SimpleModule module = new SimpleModule();
+
+        // Long to String
         module.addSerializer(Long.class, ToStringSerializer.instance);
         objectMapper.registerModule(module);
-
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
-
-        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-
-        template.setKeySerializer(stringRedisSerializer);
-        template.setHashKeySerializer(stringRedisSerializer);
-        template.setValueSerializer(jackson2JsonRedisSerializer);
-        template.setHashValueSerializer(jackson2JsonRedisSerializer);
-        template.afterPropertiesSet();
-
-        return template;
+        return objectMapper;
     }
 
 }

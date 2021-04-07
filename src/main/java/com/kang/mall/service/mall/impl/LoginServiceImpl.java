@@ -2,7 +2,6 @@ package com.kang.mall.service.mall.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.kang.mall.common.Constants;
-import com.kang.mall.common.Result;
 import com.kang.mall.entity.User;
 import com.kang.mall.exception.CustomizeException;
 import com.kang.mall.mapper.UserMapper;
@@ -65,9 +64,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Boolean register(LoginParam loginParam) {
-        if (!CommonUtils.validatePhoneNumber(loginParam.getPhone())) {
-            throw new CustomizeException("请输入正确的手机号");
-        }
+        CommonUtils.validatePhoneNumberNotPassThrowException(loginParam.getPhone());
 
         String encodePassword = passwordEncoder.encode(loginParam.getPassword());
         loginParam.setPassword(encodePassword);

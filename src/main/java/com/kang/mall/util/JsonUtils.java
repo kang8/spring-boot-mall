@@ -17,10 +17,6 @@ public class JsonUtils {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public JsonNode toJson(String str) throws JsonProcessingException {
-        return objectMapper.readTree(str);
-    }
-
     public String objectToJsonString(Object o) throws JsonProcessingException {
         return objectMapper.writeValueAsString(o);
     }

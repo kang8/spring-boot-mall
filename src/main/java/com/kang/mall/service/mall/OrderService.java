@@ -12,6 +12,7 @@ public interface OrderService {
      * 新建订单页面
      *
      * @param orderParam 订单入参
+     * @return long 返回 orderId
      */
-    void create(OrderParam orderParam);
+    Long create(OrderParam orderParam);
 }
