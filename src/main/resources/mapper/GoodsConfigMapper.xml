@@ -13,8 +13,8 @@
                   goods.goods_cover_image) AS goodsCoverImage,
                goods.goods_name
         FROM goods_config AS config
-                 CROSS JOIN goods
-                            ON config.goods_id = goods.goods_id
+                 JOIN goods
+                      ON config.goods_id = goods.goods_id
         WHERE config.config_id = #{id}
           AND config.config_type = #{type}
           AND config.is_deleted = 0
@@ -29,8 +29,8 @@
                   goods.goods_cover_image) AS goodsCoverImage,
                goods.goods_name
         FROM goods_config AS config
-                 CROSS JOIN goods
-                            ON config.goods_id = goods.goods_id
+                 JOIN goods
+                      ON config.goods_id = goods.goods_id
         WHERE config.config_type = #{type}
           AND config.is_deleted = 0
         ORDER BY config.config_rank DESC
@@ -43,8 +43,8 @@
                goods.selling_price,
                goods.goods_id
         FROM goods_config AS config
-                 CROSS JOIN goods
-                            ON config.goods_id = goods.goods_id
+                 JOIN goods
+                      ON config.goods_id = goods.goods_id
         WHERE config.config_type = #{type}
           AND config.is_deleted = 0
         ORDER BY config.config_rank DESC

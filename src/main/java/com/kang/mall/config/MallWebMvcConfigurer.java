@@ -36,7 +36,7 @@ public class MallWebMvcConfigurer implements WebMvcConfigurer {
 
         registry.addInterceptor(mallLoginInterceptor)
                 .addPathPatterns("/mall/**")
-                .addPathPatterns("/logout")
+                //.addPathPatterns("/logout")
                 .addPathPatterns("/upload");
     }
 

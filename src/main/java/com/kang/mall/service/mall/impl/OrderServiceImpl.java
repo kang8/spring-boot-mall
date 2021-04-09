@@ -1,6 +1,8 @@
 package com.kang.mall.service.mall.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kang.mall.entity.Goods;
@@ -12,6 +14,7 @@ import com.kang.mall.mapper.CartMapper;
 import com.kang.mall.mapper.OrderMapper;
 import com.kang.mall.param.mall.OrderParam;
 import com.kang.mall.result.CartResult;
+import com.kang.mall.result.OrderResult;
 import com.kang.mall.service.mall.GoodsService;
 import com.kang.mall.service.mall.OrderItemService;
 import com.kang.mall.service.mall.OrderService;
@@ -62,6 +65,11 @@ public class OrderServiceImpl implements OrderService {
         Order order = createOrder(orderParam.getTotalPrice());
         createOrderItem(orderParam.getCartGoodsList(), order.getOrderId());
         return order.getOrderId();
+    }
+
+    @Override
+    public IPage<OrderResult> list(Integer page, Integer size) {
+        return orderMapper.listPage(new Page<Order>(page, size), CommonUtils.getUserId(session));
     }
 
     private void createOrderItem(List<CartResult> cartGoodsList, Long orderId) {
