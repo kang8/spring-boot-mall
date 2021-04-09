@@ -26,4 +26,12 @@ public interface OrderService {
      * @return IPage
      */
     IPage<OrderResult> list(Integer page, Integer size);
+
+    /**
+     * 根据订单 ID 查询该订单的信息
+     *
+     * @param id 订单 ID
+     * @return OrderResult
+     */
+    OrderResult get(Long id);
 }

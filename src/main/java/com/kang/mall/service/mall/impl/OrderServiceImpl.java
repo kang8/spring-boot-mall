@@ -69,7 +69,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public IPage<OrderResult> list(Integer page, Integer size) {
-        return orderMapper.listPage(new Page<Order>(page, size), CommonUtils.getUserId(session));
+        return orderMapper.listPage(new Page<>(page, size), CommonUtils.getUserId(session));
+    }
+
+    @Override
+    public OrderResult get(Long id) {
+        return orderMapper.get(id);
     }
 
     private void createOrderItem(List<CartResult> cartGoodsList, Long orderId) {

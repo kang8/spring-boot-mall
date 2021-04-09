@@ -41,6 +41,26 @@
                  JOIN order_item AS oitem
                       ON o.order_id = oitem.order_id
         WHERE o.user_id = #{userId}
+    </select>
 
+    <select id="get" resultMap="OrderResult">
+        SELECT o.total_price,
+               o.pay_status,
+               o.pay_type,
+               o.order_status,
+               o.username,
+               o.phone,
+               o.address,
+               oitem.goods_id,
+               oitem.goods_name,
+               IF(LEFT(oitem.goods_cover_image, 1) = '/',
+                  CONCAT('/file', oitem.goods_cover_image),
+                  oitem.goods_cover_image) AS goodsCoverImage,
+               oitem.selling_price,
+               oitem.goods_count
+        FROM `order` AS o
+                 JOIN order_item AS oitem
+                      ON o.order_id = oitem.order_id
+        WHERE o.order_id = #{id}
     </select>
 </mapper>

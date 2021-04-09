@@ -32,6 +32,12 @@ public class OrderController {
         return Result.ok(list);
     }
 
+    @GetMapping("/order/{id}")
+    public Result<OrderResult> list(@PathVariable("id") Long id) {
+        OrderResult orderResult = orderService.get(id);
+        return Result.ok(orderResult);
+    }
+
     @PostMapping("/order")
     public Result<Long> create(@RequestBody @Valid OrderParam orderParam) {
         Long orderId = orderService.create(orderParam);

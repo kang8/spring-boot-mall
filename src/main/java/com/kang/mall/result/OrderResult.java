@@ -1,5 +1,6 @@
 package com.kang.mall.result;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.util.List;
  * Create Date: 2021/4/9 15:34
  */
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderResult {
     /**
      * 订单号

@@ -20,4 +20,12 @@ public interface OrderMapper extends BaseMapper<Order> {
      * @return IPage
      */
     IPage<OrderResult> listPage(Page<Order> orderPage, Long userId);
+
+    /**
+     * 根据订单 ID 查询订单信息
+     *
+     * @param id 订单 ID
+     * @return OrderResult
+     */
+    OrderResult get(Long id);
 }
