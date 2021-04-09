@@ -1,16 +1,16 @@
 CREATE TABLE `category`
 (
-    `category_id`    bigint AUTO_INCREMENT PRIMARY KEY COMMENT '分类id',
-    `parent_id`      bigint      NOT NULL DEFAULT '0' COMMENT '父分类id',
-    `category_level` tinyint     NOT NULL COMMENT '分类级别(1-一级分类 2-二级分类 3-三级分类)',
-    `category_name`  varchar(50) NOT NULL COMMENT '分类名称',
-    `category_rank`  int         NOT NULL DEFAULT '0' COMMENT '排序值(字段越大越靠前)',
-    `is_deleted`     tinyint     NOT NULL DEFAULT '0' COMMENT '删除标识字段(0-未删除 1-已删除)',
-    `create_time`    datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time`    datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-    `create_user`    bigint      NOT NULL COMMENT '创建者id',
-    `update_user`    bigint      NOT NULL COMMENT '修改者id',
-    KEY `parent_id_index` (`parent_id`)
+    `category_id`    bigint unsigned AUTO_INCREMENT PRIMARY KEY COMMENT '分类id',
+    `parent_id`      bigint unsigned  NOT NULL DEFAULT '0' COMMENT '父分类id',
+    `category_level` tinyint unsigned NOT NULL COMMENT '分类级别(1-一级分类 2-二级分类 3-三级分类)',
+    `category_name`  varchar(50)      NOT NULL COMMENT '分类名称',
+    `category_rank`  int unsigned     NOT NULL DEFAULT 0 COMMENT '排序值(字段越大越靠前)',
+    `is_deleted`     boolean          NOT NULL DEFAULT false COMMENT '删除标识字段(false-未删除 true-已删除)',
+    `create_time`    datetime         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`    datetime         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+    `create_user`    bigint unsigned  NOT NULL COMMENT '创建者id',
+    `update_user`    bigint unsigned  NOT NULL COMMENT '修改者id',
+    INDEX (`parent_id`)
 ) COMMENT '商品三级分类表';
 
 INSERT INTO `category` (category_id, category_level, parent_id, category_rank, create_user, update_user, category_name)

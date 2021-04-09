@@ -104,8 +104,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public boolean remove(Long id) {
-        int isDelete = cartMapper.hardDeleteById(id);
-        return isDelete > 0;
+        return cartMapper.deleteById(id) > 0;
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kang.mall.common.Constants;
 import com.kang.mall.entity.Goods;
 import com.kang.mall.entity.Order;
 import com.kang.mall.entity.OrderItem;
@@ -103,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void updateStockNum(List<Long> goodsIds, List<CartResult> cartGoodsList) {
         QueryChainWrapper<Goods> query = new QueryChainWrapper<>(goodsService.getBaseMapper());
-        List<Goods> goodsList = query.in("goods_id", goodsIds).eq("goods_sell_status", 1).select("goods_id", "stock_num").list();
+        List<Goods> goodsList = query.in("goods_id", goodsIds).eq("goods_sell_status", Constants.SELLING).select("goods_id", "stock_num").list();
 
         if (goodsIds.size() != cartGoodsList.size()) {
             throw new CustomizeException("不好意思，购买商品中有下架商品。请检查后重新结算");

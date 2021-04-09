@@ -17,7 +17,7 @@
                       ON config.goods_id = goods.goods_id
         WHERE config.config_id = #{id}
           AND config.config_type = #{type}
-          AND config.is_deleted = 0
+          AND config.is_deleted = false
     </select>
     <select id="listPage" resultType="com.kang.mall.result.GoodsConfigResult">
         SELECT config.config_id,
@@ -32,7 +32,7 @@
                  JOIN goods
                       ON config.goods_id = goods.goods_id
         WHERE config.config_type = #{type}
-          AND config.is_deleted = 0
+          AND config.is_deleted = false
         ORDER BY config.config_rank DESC
     </select>
     <select id="list" resultType="com.kang.mall.entity.Goods">
@@ -46,7 +46,7 @@
                  JOIN goods
                       ON config.goods_id = goods.goods_id
         WHERE config.config_type = #{type}
-          AND config.is_deleted = 0
+          AND config.is_deleted = false
         ORDER BY config.config_rank DESC
     </select>
 </mapper>

@@ -4,20 +4,20 @@
 <mapper namespace="com.kang.mall.mapper.OrderMapper">
 
     <resultMap id="OrderResult" type="com.kang.mall.result.OrderResult">
-        <result property="orderId" column="order_id" />
-        <result property="totalPrice" column="total_price" />
-        <result property="payStatus" column="pay_status" />
-        <result property="payType" column="pay_type" />
-        <result property="orderStatus" column="order_status" />
-        <result property="username" column="username" />
-        <result property="phone" column="phone" />
-        <result property="address" column="address" />
-        <collection property="orderItem" ofType="com.kang.mall.result.OrderItemResult" javaType="java.util.List" >
-            <result property="goodsId" column="goods_id" />
-            <result property="goodsName" column="goods_name" />
-            <result property="goodsCoverImage" column="goodsCoverImage" />
-            <result property="goodsCount" column="goods_count" />
-            <result property="sellingPrice" column="selling_price" />
+        <result property="orderId" column="order_id"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="payStatus" column="pay_status"/>
+        <result property="payType" column="pay_type"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="username" column="username"/>
+        <result property="phone" column="phone"/>
+        <result property="address" column="address"/>
+        <collection property="orderItem" ofType="com.kang.mall.result.OrderItemResult" javaType="java.util.List">
+            <result property="goodsId" column="goods_id"/>
+            <result property="goodsName" column="goods_name"/>
+            <result property="goodsCoverImage" column="goodsCoverImage"/>
+            <result property="goodsCount" column="goods_count"/>
+            <result property="sellingPrice" column="selling_price"/>
         </collection>
     </resultMap>
 
@@ -41,6 +41,7 @@
                  JOIN order_item AS oitem
                       ON o.order_id = oitem.order_id
         WHERE o.user_id = #{userId}
+          AND o.is_deleted = false
     </select>
 
     <select id="get" resultMap="OrderResult">
@@ -62,5 +63,6 @@
                  JOIN order_item AS oitem
                       ON o.order_id = oitem.order_id
         WHERE o.order_id = #{id}
+          AND o.is_deleted = false
     </select>
 </mapper>

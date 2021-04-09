@@ -37,10 +37,6 @@ public class Cart extends BaseTimeEntity implements Serializable {
      * 商品数量
      */
     private Integer goodsCount;
-    /**
-     * 是否删除
-     */
-    private Integer isDeleted;
 
     public Cart(Long userId, Long goodsId) {
         this.userId = userId;

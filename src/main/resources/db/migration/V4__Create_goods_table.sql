@@ -1,20 +1,21 @@
 CREATE TABLE `goods`
 (
-    `goods_id`             bigint AUTO_INCREMENT PRIMARY KEY COMMENT '商品表主键id',
-    `goods_name`           varchar(200)   NOT NULL COMMENT '商品名',
-    `goods_introduce`      varchar(200)   NOT NULL DEFAULT '' COMMENT '商品简介',
-    `category_id`          bigint         NOT NULL COMMENT '关联分类id',
-    `goods_cover_image`    varchar(200)   NOT NULL DEFAULT '/goods/empty.jpg' COMMENT '商品主图',
-    `goods_detail_content` text           NOT NULL  COMMENT '商品详情', # TEXT 不能填写 default 值
-    `original_price`       decimal(19, 2) NOT NULL COMMENT '商品价格',
-    `selling_price`        decimal(19, 2) NOT NULL COMMENT '商品实际售价',
-    `stock_num`            int            NOT NULL COMMENT '商品库存数量',
-    `tag`                  varchar(20)    NOT NULL DEFAULT '' COMMENT '商品标签',
-    `goods_sell_status`    tinyint        NOT NULL DEFAULT 0 COMMENT '商品上架状态 0-下架 1-上架。默认下架',
-    `create_time`          datetime       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '商品添加时间',
-    `update_time`          datetime       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '商品修改时间',
-    `create_user`          bigint         NOT NULL DEFAULT 0 COMMENT '添加者主键id',
-    `update_user`          bigint         NOT NULL DEFAULT 0 COMMENT '修改者主键id'
+    `goods_id`             bigint unsigned AUTO_INCREMENT PRIMARY KEY COMMENT '商品表主键id',
+    `goods_name`           varchar(200)    NOT NULL COMMENT '商品名',
+    `goods_introduce`      varchar(200)    NOT NULL DEFAULT '' COMMENT '商品简介',
+    `category_id`          bigint unsigned NOT NULL COMMENT '关联分类id',
+    `goods_cover_image`    varchar(200)    NOT NULL DEFAULT '/goods/empty.jpg' COMMENT '商品主图',
+    `goods_detail_content` text            NOT NULL COMMENT '商品详情', # TEXT 不能填写 default 值
+    `original_price`       decimal(19, 2)  NOT NULL COMMENT '商品价格',
+    `selling_price`        decimal(19, 2)  NOT NULL COMMENT '商品实际售价',
+    `stock_num`            int unsigned    NOT NULL COMMENT '商品库存数量',
+    `tag`                  varchar(20)     NOT NULL DEFAULT '' COMMENT '商品标签',
+    `goods_sell_status`    boolean         NOT NULL DEFAULT false COMMENT '商品上架状态 false-下架 true-上架。默认下架',
+    `create_time`          datetime        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '商品添加时间',
+    `update_time`          datetime        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '商品修改时间',
+    `create_user`          bigint unsigned NOT NULL DEFAULT 0 COMMENT '添加者主键id',
+    `update_user`          bigint unsigned NOT NULL DEFAULT 0 COMMENT '修改者主键id',
+    INDEX (`category_id`)
 ) COMMENT '商品信息表';
 
 INSERT INTO `goods`(goods_id, goods_name, goods_introduce, goods_cover_image, goods_detail_content, original_price, selling_price, stock_num, category_id)
@@ -599,4 +600,4 @@ SET goods_detail_content = '<div >
 where goods_id = 269;
 
 UPDATE goods
-SET goods_sell_status = 1;
+SET goods_sell_status = true;

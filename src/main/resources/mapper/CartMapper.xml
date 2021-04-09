@@ -9,13 +9,6 @@
         WHERE cart_id = #{cartId}
     </update>
 
-    <delete id="hardDeleteById">
-        DELETE
-        FROM cart
-        WHERE cart_id = #{id}
-    </delete>
-
-
     <select id="listPage" resultType="com.kang.mall.result.CartResult">
         SELECT cart_id,
                goods_count,
@@ -29,6 +22,5 @@
                  JOIN goods
                       ON cart.goods_id = goods.goods_id
         WHERE user_id = #{userId}
-          AND cart.is_deleted = 0
     </select>
 </mapper>

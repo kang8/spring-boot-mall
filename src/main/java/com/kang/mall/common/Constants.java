@@ -42,8 +42,8 @@ public class Constants {
     public final static String TABLE_FIELD_GOODS_COVER_IMAGE = "goods_cover_image";
     public final static String ENTITY_FIELD_GOODS_COVER_IMAGE = "goodsCoverImage";
 
-    public final static Byte SELLING = 1;
-    public final static Byte NOT_SELLING = 1;
+    public final static boolean SELLING = true;
+    public final static boolean NOT_SELLING = false;
 
     /**
      * 商品配置 goods_config
