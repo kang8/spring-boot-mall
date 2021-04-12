@@ -12,6 +12,7 @@
         <result property="username" column="username"/>
         <result property="phone" column="phone"/>
         <result property="address" column="address"/>
+        <result property="createTime" column="create_time"/>
         <collection property="orderItem" ofType="com.kang.mall.result.OrderItemResult" javaType="java.util.List">
             <result property="goodsId" column="goods_id"/>
             <result property="goodsName" column="goods_name"/>
@@ -30,6 +31,7 @@
                o.username,
                o.phone,
                o.address,
+               o.create_time,
                oitem.goods_id,
                oitem.goods_name,
                IF(LEFT(oitem.goods_cover_image, 1) = '/',
@@ -52,6 +54,7 @@
                o.username,
                o.phone,
                o.address,
+               o.create_time,
                oitem.goods_id,
                oitem.goods_name,
                IF(LEFT(oitem.goods_cover_image, 1) = '/',

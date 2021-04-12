@@ -87,6 +87,7 @@ public class OrderServiceImpl implements OrderService {
         List<Long> goodsIds = new ArrayList<>(cartGoodsList.size());
         List<OrderItem> orderItems = new ArrayList<>(cartGoodsList.size());
         for (CartResult cartResult : cartGoodsList) {
+            checkGoodsImage(cartResult);
             cartIds.add(cartResult.getCartId());
             goodsIds.add(cartResult.getGoodsId());
 
@@ -100,6 +101,13 @@ public class OrderServiceImpl implements OrderService {
         cartMapper.deleteBatchIds(cartIds);
         // 清库存
         updateStockNum(goodsIds, cartGoodsList);
+    }
+
+    private void checkGoodsImage(CartResult cartResult) {
+        String goodsCoverImage = cartResult.getGoodsCoverImage();
+        if (goodsCoverImage.startsWith(Constants.PATH_FOR_ACCESS_UPLOAD_FILE)) {
+            cartResult.setGoodsCoverImage(goodsCoverImage.substring(Constants.PATH_FOR_ACCESS_UPLOAD_FILE.length()));
+        }
     }
 
     private void updateStockNum(List<Long> goodsIds, List<CartResult> cartGoodsList) {
