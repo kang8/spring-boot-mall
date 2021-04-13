@@ -1,5 +1,6 @@
 package com.kang.mall.service.mall.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -14,13 +15,16 @@ import com.kang.mall.exception.CustomizeException;
 import com.kang.mall.mapper.CartMapper;
 import com.kang.mall.mapper.OrderMapper;
 import com.kang.mall.param.mall.OrderParam;
+import com.kang.mall.param.mall.OrderStatusParam;
 import com.kang.mall.result.CartResult;
 import com.kang.mall.result.OrderResult;
 import com.kang.mall.service.mall.GoodsService;
 import com.kang.mall.service.mall.OrderItemService;
 import com.kang.mall.service.mall.OrderService;
+import com.kang.mall.util.ClassUtils;
 import com.kang.mall.util.CommonUtils;
 import com.kang.mall.util.RedisUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,6 +80,27 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResult get(Long id) {
         return orderMapper.get(id);
+    }
+
+    @Override
+    public BigDecimal getTotalPriceById(Long id) {
+        QueryWrapper<Order> query = new QueryWrapper<>();
+        query.eq("order_id", id).select("total_price");
+        Order order = orderMapper.selectOne(query);
+        if (ObjectUtils.isEmpty(order.getTotalPrice())) {
+            throw new CustomizeException("找不到订单总价");
+        }
+        return order.getTotalPrice();
+    }
+
+    @Override
+    public boolean update(Long id, OrderStatusParam orderStatusParam) {
+        Order order = orderMapper.selectById(id);
+        if (ObjectUtils.isEmpty(order)) {
+            throw new CustomizeException("该订单不存在");
+        }
+        ClassUtils.copyPropertiesNotNull(orderStatusParam, order);
+        return orderMapper.updateById(order) > 0;
     }
 
     private void createOrderItem(List<CartResult> cartGoodsList, Long orderId) {

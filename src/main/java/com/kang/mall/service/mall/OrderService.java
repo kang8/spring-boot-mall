@@ -2,7 +2,10 @@ package com.kang.mall.service.mall;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.kang.mall.param.mall.OrderParam;
+import com.kang.mall.param.mall.OrderStatusParam;
 import com.kang.mall.result.OrderResult;
+
+import java.math.BigDecimal;
 
 /**
  * @author kang
@@ -34,4 +37,21 @@ public interface OrderService {
      * @return OrderResult
      */
     OrderResult get(Long id);
+
+    /**
+     * 根据订单 ID 查询订单的总价
+     *
+     * @param id 订单 ID
+     * @return 订单总价
+     */
+    BigDecimal getTotalPriceById(Long id);
+
+    /**
+     * 根据订单 ID 和订单状态参数更新订单
+     *
+     * @param id               订单 ID
+     * @param orderStatusParam 订单状态参数
+     * @return 是否更新成功
+     */
+    boolean update(Long id, OrderStatusParam orderStatusParam);
 }
