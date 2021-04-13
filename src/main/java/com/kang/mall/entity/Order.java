@@ -34,10 +34,6 @@ public class Order extends BaseTimeEntity {
      */
     private BigDecimal totalPrice;
     /**
-     * 支付状态
-     */
-    private Byte payStatus;
-    /**
      * 支付方式
      */
     private Byte payType;
