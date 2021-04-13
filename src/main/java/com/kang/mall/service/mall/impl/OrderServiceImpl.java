@@ -83,14 +83,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public BigDecimal getTotalPriceById(Long id) {
+    public OrderResult getTotalPriceById(Long id) {
         QueryWrapper<Order> query = new QueryWrapper<>();
-        query.eq("order_id", id).select("total_price");
+        query.eq("order_id", id).select("total_price", "order_status");
         Order order = orderMapper.selectOne(query);
-        if (ObjectUtils.isEmpty(order.getTotalPrice())) {
-            throw new CustomizeException("找不到订单总价");
+        if (ObjectUtils.isEmpty(order)) {
+            throw new CustomizeException("该订单不存在");
         }
-        return order.getTotalPrice();
+
+        OrderResult orderResult = new OrderResult();
+        BeanUtils.copyProperties(order, orderResult);
+        return orderResult;
     }
 
     @Override

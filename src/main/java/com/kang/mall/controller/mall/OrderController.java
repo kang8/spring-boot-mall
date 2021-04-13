@@ -30,18 +30,16 @@ public class OrderController {
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "size", defaultValue = "5") Integer size
     ) {
-        IPage<OrderResult> list = orderService.list(page, size);
-        return Result.ok(list);
+        return Result.ok(orderService.list(page, size));
     }
 
     @GetMapping("/order/{id}")
     public Result<OrderResult> get(@PathVariable("id") Long id) {
-        OrderResult orderResult = orderService.get(id);
-        return Result.ok(orderResult);
+        return Result.ok(orderService.get(id));
     }
 
     @GetMapping("/order/payment/{id}")
-    public Result<BigDecimal> getTotalPriceById(@PathVariable Long id) {
+    public Result<OrderResult> getTotalPriceById(@PathVariable Long id) {
         return Result.ok(orderService.getTotalPriceById(id));
     }
 

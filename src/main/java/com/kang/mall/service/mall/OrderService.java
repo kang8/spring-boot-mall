@@ -44,7 +44,7 @@ public interface OrderService {
      * @param id 订单 ID
      * @return 订单总价
      */
-    BigDecimal getTotalPriceById(Long id);
+    OrderResult getTotalPriceById(Long id);
 
     /**
      * 根据订单 ID 和订单状态参数更新订单
