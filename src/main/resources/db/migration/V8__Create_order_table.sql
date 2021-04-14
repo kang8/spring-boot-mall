@@ -4,7 +4,7 @@ CREATE TABLE `order`
     `user_id`      bigint unsigned NOT NULL COMMENT '用户主键id',
     `total_price`  decimal(19, 2)  NOT NULL COMMENT '订单总价',
     `pay_type`     tinyint         NOT NULL DEFAULT 0 COMMENT '支付方式:0.无 1.支付宝支付 2.微信支付 3.银行借记卡 4.快捷支付',
-    `order_status` tinyint         NOT NULL DEFAULT 0 COMMENT '订单状态:0.待支付 1.已支付 2.配货完成 3:出库成功 4.交易成功 -1.手动关闭 -2.超时关闭 -3.商家关闭。默认待支付',
+    `order_status` tinyint         NOT NULL DEFAULT 0 COMMENT '订单状态:0.待支付 1.已支付 2.配货完成 3:出库成功 4.交易成功 -1.手动关闭 -2.订单超时关闭 -3.商家关闭。默认待支付',
     `username`     varchar(50)     NOT NULL COMMENT '收货人姓名',
     `phone`        char(11)        NOT NULL COMMENT '收货人手机号',
     `address`      varchar(100)    NOT NULL COMMENT '收货人收货地址',

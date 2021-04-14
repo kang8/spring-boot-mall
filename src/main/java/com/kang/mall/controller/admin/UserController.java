@@ -1,6 +1,10 @@
 package com.kang.mall.controller.admin;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kang.mall.common.Result;
+import com.kang.mall.entity.User;
+import com.kang.mall.service.admin.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -12,9 +16,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin")
 public class UserController {
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/user")
-    public Result list() {
-        return null;
+    public Result<Page<User>> list(
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size
+    ) {
+        Page<User> list = userService.list(page, size);
+        return Result.ok(list);
     }
 
     @GetMapping("/user/{id}")
