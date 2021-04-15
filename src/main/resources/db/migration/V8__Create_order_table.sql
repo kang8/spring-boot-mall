@@ -11,5 +11,4 @@ CREATE TABLE `order`
     `is_deleted`   boolean         NOT NULL DEFAULT false COMMENT '删除标识字段(false-未删除 true-已删除) 默认未删除',
     `create_time`  datetime        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time`  datetime        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最新修改时间',
-    INDEX (`user_id`)
 ) COMMENT '订单表';
