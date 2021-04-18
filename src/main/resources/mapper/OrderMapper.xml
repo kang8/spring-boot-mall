@@ -38,6 +38,7 @@
                       ON o.order_id = oitem.order_id
         WHERE o.user_id = #{userId}
           AND o.is_deleted = false
+        ORDER BY o.create_time DESC
     </select>
 
     <select id="get" resultMap="OrderResult">

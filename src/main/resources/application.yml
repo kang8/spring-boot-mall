@@ -20,6 +20,6 @@ mybatis-plus:
       logic-not-delete-value: false
 mall:
   upload:
-    directory: F:\\upload\\
+    directory: /home/yikang/language/upload/
   category:
     level: 3
