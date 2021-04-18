@@ -32,7 +32,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean update(Long id, OrderStatusParam orderStatusParam) {
-        mallOrderService.update(id, orderStatusParam);
-        return false;
+        return mallOrderService.update(id, orderStatusParam);
     }
 }

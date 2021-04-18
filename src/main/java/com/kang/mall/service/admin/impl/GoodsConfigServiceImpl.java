@@ -105,7 +105,7 @@ public class GoodsConfigServiceImpl implements GoodsConfigService {
     @Override
     public Page<Goods> chooseGoodsList(Integer page, Integer size) {
         QueryWrapper<Goods> query = new QueryWrapper<>();
-        query.select("goods_id", "goods_name", GoodsUtils.getGoodsCoverImage(), "selling_price").eq("goods_sell_status", Constants.NOT_SELLING);
+        query.select("goods_id", "goods_name", GoodsUtils.getGoodsCoverImage(), "selling_price").eq("goods_sell_status", Constants.SELLING);
         return goodsMapper.selectPage(new Page<>(page, size), query);
     }
 }
