@@ -85,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResult getTotalPriceById(Long id) {
         QueryWrapper<Order> query = new QueryWrapper<>();
-        query.eq("order_id", id).select("total_price", "order_status");
+        query.eq("order_id", id).select("total_price", "order_status", "create_time");
         Order order = orderMapper.selectOne(query);
         if (ObjectUtils.isEmpty(order)) {
             throw new CustomizeException("该订单不存在");
