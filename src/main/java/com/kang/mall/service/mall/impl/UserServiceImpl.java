@@ -41,6 +41,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateBaseInfo(Long id, UserInfoParam userInfoParam) {
+        checkPermission(id);
+
         User user = initUser(id, userInfoParam);
         int update = userMapper.updateById(user);
         return update > 0;
