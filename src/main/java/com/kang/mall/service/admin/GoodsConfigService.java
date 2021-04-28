@@ -65,7 +65,8 @@ public interface GoodsConfigService {
      *
      * @param page 页码
      * @param size 单页长度
+     * @param goods 搜索商品名称
      * @return Page<Goods>
      */
-    Page<Goods> chooseGoodsList(Integer page, Integer size);
+    Page<Goods> chooseGoodsList(Integer page, Integer size, String goods);
 }

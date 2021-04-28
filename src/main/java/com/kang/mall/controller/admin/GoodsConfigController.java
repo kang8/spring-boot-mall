@@ -39,9 +39,10 @@ public class GoodsConfigController {
     @GetMapping("/config/choose-goods")
     public Result chooseGoodsList(
             @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "size", defaultValue = "10") Integer size
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "goods", required = false) String goods
     ) {
-        Page<Goods> goodsPage = goodsConfigService.chooseGoodsList(page, size);
+        Page<Goods> goodsPage = goodsConfigService.chooseGoodsList(page, size, goods);
         return Result.ok(goodsPage);
     }
 
