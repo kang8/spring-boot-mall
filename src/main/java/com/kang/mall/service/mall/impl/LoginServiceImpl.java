@@ -9,7 +9,6 @@ import com.kang.mall.param.mall.LoginParam;
 import com.kang.mall.service.mall.LoginService;
 import com.kang.mall.util.ClassUtils;
 import com.kang.mall.util.CommonUtils;
-import com.kang.mall.util.RedisUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -36,9 +35,6 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private HttpSession session;
 
-    @Autowired
-    private RedisUtils redisUtils;
-
     @Override
     public User login(LoginParam loginParam) {
         QueryWrapper<User> query = new QueryWrapper<>();
@@ -50,12 +46,9 @@ public class LoginServiceImpl implements LoginService {
             throw new CustomizeException("该用户不存在");
         }
 
-        boolean isMatch = passwordEncoder.matches(loginParam.getPassword(), user.getPassword());
-        if (isMatch) {
+        if (passwordEncoder.matches(loginParam.getPassword(), user.getPassword())) {
             session.setAttribute(Constants.MALL_LOGIN_CREDENTIAL, user.getUserId());
             user.setPassword(null);
-
-            redisUtils.set("login_user_" + user.getUserId(), user);
             return user;
         } else {
             throw new CustomizeException("密码错误");
@@ -82,8 +75,6 @@ public class LoginServiceImpl implements LoginService {
     public Boolean logout() {
         try {
             Long userId = CommonUtils.getUserId(session);
-            redisUtils.del("login_user_" + userId);
-
             session.removeAttribute(Constants.MALL_LOGIN_CREDENTIAL);
             return true;
         } catch (Exception e) {

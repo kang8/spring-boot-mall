@@ -4,13 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kang.mall.common.Constants;
 import com.kang.mall.entity.Goods;
 import com.kang.mall.entity.Order;
 import com.kang.mall.entity.OrderItem;
-import com.kang.mall.entity.User;
 import com.kang.mall.exception.CustomizeException;
 import com.kang.mall.mapper.CartMapper;
 import com.kang.mall.mapper.OrderMapper;
@@ -23,7 +21,6 @@ import com.kang.mall.service.mall.OrderItemService;
 import com.kang.mall.service.mall.OrderService;
 import com.kang.mall.util.ClassUtils;
 import com.kang.mall.util.CommonUtils;
-import com.kang.mall.util.RedisUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,9 +41,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private HttpSession session;
-
-    @Autowired
-    private RedisUtils redisUtils;
 
     @Autowired
     private OrderMapper orderMapper;
@@ -67,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long create(OrderParam orderParam) {
-        Order order = createOrder(orderParam.getTotalPrice());
+        Order order = createOrder(orderParam);
         createOrderItem(orderParam.getCartGoodsList(), order.getOrderId());
         return order.getOrderId();
     }
@@ -158,27 +151,20 @@ public class OrderServiceImpl implements OrderService {
         goodsService.updateBatchById(goodsList);
     }
 
-    private Order createOrder(BigDecimal totalPrice) {
+    private Order createOrder(OrderParam orderParam) {
         Long userId = CommonUtils.getUserId(session);
-        User user = getCacheForUser(userId);
 
         Order order = new Order();
         order.setUserId(userId);
-        order.setTotalPrice(totalPrice);
-        order.setUsername(user.getUsername());
-        CommonUtils.validatePhoneNumberNotPassThrowException(user.getPhone());
-        order.setPhone(user.getPhone());
-        order.setAddress(user.getAddress());
+        order.setTotalPrice(orderParam.getTotalPrice());
+        order.setUsername(orderParam.getUsername());
+        CommonUtils.validatePhoneNumberNotPassThrowException(orderParam.getPhone());
+        order.setPhone(orderParam.getPhone());
+        order.setAddress(orderParam.getAddress());
         int insert = orderMapper.insert(order);
         if (insert < 0) {
             throw new CustomizeException("创建订单失败");
         }
         return order;
-    }
-
-    private User getCacheForUser(Long userId) {
-        return objectMapper.convertValue(redisUtils.get("login_user_" + userId),
-                new TypeReference<User>() {
-                });
     }
 }
