@@ -55,4 +55,9 @@ public class AdminUserController {
     public Result updatePassword(@RequestBody @Valid PasswordParam passwordParam) {
         return adminUserService.updatePassword(passwordParam);
     }
+
+    @RequestMapping(value = "/admin-user/{id}", method = RequestMethod.DELETE)
+    public Result remove(@PathVariable Long id) {
+        return adminUserService.remove(id) ? Result.ok("删除成功") : Result.error("删除失败");
+    }
 }

@@ -112,6 +112,11 @@ public class AdminUserServiceImpl implements AdminUserService {
         return adminUserMapper.updateById(adminUser) > 0;
     }
 
+    @Override
+    public boolean remove(Long id) {
+        return adminUserMapper.deleteById(id) > 0;
+    }
+
     private AdminUser initUser(Long id) {
         AdminUser adminUser = new AdminUser();
         adminUser.setPassword(passwordEncoder.encode("123456"));

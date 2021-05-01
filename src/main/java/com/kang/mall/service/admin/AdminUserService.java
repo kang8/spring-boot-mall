@@ -53,4 +53,12 @@ public interface AdminUserService {
      * @return
      */
     boolean resetPassword(Long id);
+
+    /**
+     * 删除指定 id 号的用户
+     *
+     * @param id
+     * @return
+     */
+    boolean remove(Long id);
 }
