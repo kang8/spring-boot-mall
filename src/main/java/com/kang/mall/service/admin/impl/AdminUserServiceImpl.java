@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kang.mall.common.Result;
 import com.kang.mall.entity.AdminUser;
+import com.kang.mall.exception.CustomizeException;
 import com.kang.mall.mapper.AdminUserMapper;
+import com.kang.mall.param.admin.AdminUserParam;
 import com.kang.mall.param.admin.profile.NameParam;
 import com.kang.mall.param.admin.profile.PasswordParam;
 import com.kang.mall.service.admin.AdminUserService;
@@ -73,5 +75,47 @@ public class AdminUserServiceImpl implements AdminUserService {
         return isUpdate >= 0 ?
                 Result.ok("更新成功") :
                 Result.error("更新失败");
+    }
+
+    @Override
+    public AdminUser create(AdminUserParam adminUserParam) {
+        if (checkUsernameExist(adminUserParam.getUsername())) {
+            throw new CustomizeException("登录名称重复了！");
+        }
+
+        AdminUser adminUser = initUser(adminUserParam);
+        int isInsert = adminUserMapper.insert(adminUser);
+        if (isInsert > 0) {
+            adminUser.setPassword(null);
+            return adminUser;
+        }
+        return null;
+    }
+
+    private boolean checkUsernameExist(String username) {
+        AdminUser adminUser = adminUserMapper.selectOne(new QueryWrapper<AdminUser>()
+                .lambda().eq(AdminUser::getUsername, username));
+        return ObjectUtils.isNotEmpty(adminUser);
+    }
+
+    private AdminUser initUser(AdminUserParam adminUserParam) {
+        AdminUser adminUser = new AdminUser();
+        adminUser.setUsername(adminUserParam.getUsername());
+        adminUser.setNickName(adminUserParam.getNickName());
+        adminUser.setPassword(passwordEncoder.encode("123456"));
+        return adminUser;
+    }
+
+    @Override
+    public boolean resetPassword(Long id) {
+        AdminUser adminUser = initUser(id);
+        return adminUserMapper.updateById(adminUser) > 0;
+    }
+
+    private AdminUser initUser(Long id) {
+        AdminUser adminUser = new AdminUser();
+        adminUser.setPassword(passwordEncoder.encode("123456"));
+        adminUser.setAdminUserId(id);
+        return adminUser;
     }
 }

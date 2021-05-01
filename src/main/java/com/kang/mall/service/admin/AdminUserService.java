@@ -1,6 +1,8 @@
 package com.kang.mall.service.admin;
 
 import com.kang.mall.common.Result;
+import com.kang.mall.entity.AdminUser;
+import com.kang.mall.param.admin.AdminUserParam;
 import com.kang.mall.param.admin.profile.NameParam;
 import com.kang.mall.param.admin.profile.PasswordParam;
 
@@ -35,4 +37,20 @@ public interface AdminUserService {
      * @return Result
      */
     Result updatePassword(PasswordParam passwordParam);
+
+    /**
+     * 根据前端传来的参数创建用户
+     *
+     * @param adminUserParam 前端传来的名字参数
+     * @return
+     */
+    AdminUser create(AdminUserParam adminUserParam);
+
+    /**
+     * 根据管理员 id 号更新密码
+     *
+     * @param id 管理员 id 号
+     * @return
+     */
+    boolean resetPassword(Long id);
 }
