@@ -18,6 +18,6 @@ public class OrderStatusParam {
     /**
      * 订单状态
      */
-    @Range(min = -3L, max = 4L, message = "订单状态范围错误")
+    @Range(min = -3L, max = 5L, message = "订单状态范围错误")
     private Byte orderStatus;
 }
