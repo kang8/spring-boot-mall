@@ -15,8 +15,8 @@ public class GoodsUtils {
      * @param status 是否上架
      * @return Boolean
      */
-    public static Boolean isSell(Byte status) {
-        return status.equals(Constants.SELLING_FOR_BYTE);
+    public static Boolean isSell(Boolean status) {
+        return status.equals(Constants.SELLING);
     }
 
     /**

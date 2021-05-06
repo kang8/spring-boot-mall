@@ -45,9 +45,6 @@ public class Constants {
     public final static boolean SELLING = true;
     public final static boolean NOT_SELLING = false;
 
-    public final static Byte SELLING_FOR_BYTE = 1;
-    public final static Byte NOT_SELLING_FOR_BYTE = 0;
-
     /**
      * 商品配置 goods_config
      */

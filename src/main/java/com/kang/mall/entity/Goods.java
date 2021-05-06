@@ -62,8 +62,8 @@ public class Goods extends BaseEntity implements Serializable {
     private String tag;
     /**
      * 商品上架状态
-     * 0 -> 下架
-     * 1 -> 上架
+     * false -> 下架
+     * true -> 上架
      */
-    private Byte goodsSellStatus;
+    private Boolean goodsSellStatus;
 }
