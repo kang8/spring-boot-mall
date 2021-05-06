@@ -16,7 +16,7 @@ public class GoodsUtils {
      * @return Boolean
      */
     public static Boolean isSell(Byte status) {
-        return status.equals(Constants.SELLING);
+        return status.equals(Constants.SELLING_FOR_BYTE);
     }
 
     /**
