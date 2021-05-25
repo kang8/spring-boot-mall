@@ -1,6 +1,5 @@
 package com.kang.mall.controller.mall;
 
-import com.kang.mall.common.Constants;
 import com.kang.mall.common.Result;
 import com.kang.mall.entity.User;
 import com.kang.mall.param.mall.LoginParam;
@@ -8,15 +7,12 @@ import com.kang.mall.result.UserResult;
 import com.kang.mall.service.mall.CartService;
 import com.kang.mall.service.mall.LoginService;
 import com.kang.mall.util.ClassUtils;
-import com.kang.mall.util.CommonUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
