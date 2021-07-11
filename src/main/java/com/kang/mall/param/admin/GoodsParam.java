@@ -52,7 +52,6 @@ public class GoodsParam implements Serializable {
     @Range(min = 0, max = Integer.MAX_VALUE, message = "商品库存的范围为 int，且不能为负数")
     private Integer stockNum;
 
-    //@NotBlank(message = "请输入商品标签")
     @Size(max = 20, message = "商品标签不能超过 20 个字符")
     private String tag;
 

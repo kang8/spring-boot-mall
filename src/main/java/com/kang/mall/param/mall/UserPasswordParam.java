@@ -5,6 +5,10 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/**
+ * @author kang
+ * Create Date: 2021/4/27 15:53
+ */
 @Data
 public class UserPasswordParam {
     /**

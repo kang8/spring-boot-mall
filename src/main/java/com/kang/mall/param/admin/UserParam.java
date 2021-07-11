@@ -3,6 +3,10 @@ package com.kang.mall.param.admin;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 
+/**
+ * @author kang
+ * Create Date: 2021/5/1 14:44
+ */
 @Data
 public class UserParam {
     /**

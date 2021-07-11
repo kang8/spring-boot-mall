@@ -9,11 +9,15 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * @author kang
+ * Create Date: 2021/5/14 16:32
+ */
 @Component
 public class CommonLoginInterceptor implements HandlerInterceptor {
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         if (!isLogin(request)) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return false;

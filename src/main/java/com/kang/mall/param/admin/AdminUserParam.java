@@ -5,6 +5,10 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/**
+ * @author kang
+ * Create Date: 2021/5/21 16:29
+ */
 @Data
 public class AdminUserParam {
     @NotBlank(message = "登陆名称不能为空")
